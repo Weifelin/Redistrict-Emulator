@@ -1,0 +1,3 @@
+<md-select ng-class="$ctrl.select.formatClasses()" ng-if="$eval($ctrl.select.ifClause)" layout="$ctrl.select.layout" layout-align="$ctrl.select.layoutAlign" placeholder="{{$ctrl.select.label}}" ng-model="$ctrl.select.selected" ng-change="$ctrl.select.onChange" multiple="$ctrl.select.multiSelect">
+    <md-option ng-value="option" ng-repeat="option in $ctrl.select.options | orderBy">{{option}}</md-option>
+</md-select>

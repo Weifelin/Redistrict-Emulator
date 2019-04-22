@@ -1,0 +1,11 @@
+<md-fab-speed-dial ng-class="$ctrl.menu.formatClasses()" ng-if="$eval($ctrl.menu.ifClause)" layout="$ctrl.menu.layout" layout-align="$ctrl.menu.layoutAlign" md-open="$ctrl.menu.open" md-direction="$ctrl.menu.open" ng-mouseenter="$ctrl.menu.open=true" ng-mouseleave="$ctrl.menu.open=false">
+	<md-fab-trigger>
+	    <icon-button button="$ctrl.menu.triggerButton"></icon-button>
+	</md-fab-trigger>
+
+	<md-fab-actions>
+		<div ng-repeat="action in $ctrl.menu.actions">
+          	<icon-button button="action"></icon-button>
+        </div>
+	</md-fab-actions>
+</md-fab-speed-dial>

@@ -1,0 +1,13 @@
+<div ng-class="$ctrl.range.formatClasses()" ng-if="$eval($ctrl.range.ifClause)" layout="$ctrl.range.layout" layout-align="$ctrl.range.layoutAlign" layout-wrap>
+	<div layout layout-align="start center" flex="100">
+		<span class="md-body-1" id="{{$ctrl.range.id + 'Label'}}">
+			{{$ctrl.range.label}}
+			<md-tooltip md-direction="$ctrl.range.tooltipDir"  md-autohide="false">
+              	{{$ctrl.range.tooltip}}
+            </md-tooltip>
+		</span>
+
+		<slide-measure flex="100" slider="$ctrl.range.lowSlider"></slide-measure>
+		<slide-measure flex="100" slider="$ctrl.range.highSlider"></slide-measure>
+	</div>
+</div>

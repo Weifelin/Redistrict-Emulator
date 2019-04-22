@@ -1,0 +1,8 @@
+<md-input-container ng-class="$ctrl.input.formatClasses()" ng-if="$eval($ctrl.input.ifClause)" layout="$ctrl.input.layout" layout-align="$ctrl.input.layoutAlign">
+	<label>{{$ctrl.input.label}}</label>
+	<md-tooltip ng-if="$eval($ctrl.input.tooltip) != ''" md-direction="{{$ctrl.input.tooltipDir}}"  md-autohide="false">
+        {{$ctrl.button.label}}
+    </md-tooltip>
+	<input ng-if="$eval($ctrl.input.required)" required type="number" step="{{$ctrl.input.step}}" name="{{$ctrl.input.id}}" ng-model="$ctrl.input.value" min="{{$ctrl.input.min}}" max="{{$ctrl.input.max}}" />
+	<input ng-if="!$eval($ctrl.input.required)" type="number" step="{{$ctrl.input.step}}" name="{{$ctrl.input.id}}" ng-model="$ctrl.input.value" min="{{$ctrl.input.min}}" max="{{$ctrl.input.max}}" />
+</md-input-container>

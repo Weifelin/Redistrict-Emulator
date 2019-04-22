@@ -1,0 +1,12 @@
+<!-- Toolbar -->
+<md-toolbar ng-class="$ctrl.accordion.formatClasses()" ng-if="$eval($ctrl.accordion.ifClause)" layout="$ctrl.accordion.layout" layout-align="$ctrl.accordion.layoutAlign" flex-order="{{$ctrl.accordion.flexOrder}}">
+	<div class="md-toolbar-tools">
+		<h7 flex>{{tab.title}}</h7>
+		<icon-button button="$ctrl.accordion.expandButton"></icon-button>
+	</div>
+</md-toolbar>
+
+<!-- Content -->
+<div class="animate-if" layout="row" ng-if="$ctrl.accordion.open" flex-order="{{$ctrl.accordion.flexOrder + 1}}" layout-padding layout-wrap>
+	<gui-group group="$ctrl.accordion.content"></gui-group>
+</div>

@@ -1,0 +1,14 @@
+<md-slider-container ng-class="$ctrl.slider.formatClasses()" ng-if="$eval($ctrl.slider.ifClause)" layout="$ctrl.slider.layout" layout-align="$ctrl.slider.layoutAlign" layout-wrap>
+	<div layout layout-align="start center" flex="100">
+		<span class="md-body-1" id="{{$ctrl.slider.id + 'Label'}}">
+			{{$ctrl.slider.label}}
+			<md-tooltip md-direction="$ctrl.slider.tooltipDir"  md-autohide="false">
+              	{{$ctrl.slider.tooltip}}
+            </md-tooltip>
+		</span>
+	</div>
+	<md-slider flex="60" ng-model="$ctrl.slider.value" step="{{$ctrl.slider.step}}" min="{{$ctrl.slider.min}}" max="{{$ctrl.slider.max}}" aria-labeledby="{{$ctrl.slider.id + 'Label'}}" id="{{$ctrl.slider.id}}"></md-slider>
+	<md-input-container flex="nogrow">
+		<input type="number" ng-model="$ctrl.slider.value" min="{{$ctrl.slider.min}}" max="{{$ctrl.slider.max}}" step="{{$ctrl.slider.step}}" aria-label="{{label}}" aria-controls="{{$ctrl.slider.id}}">
+	</md-input-container>
+</md-slider-container>
