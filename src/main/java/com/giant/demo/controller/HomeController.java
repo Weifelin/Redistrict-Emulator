@@ -6,9 +6,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-    @RequestMapping("/home")
-    public String home(){
-        return "index";
+    @RequestMapping("/login")
+    public String login(){
+        return "login";
+    }
+
+
+    @RequestMapping("/submit")
+    public String submit(){
+        return "";
     }
 
 }
