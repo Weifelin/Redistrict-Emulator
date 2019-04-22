@@ -1,0 +1,166 @@
+html, body { height: 100%; }
+
+body {
+	overflow: hidden;
+}
+
+/** Leaflet UI **/
+#map {
+	height: 100vh;
+	z-index: 0;
+}
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+/** Configuring Angular UI **/
+/* Speed Dial */
+.lock-size .md-fab-top-right {
+  top: 16px; 
+}
+
+@media (max-device-width: 600px) {
+  .lock-size .md-fab-top-right {
+    top: 15px;
+    right: 15px; 
+  } 
+}
+
+.lock-size .md-fab.demo-fab.trigger-fab:hover, .lock-size .md-fab.demo-fab.trigger-fab.md-focused, .lock-size .md-fab.demo-fab.action-fab:hover, .lock-size .md-fab.demo-fab.action-fab.md-focused {
+  background-color: #333; 
+}
+
+.lock-size .md-fab.demo-fab.action-fab {
+  background-color: #aaa; 
+}
+
+.lock-size md-fab-speed-dial md-fab-trigger {
+    transition: all 0.3s ease-in-out;
+    transform: scale(1); 
+}
+
+.lock-size md-fab-speed-dial.md-scale.ng-hide-add.ng-hide-add-active, .lock-size md-fab-speed-dial.md-fling.ng-hide-add.ng-hide-add-active {
+    display: flex !important; 
+}
+.lock-size md-fab-speed-dial.md-scale.ng-hide md-fab-trigger, .lock-size md-fab-speed-dial.md-fling.ng-hide md-fab-trigger {
+    transform: scale(0); 
+}
+
+.md-button.md-fab.md-mini.currMode {
+	box-shadow: 0 0 30px rgba(249, 42, 163, 0.6);
+}
+
+/* State Selector */
+.stateSelect {
+	max-width: 24%;
+	width: 24%;
+	max-height: 44px;
+	padding: 10px;
+	position: absolute;
+	bottom: 20px;
+	right: 10px;
+	z-index: 1;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 20px;
+}
+
+.stateSelect > * {
+	max-height: 30px;
+}
+
+.stateSelect md-button {
+	background: rgba(255,255,255,0.8);
+	min-width: 1%;
+	min-height: 1%;
+}
+
+/** Algorithm Controls **/
+.algCtrl.ng-enter, .algCtrl.ng-leave {
+	transition:right ease-in-out 0.2s;
+}
+
+.algCtrl.ng-enter,
+.algCtrl.ng-leave.ng-leave-active {
+ 	right: -24vw;
+}
+
+.algCtrl.ng-leave,
+.algCtrl.ng-enter.ng-enter-active {
+	right: 10px;
+}
+
+.algCtrl {
+	width: 24%;
+	position: absolute;
+	top: 12%;
+	bottom: 12%;
+	right: 10px;
+	z-index: 1;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+/* Accordion Tabs */
+#accordContainer {
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	padding: 0;
+}
+
+.accordTab[flex-order="1"] {
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.accordTab {
+	border-bottom: 1px solid lightgrey;
+}
+
+.accordContent {
+	border-right: 1px solid lightgrey;
+	border-left: 1px solid lightgrey;
+	max-height: 22.6vh;
+	overflow-y: scroll;
+	padding-right: 1%;
+}
+.accordContent input[type="number"] {
+	min-width: 110%;
+}
+
+.animate-if.ng-enter, .animate-if.ng-leave {
+	transition:max-height ease-in-out 0.2s;
+}
+
+.animate-if.ng-enter,
+.animate-if.ng-leave.ng-leave-active {
+ 	transform-origin: bottom center;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.animate-if.ng-leave,
+.animate-if.ng-enter.ng-enter-active {
+	transform-origin: bottom center;
+  	max-height: 22.6vh;
+}
+
+::-webkit-scrollbar {
+	/*width: 5%;*/
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: pink;
+	border-radius: 5px;
+}
