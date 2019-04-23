@@ -57,19 +57,42 @@ function MeasureNumInput() {}
           clickOutsideToClose:false
         })
         .then(function(answer) {
+          var url = "";
           if (answer.action == "login") {
             app.username = answer.username;
-            console.log(answer.username + " has logged in.");
-            $mdToast.showSimple("Welcome back " + app.username + "!");
+            app.password = answer.password;
+            url = "/login";
+            successMessage = "Welcome back " + app.username + "!";
+            failMessage = "Login failed";
           }
           else if (answer.action == "signup") {
             app.username = answer.username;
-            console.log(answer.username + " is now registered.");
-            $mdToast.showSimple("Welcome, " + app.username + "!");
+            app.password = answer.password;
+            url = "/signup";
+            successMessage = "Welcome, " + app.username + "!";
+            failMessage = "Signup failed";
           }
           else {
             console.log("There is a disturbance in the login mechanism...");
           }
+
+          var req = {
+            method: 'POST',
+            "url": url,               
+            data: { 
+              username: app.username,
+              password: app.password
+            }
+          };
+
+          $http(req).
+          then(function(response){
+            console.log(response.status);
+            $mdToast.showSimple(successMessage);
+          }, function(response){
+            console.log(response.status);
+            $mdToast.showSimple(failMessage);   
+          });
         }, function() {
           console.log('You decided to continue as a guest.');
         });
