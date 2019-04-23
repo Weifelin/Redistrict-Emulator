@@ -1,0 +1,49 @@
+<md-dialog aria-label="User Account">
+  <form ng-cloak>
+    <md-dialog-content>
+      <md-tabs md-dynamic-height md-border-bottom>
+        <!-- Login -->
+        <md-tab label="login" ng-click="act='login'">
+          <md-content class="md-padding" layout="row" layout-wrap>
+            <h1 class="md-headline" flex="100">Log In</h1>
+            <md-input-container flex="100">
+              <label>Username</label>
+              <input ng-model="username">
+            </md-input-container>
+            <md-input-container flex="100">
+              <label>Password</label>
+              <input type="password" ng-model="password">
+            </md-input-container>
+          </md-content>
+        </md-tab>
+        <!-- Signup -->
+        <md-tab label="signup" ng-click="act='signup'">
+          <md-content class="md-padding" layout="row" layout-wrap>
+            <h1 class="md-headline" flex="100">Register</h1>
+            <md-input-container flex="100">
+              <label>Username</label>
+              <input ng-model="username">
+            </md-input-container>
+            <md-input-container flex="100">
+              <label>Password</label>
+              <input type="password" ng-model="password">
+            </md-input-container>
+            <md-input-container flex="100">
+              <label>Confirm Password</label>
+              <input type="password">
+            </md-input-container>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <md-button ng-click="answer('done')">
+        Submit
+      </md-button>
+      <md-button ng-click="cancel()">
+        Continue as Guest
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
