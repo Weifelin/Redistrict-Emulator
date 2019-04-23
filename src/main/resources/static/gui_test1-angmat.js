@@ -76,7 +76,9 @@ function MeasureNumInput() {}
             console.log("There is a disturbance in the login mechanism...");
           }
 
-          var req = {
+          $mdToast.showSimple(successMessage);
+
+          /*var req = {
             method: 'POST',
             "url": url,               
             data: { 
@@ -92,7 +94,7 @@ function MeasureNumInput() {}
           }, function(response){
             console.log(response.status);
             $mdToast.showSimple(failMessage);   
-          });
+          });*/
         }, function() {
           console.log('You decided to continue as a guest.');
         });
