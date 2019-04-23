@@ -1,7 +1,8 @@
 package com.giant.demo.services;
 
 import com.giant.demo.entities.User;
-import com.giant.demo.repositories.UserRepository;
+import com.giant.demo.repositories.FakeDB;
+//import com.giant.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,14 +16,16 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private FakeDB fakeDB;
+    //private UserRepository userRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException(username);
+//        User user = userRepository.findByUsername(username);
+//        if (user == null) throw new UsernameNotFoundException(username);
+        User user = fakeDB.getUser(username);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 

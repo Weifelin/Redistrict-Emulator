@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Map Test</title>
+  		<!-- Angular Material style sheet -->
+  		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+  		<!-- Leaflet Dependancies -->
+  		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+   		integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+   		crossorigin=""/>
+   		<!-- Leaflet's CSS -->
+ 		<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+   		integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+   		crossorigin=""></script>
+
+   		<link rel="stylesheet" href="gui_test1.css">
+	</head>
+	<body class="mapTest" ng-app="MapApp" ng-cloak>
+		<div ng-controller="AppCtrl as demo" ng-cloak>
+		    <!-- US Map -->
+		    <div leaflet (leafletMapReady)="onMapReady($event)" layout="column" flex="100%" id="map"></div>
+
+		    <!-- FAB Menu -->
+		    <div class="lock-size">
+			    <md-fab-speed-dial md-direction="left" md-open="demo.isOpen" ng-class="demo.selectedMode" class="md-fab-top-right" ng-mouseenter="demo.isOpen=true" ng-mouseleave="demo.isOpen=false">
+			    	<md-fab-trigger>
+	          			<md-button aria-label="menu" class="md-fab">
+	            			<md-icon md-svg-src="img/icons/baseline-menu-24px.svg"></md-icon>
+	          			</md-button>
+	        		</md-fab-trigger>
+
+			    	<md-fab-actions>
+				      	<div ng-repeat="item in demo.items">
+          					<md-button aria-label="{{item.name}}" class="md-fab md-raised md-mini{{item.class}}" ng-click="clickEvent($event, item);" ng-if="item.show">
+            					<md-tooltip md-direction="{{item.direction}}"  md-autohide="false">
+              						{{item.name}}
+            					</md-tooltip>
+
+            					<md-icon md-svg-src="{{item.icon}}" aria-label="{{item.name}}"></md-icon>
+          					</md-button>
+        				</div>
+			    	</md-fab-actions>
+			    </md-fab-speed-dial>
+			</div>
+
+			<!-- State Selection -->
+			<div class="stateSelect md-raised" layout="row" layout-align="center center" layout-padding>
+				<md-button class="md-raised md-fab md-mini">
+					<md-icon md-svg-src="{{demo.buttonIcons.prev.icon}}" aria-label="{{demo.buttonIcons.prev.name}}"></md-icon>
+				</md-button>
+				<md-select placeholder="Select state" ng-model="uiInfo.selectedState" ng-change="" flex="60">
+      				<md-option ng-value="state" ng-repeat="state in demo.states | orderBy">{{state}}</md-option>
+    			</md-select>
+    			<md-button class="md-raised md-fab md-mini">
+					<md-icon md-svg-src="{{demo.buttonIcons.next.icon}}" aria-label="{{demo.buttonIcons.next.name}}"></md-icon>
+				</md-button>
+			</div>
+
+			<!-- Application Menu -->
+			<!-- Single Run Menu -->
+			<div class="algCtrl md-raised" layout="column" layout-align="center stretch" layout-padding ng-if="(demo.username != '') && (uiInfo.selectedState != '') && (demo.mode == 'single')">
+				<div layout="row" layout-align="center start" layout-padding flex="15">
+					<md-input-container class="md-block" flex="75">
+	        			<label>Number of Districts</label>
+	        			<input required type="number" step="any" name="numDistricts" ng-model="algData.numDistricts" min="2" max="70" />
+	        		</md-input-container>
+	        		<md-button class="md-raised" flex="25">
+	        			<label>GENERATE</label>
+	        		</md-button>
+        		</div>
+
+        		<!-- Accordion Tabs -->
+        		<md-content id="accordContainer" flex>
+        			<div layout="column" layout-align="center stretch">
+        				<!-- Toolbar Generation -->
+	        			<md-toolbar class="md-accent accordTab" ng-repeat="(tabKey,tab) in accordionTabs" flex-order="{{tab.order}}">
+	        				<div class="md-toolbar-tools">
+		        				<h7 flex>{{tab.title}}</h7>
+		        				<md-button class="md-icon-button" aria-label="Tab Action" ng-click="changeTabState(tabKey);">
+		          					<md-icon md-svg-icon="{{demo.actions[tab.action].icon}}"></md-icon>
+		        				</md-button>
+	        				</div>
+	        			</md-toolbar>
+
+	        			<!-- Accordion Content -->
+	        			<!-- Compactness tab -->
+	        			<div class="accordContent animate-if" layout="row" ng-if="accordionTabs.compact.open" flex-order="{{accordionTabs.compact.order + 1}}" layout-padding layout-wrap>
+	        				<md-slider-container layout="row" layout-align="center center" layout-wrap ng-repeat="(label,content) in algData.compact">
+		        				<div layout layout-align="start center" flex="100">
+							        <span class="md-body-1">
+							        	{{label}}
+							        	<md-tooltip md-direction="up"  md-autohide="false">
+              								{{content.tooltip}}
+            							</md-tooltip>
+							        </span>
+							    </div>
+							    <md-slider flex="60" ng-model="content.value" step="{{content.step}}" min="{{content.min}}" max="{{content.max}}" aria-label="{{label}}" id="{{content.id}}"></md-slider>
+							    <md-input-container flex="nogrow">
+								    <input type="number" ng-model="content.value" min="{{content.min}}" max="{{content.max}}" step="{{content.step}}" aria-label="{{label}}" aria-controls="{{content.id}}">
+								</md-input-container>
+							</md-slider-container>
+	        			</div>
+
+	        			<!-- Contiguity tab -->
+	        			<div class="accordContent animate-if" layout="row" ng-if="accordionTabs.contig.open" flex-order="{{accordionTabs.contig.order + 1}}" layout-padding layout-wrap>
+	        				<md-slider-container layout="row" layout-align="center center" layout-wrap ng-repeat="(label,content) in algData.contig">
+		        				<div layout layout-align="start center" flex="100">
+							        <span class="md-body-1">
+							        	{{label}}
+							        	<md-tooltip md-direction="up"  md-autohide="false">
+              								{{content.tooltip}}
+            							</md-tooltip>
+							        </span>
+							    </div>
+							    <md-slider flex="60" ng-model="content.value" step="{{content.step}}" min="{{content.min}}" max="{{content.max}}" aria-label="{{label}}" id="{{content.id}}"></md-slider>
+							    <md-input-container flex="nogrow">
+								    <input type="number" ng-model="content.value" min="{{content.min}}" max="{{content.max}}" step="{{content.step}}" aria-label="{{label}}" aria-controls="{{content.id}}">
+								</md-input-container>
+							</md-slider-container>
+	        			</div> 
+
+	        			<!-- Population Equality tab -->
+	        			<div class="accordContent animate-if" layout="row" ng-if="accordionTabs.popEq.open" flex-order="{{accordionTabs.popEq.order + 1}}" layout-padding layout-wrap>
+	        				<md-slider-container layout="row" layout-align="center center" layout-wrap ng-repeat="(label,content) in algData.popEq">
+		        				<div layout layout-align="start center" flex="100">
+							        <span class="md-body-1">
+							        	{{label}}
+							        	<md-tooltip md-direction="up"  md-autohide="false">
+              								{{content.tooltip}}
+            							</md-tooltip>
+							        </span>
+							    </div>
+							    <md-slider flex="60" ng-model="content.value" step="{{content.step}}" min="{{content.min}}" max="{{content.max}}" aria-label="{{label}}" id="{{content.id}}"></md-slider>
+							    <md-input-container flex="nogrow">
+								    <input type="number" ng-model="content.value" min="{{content.min}}" max="{{content.max}}" step="{{content.step}}" aria-label="{{label}}" aria-controls="{{content.id}}">
+								</md-input-container>
+							</md-slider-container>
+	        			</div>
+
+	        			<!-- Partisan Fairness tab -->
+	        			<div class="accordContent animate-if" layout="row" ng-if="accordionTabs.parFai.open" flex-order="{{accordionTabs.parFai.order + 1}}" layout-padding layout-wrap>
+	        				<md-slider-container layout="row" layout-align="center center" layout-wrap ng-repeat="(label,content) in algData.parFai">
+		        				<div layout layout-align="start center" flex="100">
+							        <span class="md-body-1">
+							        	{{label}}
+							        	<md-tooltip md-direction="up"  md-autohide="false">
+              								{{content.tooltip}}
+            							</md-tooltip>
+							        </span>
+							    </div>
+							    <md-slider flex="60" ng-model="content.value" step="{{content.step}}" min="{{content.min}}" max="{{content.max}}" aria-label="{{label}}" id="{{content.id}}"></md-slider>
+							    <md-input-container flex="nogrow">
+								    <input type="number" ng-model="content.value" min="{{content.min}}" max="{{content.max}}" step="{{content.step}}" aria-label="{{label}}" aria-controls="{{content.id}}">
+								</md-input-container>
+							</md-slider-container>
+	        			</div>
+
+	        			<!-- Minority Majority Districts tab -->
+	        			<div class="accordContent animate-if" layout="row" ng-if="accordionTabs.majMinDis.open" flex-order="{{accordionTabs.majMinDis.order + 1}}" layout-padding layout-wrap>
+	        				<md-slider-container layout="row" layout-align="center center" layout-wrap ng-repeat="(label,content) in algData.majMinDis">
+		        				<div layout layout-align="start center" flex="100">
+							        <span class="md-body-1">
+							        	{{label}}
+							        	<md-tooltip md-direction="up"  md-autohide="false">
+              								{{content.tooltip}}
+            							</md-tooltip>
+							        </span>
+							    </div>
+							    <md-slider flex="60" ng-model="content.value" step="{{content.step}}" min="{{content.min}}" max="{{content.max}}" aria-label="{{label}}" id="{{content.id}}"></md-slider>
+							    <md-input-container flex="nogrow">
+								    <input type="number" ng-model="content.value" min="{{content.min}}" max="{{content.max}}" step="{{content.step}}" aria-label="{{label}}" aria-controls="{{content.id}}">
+								</md-input-container>
+							</md-slider-container>
+	        			</div>
+        			</div>
+        		</md-content> <!-- End of Accordion Tabs -->
+			</div> <!-- End of Single Run GUI --> 
+
+			<div class="algCtrl md-raised" layout="column" layout-align="center stretch" layout-padding ng-if="(demo.username != '') && (uiInfo.selectedState != '') && (demo.mode == 'batch')" ng-include src="'./batchUI.tmpl.html'">
+
+			</div>
+		</div>
+
+		<!-- JQuery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+  		<!-- Angular Material requires Angular.js Libraries -->
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+  		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+  		<!-- Angular Material Library -->
+  		<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+  		<!-- Leaflet AJAX -->
+  		<script src="leaflet.ajax.min.js"></script>
+  
+  		<!-- Your application bootstrap  -->
+  		<script type="text/javascript" src="gui_test1-leaflet.js"></script>
+  		<script type="text/javascript" src="gui_test1-angmat.js"></script>
+	</body>
+</html>
