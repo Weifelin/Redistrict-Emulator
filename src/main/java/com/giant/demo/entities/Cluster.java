@@ -3,6 +3,7 @@ package com.giant.demo.entities;
 import org.locationtech.jts.geom.Geometry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 
 public class Cluster {
@@ -11,6 +12,7 @@ public class Cluster {
     private Geometry boundary;
     private ObjectiveFunction objectiveFunction;
     private ArrayList<ClusterEdge> edges;
+    private int population;
 
     public Cluster(int clusterID) {
         this.clusterID = clusterID;
@@ -36,11 +38,6 @@ public class Cluster {
     public Precinct getNextPrecinct(){
         return null;
     }
-
-    public ArrayList<ClusterEdge> combineEdges(ArrayList<ClusterEdge> edges){
-        return null;
-    }
-
 
     public int getClusterID() {
         return clusterID;
@@ -74,11 +71,50 @@ public class Cluster {
         this.objectiveFunction = objectiveFunction;
     }
 
+    public int getPopulation(){
+        return this.population;
+    }
+
     public ArrayList<ClusterEdge> getEdges() {
         return edges;
     }
 
+    public void addEdge(ClusterEdge edge){
+        this.edges.add(edge);
+    }
+
     public void setEdges(ArrayList<ClusterEdge> edges) {
         this.edges = edges;
+    }
+
+    public ArrayList<ClusterEdge> combineEdges(ArrayList<ClusterEdge> edges){
+        for(ClusterEdge edge1 : this.edges){
+            for(ClusterEdge edge2 : edges){
+                if(edge1.equals(edge2))
+                    edge1.mergeEdge(edge2);
+                else
+                    this.addEdge(edge2);
+            }
+        }
+        return edges;
+    }
+
+    public void sortEdges(){
+        Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
+    }
+
+    public Cluster[] findClusterPair(int numClusters, int totalPop){
+        double max = 0.0;
+        Cluster candidate = null;
+        int popUpperBound = totalPop / (numClusters / 2);
+        for(ClusterEdge e : edges){
+            int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
+            if(combinePop <= popUpperBound && e.getJoinability() > max){
+                max = e.getJoinability();
+                candidate = e.getCluster2();
+            }
+        }
+        this.sortEdges();
+        return (candidate != null) ? new Cluster[]{this.edges.get(0).getCluster1(), this.edges.get(0).getCluster2()} : null;
     }
 }

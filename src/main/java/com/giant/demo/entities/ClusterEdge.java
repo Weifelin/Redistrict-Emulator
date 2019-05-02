@@ -55,4 +55,13 @@ public class ClusterEdge {
     public void setEdgeID(int edgeID) {
         this.edgeID = edgeID;
     }
+
+    public int compareTo(ClusterEdge e2){
+        double score = e2.getJoinability();
+        if(this.joinability == score)
+            return 0;
+        else if(this.joinability > score)
+            return 1;
+        return -1;
+    }
 }
