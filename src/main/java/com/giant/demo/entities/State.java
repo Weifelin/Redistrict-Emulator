@@ -12,6 +12,7 @@ public class State {
     private int numOfDistricts;
     private Set<Cluster> districts;
     private Set<Cluster> majorityMinorityDistricts;
+    private int population;
 
     public State() {
     }
@@ -94,5 +95,13 @@ public class State {
         for(Cluster c : this.districts){
             c.setClusterID(i++);
         }
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 }

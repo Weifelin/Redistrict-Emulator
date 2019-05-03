@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class Cluster {
+    public int level = 0;
     private int clusterID;
     private Set<Precinct> containedPrecincts;
     private Geometry boundary;
@@ -115,19 +116,25 @@ public class Cluster {
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }
 
-    public Cluster[] findClusterPair(int numClusters, int totalPop){
+    public ClusterEdge findClusterPair(int numClusters, int totalPop){
         double max = 0.0;
-        Cluster candidate = null;
+        ClusterEdge bestEdge = null;
         int popUpperBound = totalPop / (numClusters / 2);
         for(ClusterEdge e : edges){
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
             if(combinePop <= popUpperBound && e.getJoinability() > max){
                 max = e.getJoinability();
-                candidate = e.getCluster2();
+                bestEdge = e;
             }
         }
         this.sortEdges();
-        return (candidate != null) ? new Cluster[]{this.edges.get(0).getCluster1(), this.edges.get(0).getCluster2()} : null;
+        return bestEdge;
+    }
+
+    public void combineCluster(Cluster c2){
+        this.addPopulation(c2.getPopulation());
+        this.containedPrecincts.addAll(c2.getContainedPrecincts());
+        this.combineEdges(c2.getEdges());
     }
 
     public int compareTo(Cluster c2){
