@@ -64,4 +64,22 @@ public class ClusterEdge {
             return 1;
         return -1;
     }
+
+    //calculate joinability based of percentages from demographics
+    public double calculateJoinability(Demographics d){
+        double score = 0.0;
+        //African American
+        double aa = cluster1.getDemographics().getAfricanAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getAfricanAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+        score += 1 / (aa - d.getAfricanAmerican());
+        //White
+        double w = cluster1.getDemographics().getWhite() * cluster1.getPopulation() + cluster2.getDemographics().getWhite() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+        score += 1 / (w - d.getWhite());
+        //Asian
+        double a = cluster1.getDemographics().getAsian() * cluster1.getPopulation() + cluster2.getDemographics().getAsian() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+        score += 1 / (a - d.getAsian());
+        //Latin American
+        double la = cluster1.getDemographics().getLatinAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getLatinAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+        score += 1 / (la - d.getLatinAmerican());
+        return score;
+    }
 }

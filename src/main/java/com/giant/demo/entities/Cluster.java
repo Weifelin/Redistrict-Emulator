@@ -13,6 +13,7 @@ public class Cluster {
     private ObjectiveFunction objectiveFunction;
     private ArrayList<ClusterEdge> edges;
     private int population;
+    private Demographics demo;
 
     public Cluster(int clusterID) {
         this.clusterID = clusterID;
@@ -34,6 +35,8 @@ public class Cluster {
     public boolean updateBoundary(){
         return false;
     }
+
+    public Demographics getDemographics(){ return demo; }
 
     public Precinct getNextPrecinct(){
         return null;
@@ -99,6 +102,15 @@ public class Cluster {
         return edges;
     }
 
+    public void addPopulation(int pop){
+        this.population += pop;
+    }
+
+    public void addPrecinct(Precinct p){
+        this.addPopulation(p.getPopulation());
+        this.containedPrecincts.add(p);
+    }
+
     public void sortEdges(){
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }
@@ -116,5 +128,11 @@ public class Cluster {
         }
         this.sortEdges();
         return (candidate != null) ? new Cluster[]{this.edges.get(0).getCluster1(), this.edges.get(0).getCluster2()} : null;
+    }
+
+    public int compareTo(Cluster c2){
+        if(this.population == c2.getPopulation())
+            return 0;
+        return (this.population > c2.getPopulation()) ? -1 : 1;
     }
 }

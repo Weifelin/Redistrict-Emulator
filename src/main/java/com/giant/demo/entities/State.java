@@ -2,6 +2,9 @@ package com.giant.demo.entities;
 
 import com.giant.demo.enums.StateE;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class State {
@@ -20,7 +23,10 @@ public class State {
     }
 
     public void breakCluster(Cluster c){
-
+        for(Precinct p : c.getContainedPrecincts()){
+            Cluster neighbor = eligibleCluster();
+            neighbor.addPrecinct(p);
+        }
     }
 
     public void displayMajorityMinorityDistricts(){
@@ -58,5 +64,35 @@ public class State {
 
     public void setMajorityMinorityDistricts(Set<Cluster> majorityMinorityDistricts) {
         this.majorityMinorityDistricts = majorityMinorityDistricts;
+    }
+
+    public Cluster minPopulation(){
+        int min = 0;
+        Cluster ret = null;
+        for(Cluster c : this.districts){
+            if(min == 0 || min > ret.getPopulation()){
+                ret = c;
+                min = ret.getPopulation();
+            }
+        }
+        return ret;
+    }
+
+    public Cluster eligibleCluster(){
+        //Cluster[] clusters =  new HashSet<Cluster>(Arrays.asList(this.districts));
+        //Collection.sort(clusters, (c1, c2) -> c1.compareTo(c2));
+        return null;
+    }
+
+    public void toDistrict(){
+        while(this.districts.size() != numOfDistricts){
+            Cluster breakdown = minPopulation();
+            this.districts.remove(breakdown);
+            breakCluster(breakdown);
+        }
+        int i = 0;
+        for(Cluster c : this.districts){
+            c.setClusterID(i++);
+        }
     }
 }
