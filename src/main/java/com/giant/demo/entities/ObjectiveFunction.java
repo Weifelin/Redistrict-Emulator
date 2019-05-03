@@ -23,6 +23,8 @@ public class ObjectiveFunction {
         return demographicScore;
     }
 
+
+
     public void setDemographicScore(double demographicScore) {
         this.demographicScore = demographicScore;
     }
@@ -59,7 +61,33 @@ public class ObjectiveFunction {
         this.populationScore = populationScore;
     }
 
-    public double getScore() {
+    public double calculateDemographicScore(){
+        return 0.0;
+    }
+
+    public double calculateCompactnessScore(){
+        return 0.0;
+    }
+
+    public double calculateParisanScore(){
+        return 0.0;
+    }
+
+    public double calculatePopulationScore(){
+        return 0.0;
+    }
+
+    public double calculateContiguity(){
+        return 0.0;
+    }
+
+    public double getScore(Job j) {
+        int score = 0;
+        score += calculateCompactnessScore() * j.getCompactnessWeight();
+        score += calculateDemographicScore() * j.getDemographicsWeight();
+        score += calculateParisanScore() * j.getPartisanWeight();
+        score += calculatePopulationScore() * j.getPopulationWeight();
+        score += calculateContiguity() * j.getContiguityWeight();
         return score;
     }
 
