@@ -2,8 +2,6 @@ package com.giant.demo.services;
 
 import com.giant.demo.entities.User;
 
-public interface UserService {
-    void save(User user);
+public class UserService {
 
-    User findByUsername(String username);
 }

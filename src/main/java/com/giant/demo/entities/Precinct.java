@@ -4,17 +4,19 @@ import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import org.locationtech.jts.geom.Geometry;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Set;
 
+@Entity
 public class Precinct {
+    @Id
     private String precinctID;
     private StateE state;
     private int population;
     private Race majority;
     private Geometry boundaries;
     private Set<Precinct> neighbours;
-
-
 
     public Precinct() {
     }
