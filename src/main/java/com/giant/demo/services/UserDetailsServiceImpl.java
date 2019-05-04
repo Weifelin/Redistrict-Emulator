@@ -20,6 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User NOT Found");
         }
 
-        return UserRules;
+        return new UserRules(user);
     }
 }

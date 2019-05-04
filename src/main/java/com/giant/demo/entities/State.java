@@ -15,6 +15,8 @@ public class State {
     private Set<Cluster> districts;
     private Set<Cluster> majorityMinorityDistricts;
     private int population;
+    private Demographics demographics;
+
 
     public State() {
     }
@@ -117,5 +119,13 @@ public class State {
 
     public void setStateID(int stateID) {
         this.stateID = stateID;
+    }
+
+    public Demographics getDemographics() {
+        return demographics;
+    }
+
+    public void setDemographics(Demographics demographics) {
+        this.demographics = demographics;
     }
 }

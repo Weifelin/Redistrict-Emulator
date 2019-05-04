@@ -1,5 +1,6 @@
 package com.giant.demo.entities;
 
+import com.giant.demo.enums.PartyPreference;
 import org.locationtech.jts.geom.Geometry;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ public class Cluster {
     private ObjectiveFunction objectiveFunction;
     private ArrayList<ClusterEdge> edges;
     private int population;
-    private Demographics demo;
+    private Demographics demographics;
+    private PartyPreference partyPreference;
 
     public Cluster(int clusterID) {
         this.clusterID = clusterID;
@@ -38,7 +40,7 @@ public class Cluster {
         return false;
     }
 
-    public Demographics getDemographics(){ return demo; }
+    public Demographics getDemographics(){ return demographics; }
 
     public Precinct getNextPrecinct(){
         return null;
@@ -142,5 +144,17 @@ public class Cluster {
         if(this.population == c2.getPopulation())
             return 0;
         return (this.population > c2.getPopulation()) ? -1 : 1;
+    }
+
+    public PartyPreference getPartyPreference() {
+        return partyPreference;
+    }
+
+    public void setPartyPreference(PartyPreference partyPreference) {
+        this.partyPreference = partyPreference;
+    }
+
+    public void setDemographics(Demographics demographics) {
+        this.demographics = demographics;
     }
 }
