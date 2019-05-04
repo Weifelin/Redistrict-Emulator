@@ -1,5 +1,6 @@
 package com.giant.demo.entities;
 
+import com.giant.demo.enums.PartyPreference;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import org.locationtech.jts.geom.Geometry;
@@ -17,6 +18,7 @@ public class Precinct {
     private Race majority;
     private Geometry boundaries;
     private Set<Precinct> neighbours;
+    private PartyPreference partyPreference;
 
     public Precinct() {
     }
@@ -76,5 +78,13 @@ public class Precinct {
 
     public void setBoundaries(Geometry boundaries) {
         this.boundaries = boundaries;
+    }
+
+    public PartyPreference getPartyPreference() {
+        return partyPreference;
+    }
+
+    public void setPartyPreference(PartyPreference partyPreference) {
+        this.partyPreference = partyPreference;
     }
 }
