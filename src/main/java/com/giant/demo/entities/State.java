@@ -25,7 +25,7 @@ public class State {
 
     public void breakCluster(Cluster c){
         for(Precinct p : c.getContainedPrecincts()){
-            Cluster neighbor = eligibleCluster();
+            Cluster neighbor = eligibleCluster(c);
             neighbor.addPrecinct(p);
         }
     }
@@ -79,10 +79,14 @@ public class State {
         return ret;
     }
 
-    public Cluster eligibleCluster(){
-        //Cluster[] clusters =  new HashSet<Cluster>(Arrays.asList(this.districts));
-        //Collection.sort(clusters, (c1, c2) -> c1.compareTo(c2));
-        return null;
+    public Cluster eligibleCluster(Cluster c){
+        Cluster min = null;
+        for(ClusterEdge e : c.getEdges()){
+            if(min == null || min.getPopulation() < e.getCluster2().getPopulation()){
+                min = e.getCluster2();
+            }
+        }
+        return min;
     }
 
     public void toDistrict(){
