@@ -27,11 +27,6 @@ public class HomeController {
     private UserValidator userValidator;
 
 
-//    @GetMapping("/")
-//    public String load(){
-//        return "index.";
-//    }
-
     /*/login POST controller is provided by Spring Security*/
     @GetMapping("/login")
     public String login(Model model, String error, String logout){
@@ -55,7 +50,7 @@ public class HomeController {
 
         userService.save(newUser);
 
-//        securityService.autoLogin(newUser.getUserName(), newUser.getPassword());
+//        securityService.autoLogin(newUser.getUsername(), newUser.getPassword());
 //
         return "redirect:/single-batch"; //show single batch.
     }

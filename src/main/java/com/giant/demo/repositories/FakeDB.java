@@ -16,7 +16,7 @@ public class FakeDB {
     }
 
     public boolean addUser(User user){
-        users.put(user.getUserName(), user);
+        users.put(user.getUsername(), user);
 
         return true; //hard coded return value.
     }
