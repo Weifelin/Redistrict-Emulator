@@ -1,94 +1,50 @@
 package com.giant.demo;
 
-import com.giant.demo.entities.Cluster;
-import com.giant.demo.entities.ClusterEdge;
-import com.giant.demo.entities.Move;
-import com.giant.demo.entities.Precinct;
+import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
-import org.jgrapht.Graph;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class Algorithm {
+
     private int gerrymanderingIndex;
     private StateE state;
-    private Set<Cluster> clusters;
-    private Graph<Cluster, ClusterEdge> map;
-    private ArrayList<Cluster[]> candidatePairs;
-    private List<Race> communtiesOfInterest;
+    private ArrayList<ClusterEdge> candidatePairs;
+    private List<Race> commmunitiesOfInterest;
+    private State realState;
 
-    public Algorithm() {
+    public Algorithm(){
+        this.candidatePairs = null;
     }
 
-
-    public boolean initalize(){
-        return false;
+    public Set<Cluster> GraphPartition(Set<Cluster> clusters){
+        int level = 0;
+        candidatePairs = new ArrayList<ClusterEdge>();
+        int start = (int) (Math.log(clusters.size()) / Math.log(2));
+        int end = (int) (Math.log(this.realState.getNumOfDistricts()));
+        for(int i =  start; i > end; i--){
+            for(Cluster c : clusters){
+                if(c.level < level){
+                    ClusterEdge candidate = c.findClusterPair(clusters.size(), realState.getPopulation());
+                    if(candidate != null){
+                        candidatePairs.add(candidate);
+                    }
+                }
+            }
+            for(ClusterEdge edge : candidatePairs){
+                edge.getCluster1().combineCluster(edge.getCluster2());
+                clusters.remove(edge.getCluster2());
+                edge.getCluster1().level = level;
+            }
+            level++;
+        }
+        realState.setDistricts(clusters);
+        realState.toDistrict();
+        return realState.getDistricts();
     }
-
-    public boolean phase1(){
-        return false;
-    }
-
-    public boolean phase2(){
-        return false;
-    }
-
-    public boolean updateOF(Move move){
-        return false;
-    }
-
-    public void  normalizeOF(Set<Cluster> clusters){
-
-    }
-
-    public Set<Precinct> selectPrecinct(){
-        return null;
-    }
-
-    public boolean shouldCombine(Cluster c1, Cluster c2){
-        return false;
-    }
-
-    public void combineClusters(Cluster c1, Cluster c2){
-
-    }
-
-    public boolean mergeBorder(Cluster c1, Cluster c2){
-        return false;
-    }
-
-    public boolean updateEdge(Graph map){
-        return false;
-    }
-
-    public boolean sendPrecinct(Precinct p, int c1ID, int c2ID){
-        return false;
-    }
-
-    public int sendCluster(int clusterID){
-        return 0;
-    }
-
-    /*
-    *
-    * methods:
-    *
-    *  sendSummary,
-    *  run
-    *  saveMap
-    *
-    *  -------------------------
-    * class:
-    *   BatchRun
-    *   Job
-    *   Summary
-    * */
-
-
-
 
     public int getGerrymanderingIndex() {
         return gerrymanderingIndex;
@@ -106,35 +62,19 @@ public class Algorithm {
         this.state = state;
     }
 
-    public Set<Cluster> getClusters() {
-        return clusters;
-    }
-
-    public void setClusters(Set<Cluster> clusters) {
-        this.clusters = clusters;
-    }
-
-    public Graph<Cluster, ClusterEdge> getMap() {
-        return map;
-    }
-
-    public void setMap(Graph<Cluster, ClusterEdge> map) {
-        this.map = map;
-    }
-
-    public ArrayList<Cluster[]> getCandidatePairs() {
+    public ArrayList<ClusterEdge> getCandidatePairs() {
         return candidatePairs;
     }
 
-    public void setCandidatePairs(ArrayList<Cluster[]> candidatePairs) {
+    public void setCandidatePairs(ArrayList<ClusterEdge> candidatePairs) {
         this.candidatePairs = candidatePairs;
     }
 
-    public List<Race> getCommuntiesOfInterest() {
-        return communtiesOfInterest;
+    public List<Race> getCommmunitiesOfInterest() {
+        return commmunitiesOfInterest;
     }
 
-    public void setCommuntiesOfInterest(List<Race> communtiesOfInterest) {
-        this.communtiesOfInterest = communtiesOfInterest;
+    public void setCommmunitiesOfInterest(List<Race> commmunitiesOfInterest) {
+        this.commmunitiesOfInterest = commmunitiesOfInterest;
     }
 }
