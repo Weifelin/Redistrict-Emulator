@@ -1,4 +1,4 @@
-package com.giant.demo;
+package com.giant.demo.services;
 
 import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;

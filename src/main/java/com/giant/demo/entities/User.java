@@ -16,7 +16,9 @@ public class User {
     private String username;
     private String password;
     private UserType userType;
-
+    @OneToMany
+    @JoinColumn(name = "stateID")
+    private State state;
     @Transient/*Ignore confirm password when putting into data.*/
     private String passwordConfirm;
 

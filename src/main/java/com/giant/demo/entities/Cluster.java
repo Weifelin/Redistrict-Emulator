@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class Cluster {
+
     public int level = 0;
     private int clusterID;
     private Set<Precinct> containedPrecincts;

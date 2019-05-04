@@ -2,12 +2,14 @@ package com.giant.demo.entities;
 
 import com.giant.demo.enums.StateE;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Set;
 
+@Entity
 public class State {
+    @Id
+    private int stateID;
     private StateE state;
     private int numOfDistricts;
     private Set<Cluster> districts;
@@ -107,5 +109,13 @@ public class State {
 
     public void setPopulation(int population) {
         this.population = population;
+    }
+
+    public int getStateID() {
+        return stateID;
+    }
+
+    public void setStateID(int stateID) {
+        this.stateID = stateID;
     }
 }
