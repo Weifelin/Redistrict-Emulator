@@ -1,6 +1,7 @@
 package com.giant.demo.entities;
 
 import com.giant.demo.enums.StateE;
+import javafx.util.Pair;
 
 public class Job {
     private StateE state;
@@ -9,6 +10,10 @@ public class Job {
     private double contiguityWeight;
     private double populationWeight;
     private double partisanWeight;
+    private Pair<Double, Double> AArange;
+    private Pair<Double, Double> Arange;
+    private Pair<Double, Double> Wrange;
+    private Pair<Double, Double> LArange;
 
     public Job(double demo, double comp, double cont, double pop, double party){
         this.demographicsWeight = demo;
@@ -64,5 +69,37 @@ public class Job {
 
     public void setPartisanWeight(double partisanWeight) {
         this.partisanWeight = partisanWeight;
+    }
+
+    public Pair<Double, Double> getAArange() {
+        return AArange;
+    }
+
+    public void setAArange(Pair<Double, Double> AArange) {
+        this.AArange = AArange;
+    }
+
+    public Pair<Double, Double> getArange() {
+        return Arange;
+    }
+
+    public void setArange(Pair<Double, Double> arange) {
+        Arange = arange;
+    }
+
+    public Pair<Double, Double> getWrange() {
+        return Wrange;
+    }
+
+    public void setWrange(Pair<Double, Double> wrange) {
+        Wrange = wrange;
+    }
+
+    public Pair<Double, Double> getLArange() {
+        return LArange;
+    }
+
+    public void setLArange(Pair<Double, Double> LArange) {
+        this.LArange = LArange;
     }
 }
