@@ -22,7 +22,6 @@ public class Cluster {
     private ArrayList<ClusterEdge> edges;
     private int population;
     @OneToOne
-    private Demographics demo;
     private Demographics demographics;
     private PartyPreference partyPreference;
 

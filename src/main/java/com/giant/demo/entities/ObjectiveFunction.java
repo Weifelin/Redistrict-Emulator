@@ -5,10 +5,7 @@ import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 import org.locationtech.jts.geom.Geometry;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class ObjectiveFunction {
@@ -21,6 +18,8 @@ public class ObjectiveFunction {
     private double partisanScore;
     private double populationScore;
     private double score;
+    @OneToOne
+    @JoinColumn(name = "stateID")
     private State state;
 
     public ObjectiveFunction(State state) {

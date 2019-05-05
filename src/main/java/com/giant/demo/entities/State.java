@@ -17,6 +17,7 @@ public class State {
     @JoinColumn(name = "clusterID")
     private Set<Cluster> majorityMinorityDistricts;
     private int population;
+    @OneToOne
     private Demographics demographics;
 
 
