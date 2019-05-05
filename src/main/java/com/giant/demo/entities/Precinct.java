@@ -7,6 +7,8 @@ import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import java.util.Set;
 
 @Entity
@@ -17,6 +19,8 @@ public class Precinct {
     private int population;
     private Race majority;
     private Geometry boundaries;
+    @ManyToMany
+    @JoinColumn(name = "precinctID")
     private Set<Precinct> neighbours;
     private PartyPreference partyPreference;
 

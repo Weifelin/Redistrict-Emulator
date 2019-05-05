@@ -2,8 +2,7 @@ package com.giant.demo.entities;
 
 import com.giant.demo.enums.StateE;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -12,9 +11,14 @@ public class State {
     private int stateID;
     private StateE state;
     private int numOfDistricts;
+    @OneToMany
     private Set<Cluster> districts;
+    @OneToMany
+    @JoinColumn(name = "clusterID")
     private Set<Cluster> majorityMinorityDistricts;
     private int population;
+    private Demographics demographics;
+
 
     public State() {
     }
@@ -117,5 +121,13 @@ public class State {
 
     public void setStateID(int stateID) {
         this.stateID = stateID;
+    }
+
+    public Demographics getDemographics() {
+        return demographics;
+    }
+
+    public void setDemographics(Demographics demographics) {
+        this.demographics = demographics;
     }
 }

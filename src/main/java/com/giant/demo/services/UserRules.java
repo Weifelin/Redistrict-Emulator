@@ -20,7 +20,7 @@ public class UserRules implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         UserType role = getUserType();
-        return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_"+role.toString()));
     }
 
     @Override

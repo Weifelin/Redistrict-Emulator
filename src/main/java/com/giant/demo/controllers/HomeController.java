@@ -1,57 +1,42 @@
 package com.giant.demo.controllers;
 
 
-
 import com.giant.demo.entities.User;
-//import com.giant.demo.services.SecurityService;
+import com.giant.demo.services.SecurityService;
 import com.giant.demo.services.UserService;
-import com.giant.demo.services.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 public class HomeController {
-
 //    private static AtomicInteger ID_GENERATOR = new AtomicInteger(10000);
-
     @Autowired
     private UserService userService;
-//    @Autowired
-//    private SecurityService securityService;
     @Autowired
-    private UserValidator userValidator;
+    private SecurityService securityService;
 
-
-    /*/login POST controller is provided by Spring Security*/
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout){
-        if (error != null)
-            model.addAttribute("error", "Invalid password or username");
-
-        if (logout != null)
-            model.addAttribute("message", "Logged out");
-
-        return "redirect:/single-batch"; // show single batch run
-    }
-
+//    Login is processed by WebSecurityConfig
+//    /*/login POST controller is provided by Spring Security*/
+//    @GetMapping("/login")
+//    public String login(@Valid @RequestBody User user){
+//        return null;
+//    }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("newUser") User newUser, BindingResult bindingResult){
-        userValidator.validate(newUser, bindingResult);
+    public String register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
 
-        if (bindingResult.hasErrors()){
-            return "register error";
+
+        User user = userService.save(newUser);
+        if (user != null) {
+            securityService.autoLogin(newUser.getUsername(), newUser.getPassword(), httpServletRequest);
         }
 
-        userService.save(newUser);
-
-//        securityService.autoLogin(newUser.getUsername(), newUser.getPassword());
-//
         return "redirect:/single-batch"; //show single batch.
     }
 

@@ -1,10 +1,22 @@
 package com.giant.demo.entities;
 
-class Demographics{
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Demographics{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int demoID;
     private double african_american;
     private double white;
     private double asian;
     private double latin_american;
+
+    public Demographics() {
+    }
 
     public Demographics(double aa, double w, double a, double la){
         this.african_american = aa;

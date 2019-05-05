@@ -3,6 +3,9 @@ package com.giant.demo.entities;
 import com.giant.demo.enums.UserType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 /*This is representation of user table in db.*/
 /*JPA Entity is defined with @Entity annotation, represent a table in database.*/
@@ -12,13 +15,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userID;
-
+    @NotBlank(message = "Username Can't Be Empty")
     private String username;
+    @NotBlank(message = "Password Can't Be Empty")
     private String password;
     private UserType userType;
     @OneToMany
     @JoinColumn(name = "stateID")
-    private State state;
+    private List<State> states;
     @Transient/*Ignore confirm password when putting into data.*/
     private String passwordConfirm;
 
@@ -30,8 +34,12 @@ public class User {
         this.username = username;
         this.userType = userType;
         this.password = password;
+        this.states = new ArrayList<>();
     }
 
+    public void addState(State state){
+        states.add(state);
+    }
 
     public String getUsername() {
         return username;

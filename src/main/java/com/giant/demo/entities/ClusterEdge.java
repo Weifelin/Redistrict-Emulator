@@ -1,10 +1,13 @@
 package com.giant.demo.entities;
 
 public class ClusterEdge {
+
+
+    private int edgeID;
     private Cluster cluster1;
     private Cluster cluster2;
     private double joinability;
-    private int edgeID;
+
 
     public ClusterEdge() {
     }

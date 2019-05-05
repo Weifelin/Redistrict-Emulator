@@ -1,21 +1,37 @@
 package com.giant.demo.entities;
 
+import com.giant.demo.enums.PartyPreference;
 import org.locationtech.jts.geom.Geometry;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 
+@Entity
 public class Cluster {
-
-    public int level = 0;
+    @Id
     private int clusterID;
+    public int level = 0;
+    @OneToMany
     private Set<Precinct> containedPrecincts;
     private Geometry boundary;
+    @OneToOne
     private ObjectiveFunction objectiveFunction;
+    @Transient
     private ArrayList<ClusterEdge> edges;
     private int population;
+<<<<<<< HEAD
+    @OneToOne
     private Demographics demo;
+=======
+    private Demographics demographics;
+    private PartyPreference partyPreference;
+>>>>>>> 02c0c9d19086a520829b61a20973f0a723957b8e
+
+
+    public Cluster() {
+    }
 
     public Cluster(int clusterID) {
         this.clusterID = clusterID;
@@ -38,7 +54,7 @@ public class Cluster {
         return false;
     }
 
-    public Demographics getDemographics(){ return demo; }
+    public Demographics getDemographics(){ return demographics; }
 
     public Precinct getNextPrecinct(){
         return null;
@@ -142,5 +158,17 @@ public class Cluster {
         if(this.population == c2.getPopulation())
             return 0;
         return (this.population > c2.getPopulation()) ? -1 : 1;
+    }
+
+    public PartyPreference getPartyPreference() {
+        return partyPreference;
+    }
+
+    public void setPartyPreference(PartyPreference partyPreference) {
+        this.partyPreference = partyPreference;
+    }
+
+    public void setDemographics(Demographics demographics) {
+        this.demographics = demographics;
     }
 }
