@@ -19,6 +19,7 @@ public class State {
     private int population;
     @OneToOne
     private Demographics demographics;
+    private int numMinorityDistricts;
 
 
     public State() {
@@ -130,5 +131,10 @@ public class State {
 
     public void setDemographics(Demographics demographics) {
         this.demographics = demographics;
+    }
+
+    //needs to hold the number of minority majority districts
+    public int getNumMinorityDistricts() {
+        return this.numMinorityDistricts;
     }
 }
