@@ -21,13 +21,11 @@ public class Cluster {
     @Transient
     private ArrayList<ClusterEdge> edges;
     private int population;
-<<<<<<< HEAD
     @OneToOne
     private Demographics demo;
-=======
     private Demographics demographics;
     private PartyPreference partyPreference;
->>>>>>> 02c0c9d19086a520829b61a20973f0a723957b8e
+
 
 
     public Cluster() {

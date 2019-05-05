@@ -1,22 +1,16 @@
 package com.giant.demo.entities;
 
-<<<<<<< HEAD
+import com.giant.demo.enums.PartyPreference;
+import org.locationtech.jts.algorithm.ConvexHull;
+import org.locationtech.jts.algorithm.MinimumBoundingCircle;
+import org.locationtech.jts.geom.Geometry;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-=======
-import com.giant.demo.DemoApplication;
-import com.giant.demo.enums.PartyPreference;
-import org.locationtech.jts.algorithm.ConvexHull;
-import org.locationtech.jts.algorithm.MinimumBoundingCircle;
-import org.locationtech.jts.geom.Geometry;
-
-import java.util.Set;
-
->>>>>>> 02c0c9d19086a520829b61a20973f0a723957b8e
 public class ObjectiveFunction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
