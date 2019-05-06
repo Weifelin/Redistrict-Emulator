@@ -114,7 +114,7 @@ public class ObjectiveFunction {
         for(Cluster c : this.state.getDistricts()){
             Demographics demo = c.getDemographics();
 
-            double demoScore = 0, temp;
+            double demoScore = 0;
             int count = 0;
             if(this.state.getDemographics().getRaces().contains(Race.African_American)) {
                 demoScore = 1 / distance(demo.getAfricanAmerican(), this.state.getWeights().getAArange());
