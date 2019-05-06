@@ -20,6 +20,7 @@ public class State {
     @OneToOne
     private Demographics demographics;
     private int numMinorityDistricts;
+    private Job weights;
 
 
     public State() {
@@ -136,5 +137,13 @@ public class State {
     //needs to hold the number of minority majority districts
     public int getNumMinorityDistricts() {
         return this.numMinorityDistricts;
+    }
+
+    public Job getWeights() {
+        return weights;
+    }
+
+    public void setWeights(Job weights) {
+        this.weights = weights;
     }
 }

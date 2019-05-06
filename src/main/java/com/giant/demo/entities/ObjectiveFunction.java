@@ -3,6 +3,7 @@ package com.giant.demo.entities;
 import com.giant.demo.enums.Measures;
 import com.giant.demo.enums.PartyPreference;
 import com.giant.demo.enums.Race;
+import javafx.util.Pair;
 import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 import org.locationtech.jts.geom.Geometry;
@@ -98,6 +99,16 @@ public class ObjectiveFunction {
         this.populationScore = populationScore;
     }
 
+    public double distance(double x, Pair<Double, Double> pair){
+        double min = pair.getKey();
+        double max = pair.getValue();
+        if(x <= min)
+            return x - min;
+        else if(x >= max)
+            return max - x;
+        return 1;
+    }
+
     public double calculateDemographicScore(){
         double min = Double.POSITIVE_INFINITY, max = 0;
         double score = 0;
@@ -105,26 +116,22 @@ public class ObjectiveFunction {
         for(Cluster c : this.state.getDistricts()){
             Demographics demo = c.getDemographics();
 
-            double demoScore = 0, temp;
+            double demoScore = 0;
             int count = 0;
             if(this.state.getDemographics().getRaces().contains(Race.African_American)) {
-                temp = Math.abs(demo.getAfricanAmerican() - this.state.getDemographics().getAfricanAmerican());
-                demoScore = (temp != 0) ? 1 / temp : 1;
+                demoScore = 1 / distance(demo.getAfricanAmerican(), this.state.getWeights().getAArange());
                 count++;
             }
             else if(this.state.getDemographics().getRaces().contains(Race.Asian)) {
-                temp = Math.abs(demo.getAsian() - this.state.getDemographics().getAsian());
-                demoScore = (temp != 0) ? 1 / temp : 1;
+                demoScore = 1 / distance(demo.getAsian(), this.state.getWeights().getArange());
                 count++;
             }
             else if(this.state.getDemographics().getRaces().contains(Race.White)) {
-                temp = Math.abs(demo.getWhite() - this.state.getDemographics().getWhite());
-                demoScore = (temp != 0) ? 1 / temp : 1;
+                demoScore = 1/ distance(demo.getWhite(), this.state.getWeights().getWrange());
                 count++;
             }
             else if(this.state.getDemographics().getRaces().contains(Race.Latin_American)){
-                temp = Math.abs(demo.getLatinAmerican() - this.state.getDemographics().getLatinAmerican());
-                demoScore = (temp != 0) ? 1 / temp : 1;
+                demoScore = 1 / distance(demo.getLatinAmerican(), this.state.getWeights().getLArange());
                 count++;
             }
             demoScore /= count;
