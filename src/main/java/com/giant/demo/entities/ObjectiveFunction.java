@@ -24,7 +24,9 @@ public class ObjectiveFunction {
     @OneToOne
     @JoinColumn(name = "stateID")
     private State state;
+    @Transient
     private Map<Measures, Double> maxScores;
+    @Transient
     private Map<Measures, Double> minScores;
 
     public ObjectiveFunction(State state) {

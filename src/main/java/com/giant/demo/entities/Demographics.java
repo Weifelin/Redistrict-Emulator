@@ -2,10 +2,7 @@ package com.giant.demo.entities;
 
 import com.giant.demo.enums.Race;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -17,6 +14,7 @@ public class Demographics{
     private double white;
     private double asian;
     private double latin_american;
+    @Transient
     private Set<Race> races;
 
     public Demographics() {

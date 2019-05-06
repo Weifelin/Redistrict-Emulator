@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,6 +30,12 @@ public class HomeController {
     @GetMapping("/login")
     public String login(Model model, String error, String logout){
         return "login";
+    }
+
+    @GetMapping("/")
+    public String index(Model model){
+        //return new ModelAndView("index");
+        return "index";
     }
 
     @PostMapping("/register")
