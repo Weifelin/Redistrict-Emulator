@@ -20,6 +20,7 @@ public class State {
     @OneToOne
     private Demographics demographics;
     private int numMinorityDistricts;
+    @OneToOne
     private Job weights;
 
 

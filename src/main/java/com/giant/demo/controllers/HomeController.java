@@ -25,18 +25,23 @@ public class HomeController {
     @Autowired
     private SecurityService securityService;
 
-    //Login is processed by WebSecurityConfig
     /*/login POST controller is provided by Spring Security*/
     @GetMapping("/login")
-    public String login(Model model, String error, String logout){
-        return "login";
+    public ModelAndView login(Model model, String error, String logout){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("login");
+        return modelAndView;
     }
 
     @GetMapping("/")
-    public String index(Model model){
+    public ModelAndView index(){
         //return new ModelAndView("index");
-        return "index";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
     }
+
+
 
     @PostMapping("/register")
     public String register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
@@ -47,7 +52,7 @@ public class HomeController {
             securityService.autoLogin(newUser.getUsername(), newUser.getPassword(), httpServletRequest);
         }
 
-        return "redirect:/single-batch"; //show single batch.
+        return "single-batch"; //show single batch.
     }
 
     @GetMapping("/error")

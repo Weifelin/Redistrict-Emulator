@@ -3,16 +3,26 @@ package com.giant.demo.entities;
 import com.giant.demo.enums.StateE;
 import javafx.util.Pair;
 
+import javax.persistence.*;
+
+@Entity
 public class Job {
-    private StateE state;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int jobID;
     private double demographicsWeight;
     private double compactnessWeight;
     private double contiguityWeight;
     private double populationWeight;
     private double partisanWeight;
+    @Transient
     private Pair<Double, Double> AArange;
+    @Transient
     private Pair<Double, Double> Arange;
+    @Transient
     private Pair<Double, Double> Wrange;
+    @Transient
     private Pair<Double, Double> LArange;
 
     public Job(double demo, double comp, double cont, double pop, double party){
@@ -55,13 +65,7 @@ public class Job {
         this.populationWeight = populationWeight;
     }
 
-    public StateE getState() {
-        return state;
-    }
 
-    public void setState(StateE state) {
-        this.state = state;
-    }
 
     public double getPartisanWeight() {
         return partisanWeight;
