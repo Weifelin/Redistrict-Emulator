@@ -15,6 +15,11 @@ public class UserService {
     private static BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public User save(User newUser) {
+        /*To see if duplicate username is found*/
+        User user = userRepository.findByUsername(newUser.getUsername());
+        if (user != null){
+            return null;
+        }
         String password = bCryptPasswordEncoder.encode(newUser.getPassword());
         newUser.setPassword(password);
         newUser.setUserType(UserType.REGULAR);

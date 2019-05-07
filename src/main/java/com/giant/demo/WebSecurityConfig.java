@@ -1,6 +1,6 @@
 package com.giant.demo;
 
-import com.giant.demo.enums.UserType;
+import com.giant.demo.filter.CsrfHeaderFilter;
 import com.giant.demo.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +35,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        /*
+        Except the home page and login page. All other html will be protected.
+        The access to other page will be redirect to either login page or home page
+        by: angular.
+        The server side will be sending Unauthorized error,
+        which will be captured and processed by client side, and redirect to different pages.
+        */
         http
+                .httpBasic()
+                .and()
+                .authorizeRequests().antMatchers("/index.html", "/login.html", "/", "/index", "/login").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/")
+                    .failureForwardUrl("/login")
+                .and()
+                .logout()
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutSuccessUrl("/")
+                .and()
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
+                .csrf()
+                .csrfTokenRepository(csrfTokenRepository())
+        ;
+        /*http
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login", "/register", "/","/index").permitAll()
@@ -58,7 +86,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/login")
-        ;
+        ;*/
+    }
+    /*Tell the name of the cookie*/
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 
 }

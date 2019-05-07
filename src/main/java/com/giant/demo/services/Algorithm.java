@@ -77,4 +77,6 @@ public class Algorithm {
     public void setCommmunitiesOfInterest(List<Race> commmunitiesOfInterest) {
         this.commmunitiesOfInterest = commmunitiesOfInterest;
     }
+
+
 }
