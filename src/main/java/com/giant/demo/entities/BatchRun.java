@@ -1,6 +1,7 @@
 package com.giant.demo.entities;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Queue;
 
 @Entity
@@ -9,10 +10,13 @@ public class BatchRun {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int batchRunID;
     @OneToMany
-    private Queue<Job> jobList;
+    private List<Job> jobList;
+    @Transient
+    private int count;
 
-    public BatchRun(Queue<Job> jobList) {
+    public BatchRun(List<Job> jobList) {
         this.jobList = jobList;
+        this.count = 0;
     }
 
     public BatchRun() {
@@ -23,6 +27,7 @@ public class BatchRun {
     }
 
     public Job getJob(){
-        return jobList.poll();
+        Job job = jobList.get(count);
+        return job;
     }
 }

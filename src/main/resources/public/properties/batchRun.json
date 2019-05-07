@@ -1,0 +1,275 @@
+{
+		"type": "guiGroup",
+		"id": "BatchRun",
+		"properties": "batchRun",
+		"sections": {
+			"mainControls": {
+				"type": "guiGroup",
+				"id": "BatchMainCtrl",
+				"properties": "mainCtrl",
+				"sections": {
+					"numBatchesInput": {
+						"type": "numInput",
+						"properties": "numBatches",
+						"id": "numDistrict",
+						"label": "Number of Batches",
+						"tooltip": "",
+						"tooltipDir": "",
+						"min": 1,
+						"max": 1000000000,
+						"step": "1",
+						"value": "",
+						"required": true
+					},
+					"runButton": {
+						"type": "textBtn",
+						"properties": "runBtn", 
+						"id": "batchRunBtn", 
+						"label": "batchRunBtn", 
+						"text": "Generate", 
+						"clickEvent": "batchRun", 
+						"tooltip": "", 
+						"tooltipDir": ""
+					},
+                                        "minDistrictInput": {
+                                                "type": "numInput",
+						"properties": "minDistrict",
+						"id": "minDistrict",
+						"label": "Min Number of Districts",
+						"tooltip": "",
+						"tooltipDir": "",
+						"min": 1,
+						"max": 1000000000,
+						"step": "1",
+						"value": "",
+						"required": true
+                                        },
+                                        "maxDistrictInput": {
+                                                "type": "numInput",
+						"properties": "maxDistrict",
+						"id": "maxBatches",
+						"label": "Max Number of Districts",
+						"tooltip": "",
+						"tooltipDir": "",
+						"min": 1,
+						"max": 1000000000,
+						"step": "1",
+						"value": "",
+						"required": true
+                                        }
+				}
+			},
+			"measureTabs": {
+				"type": "guiGroup",
+				"properties": "accordContainer",
+				"id": "accordContainer",
+				"sections": {
+					"compactnessTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "compactTab",
+						"title": "Compactness",
+						"content": {
+							"type": "guiGroup",
+							"id": "compactContent",
+							"properties": "guiGroup",
+							"sections": {
+								"polsPopRanger": {	
+									"type": "rangeMeasure",
+									"properties": "rangeMeasure",
+									"id": "1",
+									"label": "Polsby-popper",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+                                                                        "childProperties": "slideMeasure"
+								},
+								"schwartzRanger": {
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "2",
+									"label": "Schwartzberg",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								},
+								"convexHullRanger": {
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "3",
+									"label": "Convex Hull",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								},
+								"reockRanger": {
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "4",
+									"label": "Reock",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								}
+							}
+						},
+						"flexOrder": 1,
+						"open": true,
+						"expandButton": "accordBtnOpen"
+					},
+					"contigTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "contigTab",
+						"title": "Contiguity",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "contigContent",
+							"sections": {
+								"contigRanger": {	
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "1",
+									"label": "Contiguity",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								}
+							}
+						},
+						"flexOrder": 3,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"popEqTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "popEqTab",
+						"title": "Population Equality",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "popEqContent",
+							"sections": {
+								"popEqRanger": {
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "8",
+									"label": "Population Equality",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								}
+							}
+						},
+						"flexOrder": 5,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"partFairTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "6",
+						"title": "Partisan Fairness",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "partFairContent",
+							"sections": {
+								"partFairRanger": {
+                                                                        "properties": "rangeMeasure",
+									"childProperties": "slideMeasure",
+									"id": "9",
+									"label": "Partisan Fairness",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "rangeMeasure"
+								}
+							}
+						},
+						"flexOrder": 7,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"majMinTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "6",
+						"title": "Majority-Minority Districts",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "majMinContent",
+							"sections": {
+								"numMajMin": {	
+									"properties": "numInput",
+									"id": "17",
+									"label": "7",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 1,
+									"max": 100,
+									"step": "1",
+									"value": "",
+									"required": false,
+									"type": "numInput"
+								},
+								"minoritySelect": {
+									"properties": "select",
+									"id": "7",
+									"label": "Minority Select",
+									"options": [
+										"African-American",
+										"Asian",
+										"Latin-American",
+										"White"
+									],
+									"selected": [],
+									"multiSelect": true,
+									"onChange": "",
+									"type": "select"
+								},
+								"minSettingsGroup": {
+									"type": "guiGroup",
+									"properties": "guiGroup",
+									"id": "tabs",
+									"sections": []
+								}
+							}
+						},
+						"flexOrder": 9,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					}
+				}
+			}
+		}
+}

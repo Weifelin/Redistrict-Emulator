@@ -1,0 +1,110 @@
+{
+		"type": "guiGroup",
+		"id": "appMenu",
+		"properties": "default",
+		"sections": {
+			"mainMenu": {
+				"type": "menu",
+				"properties": "menu",
+				"open": false,
+				"direction": "left",
+				"triggerButton" : {
+					"type": "iconBtn",
+					"properties": "menuTrigger", 
+					"id": "menuTrigger", 
+					"label": "", 
+					"icon": "img/icons/baseline-menu-24px.svg", 
+					"clickEvent": "",
+					"eventArgs": "", 
+					"tooltip": "", 
+					"tooltipDir": ""
+				},
+				"actions" : [
+					{
+						"type": "iconBtn",
+						"properties": "menuAction", 
+						"id": "singleRun", 
+						"label": "singleRun", 
+						"icon": "img/icons/baseline-photo-24px.svg", 
+						"clickEvent": "changeMode",
+						"eventArgs": "{'mode': 'singleRun'}", 
+						"tooltip": "Single Run", 
+						"tooltipDir": "bottom"
+					},
+					{
+						"type": "iconBtn",
+						"properties": "batchRunAction", 
+						"id": "batchRun", 
+						"label": "batchRun", 
+						"icon": "img/icons/baseline-add_photo_alternate-24px.svg", 
+						"clickEvent": "changeMode",
+						"eventArgs": "{'mode': 'batchRun'}", 
+						"tooltip": "Batch Run", 
+						"tooltipDir": "bottom"
+					},
+					{
+						"type": "iconBtn",
+						"properties": "loginAction", 
+						"id": "login", 
+						"label": "login", 
+						"icon": "img/icons/baseline-person_outline-24px.svg", 
+						"clickEvent": "login",
+						"eventArgs": "{}", 
+						"tooltip": "Log In/Sign Up", 
+						"tooltipDir": "bottom"
+					},
+					{
+						"type": "iconBtn",
+						"properties": "logoutAction", 
+						"id": "logout", 
+						"label": "logout", 
+						"icon": "img/icons/baseline-exit_to_app-24px.svg", 
+						"clickEvent": "logout",
+						"eventArgs": "{}", 
+						"tooltip": "Log Out", 
+						"tooltipDir": "bottom"
+					}
+				]
+			},
+			"stateSelect": {
+				"type": "guiGroup",
+				"id": "stateSelect",
+				"properties": "stateSelect",
+				"sections": {
+					"prevButton": {
+						"type": "iconBtn",
+						"properties": "iconBtn", 
+						"id": "prevStateBtn", 
+						"label": "prevStateBtn", 
+						"icon": "img/icons/baseline-navigate_before-24px.svg", 
+						"clickEvent": "advanceState",
+						"eventArgs": "{ 'sectionId': 'appMenu', 'buttonUrl': $ctrl.button.url, 'action': 'previous' }", 
+						"tooltip": "", 
+						"tooltipDir": ""
+					},
+					"stateSelectBox": {
+						"properties": "select",
+						"id": "stateChoice",
+						"label": "stateChoice",
+						"options": [],
+						"selected": "",
+						"multiSelect": false,
+						"onChange": "setSelectedState",
+						"eventArgs": "{ 'state': $ctrl.select.selected }",
+						"type": "select"
+					},
+					"nextButton": {
+						"type": "iconBtn",
+						"properties": "iconBtn", 
+						"id": "nextStateBtn", 
+						"label": "nextStateBtn", 
+						"icon": "img/icons/baseline-navigate_next-24px.svg", 
+						"clickEvent": "advanceState",
+						"eventArgs": "{ 'sectionId': 'appMenu', 'buttonUrl': $ctrl.button.url, 'action': 'next' }", 
+						"tooltip": "", 
+						"tooltipDir": ""
+					}
+				}
+			}
+		}
+}

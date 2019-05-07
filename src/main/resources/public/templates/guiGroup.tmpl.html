@@ -1,0 +1,11 @@
+<div id="{{$ctrl.group.id}}" ng-class="$ctrl.group.classes" ng-if="$eval($ctrl.group.ifClause)">
+	<gui-group ng-repeat-start="(sectionID, section) in $ctrl.group.sections" ng-if="section.type === 'guiGroup'" group="$ctrl.group.sections[sectionID]" ng-class="section.flex"></gui-group>
+	<menu ng-if="section.type == 'menu'" menu="$ctrl.group.sections[sectionID]" ng-class="section.flex"></menu>
+	<text-button ng-if="section.type === 'textBtn'" button="$ctrl.group.sections[sectionID]" ng-class="section.flex"></text-button>
+	<icon-button ng-if="section.type === 'iconBtn'" button="$ctrl.group.sections[sectionID]" ng-class="section.flex"></icon-button>
+	<number-input ng-if="section.type === 'numInput'" input="$ctrl.group.sections[sectionID]" ng-class="section.flex"></number-input>
+	<slide-measure ng-if="section.type === 'slideMeasure'" slider="$ctrl.group.sections[sectionID]" ng-class="section.flex"></slide-measure>
+	<range-measure ng-if="section.type === 'rangeMeasure'" range="$ctrl.group.sections[sectionID]" ng-class="section.flex"></range-measure>
+	<select-display ng-if="section.type === 'select'" select="$ctrl.group.sections[sectionID]" ng-class="section.flex"></select-display>
+	<accordion-tab ng-repeat-end ng-if="section.type === 'accordTab'" accordion="$ctrl.group.sections[sectionID]" ng-class="section.flex"></accordion>
+</div>
