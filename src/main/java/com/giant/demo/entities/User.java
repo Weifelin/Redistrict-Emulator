@@ -25,6 +25,7 @@ public class User {
     private List<State> states;
     @Transient/*Ignore confirm password when putting into data.*/
     private String passwordConfirm;
+    private List<BatchRun> batchRunList;
 
     public User(){
 
@@ -35,6 +36,7 @@ public class User {
         this.userType = userType;
         this.password = password;
         this.states = new ArrayList<>();
+        this.batchRunList = new ArrayList<>();
     }
 
     public void addState(State state){

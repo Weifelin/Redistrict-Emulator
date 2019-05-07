@@ -22,27 +22,28 @@ public class Algorithm {
 
     public Set<Cluster> GraphPartition(Set<Cluster> clusters){
         int level = 0;
-        candidatePairs = new ArrayList<ClusterEdge>();
-        int start = (int) (Math.log(clusters.size()) / Math.log(2));
-        int end = (int) (Math.log(this.realState.getNumOfDistricts()));
+        candidatePairs = new ArrayList<ClusterEdge>();//list to hold pairs based off joinability
+        int start = (int) (Math.log(clusters.size()) / Math.log(2));//number of pairings needed to partition
+        int end = (int) (Math.log(this.realState.getNumOfDistricts()));//number desired in logs
         for(int i =  start; i > end; i--){
             for(Cluster c : clusters){
-                if(c.level < level){
+                if(c.level < level){//only pair each cluster once per iteration
                     ClusterEdge candidate = c.findClusterPair(clusters.size(), realState.getPopulation());
                     if(candidate != null){
                         candidatePairs.add(candidate);
                     }
                 }
             }
+            //When all the candidate pairs are picked they are then evaluated
             for(ClusterEdge edge : candidatePairs){
                 edge.getCluster1().combineCluster(edge.getCluster2());
-                clusters.remove(edge.getCluster2());
+                clusters.remove(edge.getCluster2());//second cluster removed
                 edge.getCluster1().level = level;
             }
             level++;
         }
         realState.setDistricts(clusters);
-        realState.toDistrict();
+        realState.toDistrict();//makes sure the number of districts is the desired amount
         return realState.getDistricts();
     }
 
@@ -77,4 +78,6 @@ public class Algorithm {
     public void setCommmunitiesOfInterest(List<Race> commmunitiesOfInterest) {
         this.commmunitiesOfInterest = commmunitiesOfInterest;
     }
+
+
 }

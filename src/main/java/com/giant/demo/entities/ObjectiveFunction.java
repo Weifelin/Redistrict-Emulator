@@ -26,9 +26,9 @@ public class ObjectiveFunction {
     @JoinColumn(name = "stateID")
     private State state;
     @Transient
-    private Map<Measures, Double> maxScores;
+    private Map<Measures, Double> maxScores;//max normalize scores
     @Transient
-    private Map<Measures, Double> minScores;
+    private Map<Measures, Double> minScores;//min normalize scores
 
     public ObjectiveFunction(State state) {
         this.state = state;
@@ -51,6 +51,7 @@ public class ObjectiveFunction {
         return (x - min) / (max - min);
     }
 
+    /*Normalize each measure but accessing the stored min and max that is observed during the duration of the algorithm*/
     public void normalizedObjectiveFunction(){
         setDemographicScore(normalize(getDemographicScore(), minScores.get(Measures.Demographics), maxScores.get(Measures.Demographics)));
         setCompactnessScore(normalize(getCompactnessScore(), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness)));
@@ -59,46 +60,8 @@ public class ObjectiveFunction {
         setPartisanScore(normalize(getPartisanScore(), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)));
     }
 
-    public double getDemographicScore() {
-        return demographicScore;
-    }
 
-    public void setDemographicScore(double demographicScore) {
-        this.demographicScore = demographicScore;
-    }
-
-    public double getCompactnessScore() {
-        return compactnessScore;
-    }
-
-    public void setCompactnessScore(double compactnessScore) {
-        this.compactnessScore = compactnessScore;
-    }
-
-    public double getContiguity() {
-        return contiguity;
-    }
-
-    public void setContiguity(double contiguity) {
-        this.contiguity = contiguity;
-    }
-
-    public double getPartisanScore() {
-        return partisanScore;
-    }
-
-    public void setPartisanScore(double partisanScore) {
-        this.partisanScore = partisanScore;
-    }
-
-    public double getPopulationScore() {
-        return populationScore;
-    }
-
-    public void setPopulationScore(double populationScore) {
-        this.populationScore = populationScore;
-    }
-
+    //calculate the distance of x from the min and mx values
     public double distance(double x, Pair<Double, Double> pair){
         double min = pair.getKey();
         double max = pair.getValue();
@@ -109,6 +72,7 @@ public class ObjectiveFunction {
         return 1;
     }
 
+    //For each of the selected demographics the avg score per clusters is calculated
     public double calculateDemographicScore(){
         double min = Double.POSITIVE_INFINITY, max = 0;
         double score = 0;
@@ -156,21 +120,26 @@ public class ObjectiveFunction {
         double minP = 20, minR = 20, minC = 20, minS = 20;
         for(Cluster c : this.state.getDistricts()) {
             //Polsby-Popper
+            //Area divided by Perimeter
             double A = Math.PI * Math.pow(c.getBoundary().getLength() / (2 * Math.PI), 2);
             polsbyPopper += 4 * Math.PI * (A / Math.pow(c.getBoundary().getLength(), 2));
             maxP = (polsbyPopper > maxP) ? polsbyPopper : maxP;
             minP = (polsbyPopper < minP) ? polsbyPopper : minP;
             //Reock
+            //Area of the Distrist divided by the area of the minimum bounding circle
             Geometry circle = new MinimumBoundingCircle(c.getBoundary()).getCircle();
             reock += c.getBoundary().getArea() / circle.getArea();
             maxR = (reock > maxR) ? reock : maxR;
             minR = (reock < minR) ? reock : minR;
             //ConvexHull
+            //ratio of area of district to area of convex hull
             Geometry polygon = new ConvexHull(c.getBoundary()).getConvexHull();
             convexHull += c.getBoundary().getArea() / polygon.getArea();
             maxC = (convexHull > maxC) ? convexHull : maxC;
             minC = (convexHull < maxC) ? convexHull : minC;
             //Schwartzberg
+            //ratio of perimeter of the district to circumference of circle whose area is
+            //equal to area of district
             double r = Math.sqrt(c.getBoundary().getArea() / Math.PI);
             schwartzberg += 1 / (c.getBoundary().getLength() / (2 * Math.PI * r));
             maxS = (schwartzberg > maxS) ? schwartzberg : maxS;
@@ -195,11 +164,13 @@ public class ObjectiveFunction {
         return score;//normalize(score, 0, 4);
     }//makes sure to nomralize between 0 and 4 to makes sure that is isnt double normalized
 
+
     public double calculateParisanScore(){
         double perDemo = 0, perRep = 0, perInd = 0;
         int numD = 0, numR = 0, numI = 0;
         for(Cluster c : this.state.getDistricts()){
             int numDemo = 0, numRep = 0, numInd = 0;
+            //percentage representation per cluster
             for(Precinct p : c.getContainedPrecincts()){
                 if(p.getPartyPreference() == PartyPreference.BLUE)
                     numDemo++;
@@ -208,6 +179,7 @@ public class ObjectiveFunction {
                 else
                     numInd++;
             }
+            //percentage party affiliation
             perDemo += numDemo / c.getContainedPrecincts().size();
             perRep += numRep / c.getContainedPrecincts().size();
             perInd += numInd / c.getContainedPrecincts().size();
@@ -219,6 +191,7 @@ public class ObjectiveFunction {
                 numI++;
         }
         double score = 0.0;
+        //measure distance of overall representation to each cluster
         score += 1 / Math.abs(perDemo - numD);
         score += 1 / Math.abs(perRep - numR);
         score += 1 / Math.abs(perInd - numI);
@@ -232,6 +205,7 @@ public class ObjectiveFunction {
         return score;
     }
 
+    //measure how close the population of each cluster is so being #people / # districts
     public double calculatePopulationScore(){
         double score = 0, avgPop = this.state.getPopulation() / this.state.getDistricts().size();
         for(Cluster c : this.state.getDistricts()){
@@ -247,6 +221,7 @@ public class ObjectiveFunction {
         return score;
     }
 
+    //Calculate the convex hull of the district and measure difference from area of district
     public double calculateContiguity() {
         double score = 0, min = Double.POSITIVE_INFINITY, max = 0;
         for (Cluster c : this.state.getDistricts()) {
@@ -283,5 +258,45 @@ public class ObjectiveFunction {
 
     public int getObID() {
         return obID;
+    }
+
+    public double getDemographicScore() {
+        return demographicScore;
+    }
+
+    public void setDemographicScore(double demographicScore) {
+        this.demographicScore = demographicScore;
+    }
+
+    public double getCompactnessScore() {
+        return compactnessScore;
+    }
+
+    public void setCompactnessScore(double compactnessScore) {
+        this.compactnessScore = compactnessScore;
+    }
+
+    public double getContiguity() {
+        return contiguity;
+    }
+
+    public void setContiguity(double contiguity) {
+        this.contiguity = contiguity;
+    }
+
+    public double getPartisanScore() {
+        return partisanScore;
+    }
+
+    public void setPartisanScore(double partisanScore) {
+        this.partisanScore = partisanScore;
+    }
+
+    public double getPopulationScore() {
+        return populationScore;
+    }
+
+    public void setPopulationScore(double populationScore) {
+        this.populationScore = populationScore;
     }
 }
