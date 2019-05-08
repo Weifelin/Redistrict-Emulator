@@ -7,8 +7,11 @@ import com.giant.demo.services.BatchService;
 import com.giant.demo.services.SecurityService;
 import com.giant.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,12 +28,12 @@ public class HomeController {
     private BatchService batchService;
 
     /*/login POST controller is provided by Spring Security*/
-    @GetMapping("/login")
-    public ModelAndView login(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
-        return modelAndView;
-    }
+//    @GetMapping("/login")
+//    public ModelAndView login(){
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("login");
+//        return modelAndView;
+//    }
 
     @GetMapping("/")
     public ModelAndView index(){
@@ -40,26 +43,36 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping()
-    public BatchSummary getBatchResult(){
-        return batchService.getBatchSummary();
-    }
+//    @GetMapping("/batch")
+//    public BatchSummary getBatchResult(){
+//        return batchService.getBatchSummary();
+//    }
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
+    public User register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
         User user = userService.save(newUser);
         if (user != null) {
             securityService.autoLogin(newUser.getUsername(), newUser.getPassword(), httpServletRequest);
         }
 
-        return "single-batch"; //show single batch.
+        return user; //show single batch.
     }
 
-    /*
-    @GetMapping("/error")
-    public String error(){
-        return "redirect:/ This is an error";
-    }*/
+
+
+
+//    @GetMapping("/error")
+//    public String handleError(HttpServletRequest request){
+//        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+//        if (status != null){
+//            Integer statusCode = Integer.valueOf(status.toString());
+//            if (statusCode == HttpStatus.UNAUTHORIZED.value()){
+//                return "index";
+//            }
+//        }
+//        return "error";
+//    }
+
 
 
 

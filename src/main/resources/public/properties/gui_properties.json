@@ -1,0 +1,150 @@
+{
+	"default" : {
+		"classes": [],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"singleRun" : {
+		"classes": ["algCtrl", "guiCtrl", "md-raised", "layout-padding", "layout-column", "layout-align-center-stretch"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"mainCtrl" : {
+		"classes": ["layout-row", "layout-align-center-start"],
+		"ifClause": "true",
+		"flex": "flex-10",
+		"layout": []
+	},
+	"menuTrigger": {
+		"classes": ["md-fab"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"menuAction": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"iconBtn": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"accordBtn": {
+		"classes": ["md-icon-button"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"textBtn": {
+		"classes": ["md-raised"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"runBtn": {
+		"classes": ["md-raised"],
+		"ifClause": "true",
+		"flex": "flex-30",
+		"layout": []
+	},
+	"numInput": {
+		"classes": ["md-block"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"numDistrict": {
+		"classes": ["md-block"],
+		"ifClause": "true",
+		"flex": "flex-70",
+		"layout": []
+	},
+	"slideMeasure": {
+		"classes": ["layout-row", "layout-align-center-center"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"rangeMeasure": {
+		"classes": ["layout-row", "layout-align-center-center"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"majMinRange": {	
+		"properties": "rangeMeasure",
+		"id": "",
+		"label": "",
+		"tooltip": "",
+		"tooltipDir": "",
+		"min": 1,
+		"max": 100,
+		"step": 1,
+		"value": 50,
+		"type": "rangeMeasure"
+	},
+	"menu": {
+		"classes": ["md-fab-top-right", "md-scale"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"guiGroup": {
+		"classes": [],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"select": {
+		"classes": [],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"stateSelect": {
+		"classes": ["stateSelect", "md-raised", "layout-padding", "layout-row", "layout-align-center-center"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"accordContainer": {
+		"classes": ["accordContainer", "layout-fill"],
+		"ifClause": "true",
+		"flex": "flex-85",
+		"layout": []
+	},
+	"accordTab": {
+		"classes": ["accordContent", "animate-if"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"accordBtnOpen": {
+		"type": "iconBtn",
+		"properties": "accordBtn", 
+		"id": "", 
+		"label": "maximize", 
+		"icon": "img/icons/baseline-remove-24px.svg", 
+		"clickEvent": "changeTabState",
+		"eventArgs": "{'sectionId': 'singleRun', 'buttonUrl': $ctrl.button.url}", 
+		"tooltip": "", 
+		"tooltipDir": ""
+	},
+	"accordBtnClosed": {
+		"type": "iconBtn",
+		"properties": "accordBtn", 
+		"id": "", 
+		"label": "minimize", 
+		"icon": "img/icons/baseline-add-24px.svg", 
+		"clickEvent": "changeTabState",
+		"eventArgs": "{'sectionId': 'singleRun', 'buttonUrl': $ctrl.button.url}", 
+		"tooltip": "", 
+		"tooltipDir": ""
+	}
+}

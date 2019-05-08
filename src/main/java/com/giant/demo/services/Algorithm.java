@@ -3,6 +3,8 @@ package com.giant.demo.services;
 import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
+import com.giant.demo.repositories.PrecinctRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,10 @@ public class Algorithm {
     private ArrayList<ClusterEdge> candidatePairs;
     private List<Race> commmunitiesOfInterest;
     private State realState;
+    private Set<Cluster> clusters;
+
+    @Autowired
+    private PrecinctRepository precinctRepository;
 
     public Algorithm(){
         this.candidatePairs = null;
@@ -22,28 +28,27 @@ public class Algorithm {
 
     public Set<Cluster> GraphPartition(Set<Cluster> clusters){
         int level = 0;
-        candidatePairs = new ArrayList<ClusterEdge>();//list to hold pairs based off joinability
-        int start = (int) (Math.log(clusters.size()) / Math.log(2));//number of pairings needed to partition
-        int end = (int) (Math.log(this.realState.getNumOfDistricts()));//number desired in logs
+        candidatePairs = new ArrayList<ClusterEdge>();
+        int start = (int) (Math.log(clusters.size()) / Math.log(2));
+        int end = (int) (Math.log(this.realState.getNumOfDistricts()));
         for(int i =  start; i > end; i--){
             for(Cluster c : clusters){
-                if(c.level < level){//only pair each cluster once per iteration
+                if(c.level < level){
                     ClusterEdge candidate = c.findClusterPair(clusters.size(), realState.getPopulation());
                     if(candidate != null){
                         candidatePairs.add(candidate);
                     }
                 }
             }
-            //When all the candidate pairs are picked they are then evaluated
             for(ClusterEdge edge : candidatePairs){
                 edge.getCluster1().combineCluster(edge.getCluster2());
-                clusters.remove(edge.getCluster2());//second cluster removed
+                clusters.remove(edge.getCluster2());
                 edge.getCluster1().level = level;
             }
             level++;
         }
         realState.setDistricts(clusters);
-        realState.toDistrict();//makes sure the number of districts is the desired amount
+        realState.toDistrict();
         return realState.getDistricts();
     }
 
@@ -79,5 +84,14 @@ public class Algorithm {
         this.commmunitiesOfInterest = commmunitiesOfInterest;
     }
 
+    /*Initialize all precinct into clusters*/
+    public void initializeClusters(){
+        List<Precinct> allPrecinct =  precinctRepository.findAll();
+        for (int i=0; i<allPrecinct.size(); i++){
+            ArrayList<Precinct> precinctsList = new ArrayList<>();
+            precinctsList.add(allPrecinct.get(i));
+            clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
+        }
+    }
 
 }

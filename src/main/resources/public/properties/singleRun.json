@@ -1,0 +1,244 @@
+{
+		"type": "guiGroup",
+		"id": "singleRunGroup",
+		"properties": "singleRun",
+		"sections": {
+			"mainControls": {
+				"type": "guiGroup",
+				"id": "singleMainCtrl",
+				"properties": "mainCtrl",
+				"sections": {
+					"numDistrictInput": {
+						"type": "numInput",
+						"properties": "numDistrict",
+						"id": "numDistrict",
+						"label": "Number of Districts",
+						"tooltip": "",
+						"tooltipDir": "",
+						"min": 1,
+						"max": 435,
+						"step": "any",
+						"value": "",
+						"required": true
+					},
+					"runButton": {
+						"type": "textBtn",
+						"properties": "runBtn", 
+						"id": "singleRunBtn", 
+						"label": "singleRunBtn", 
+						"text": "Generate", 
+						"clickEvent": "startSingleRun",
+						"eventArgs": "{}",
+						"tooltip": "", 
+						"tooltipDir": ""
+					}
+				}
+			},
+			"measureTabs": {
+				"type": "guiGroup",
+				"properties": "accordContainer",
+				"id": "accordContainer",
+				"sections": {
+					"compactnessTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "compactTab",
+						"title": "Compactness",
+						"content": {
+							"type": "guiGroup",
+							"id": "compactContent",
+							"properties": "guiGroup",
+							"sections": {
+								"polsPopSlider": {	
+									"type": "slideMeasure",
+									"properties": "slideMeasure",
+									"id": "1",
+									"label": "Polsby-popper",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5
+								},
+								"schwartzSlider": {
+									"properties": "slideMeasure",
+									"id": "2",
+									"label": "Schwartzberg",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								},
+								"convexHullSlider": {
+									"properties": "slideMeasure",
+									"id": "3",
+									"label": "Convex Hull",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								},
+								"reockSlider": {
+									"properties": "slideMeasure",
+									"id": "4",
+									"label": "Reock",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								}
+							}
+						},
+						"flexOrder": 1,
+						"open": true,
+						"expandButton": "accordBtnOpen"
+					},
+					"contigTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "contigTab",
+						"title": "Contiguity",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "contigContent",
+							"sections": {
+								"contigSlider": {	
+									"properties": "slideMeasure",
+									"id": "1",
+									"label": "Contiguity",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								}
+							}
+						},
+						"flexOrder": 3,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"popEqTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "popEqTab",
+						"title": "Population Equality",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "popEqContent",
+							"sections": {
+								"popEqSlider": {	
+									"properties": "slideMeasure",
+									"id": "1",
+									"label": "Population Equality",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								}
+							}
+						},
+						"flexOrder": 5,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"partFairTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "6",
+						"title": "Partisan Fairness",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "partFairContent",
+							"sections": {
+								"partFairSlider": {	
+									"properties": "slideMeasure",
+									"id": "1",
+									"label": "Partisan Fairness",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								}
+							}
+						},
+						"flexOrder": 7,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					},
+					"majMinTab": {
+						"type": "accordTab",
+						"properties": "accordTab",
+						"id": "6",
+						"title": "Majority-Minority Districts",
+						"content": {
+							"type": "guiGroup",
+							"properties": "guiGroup",
+							"id": "majMinContent",
+							"sections": {
+								"numMajMin": {	
+									"properties": "numInput",
+									"id": "singleMinMajNum",
+									"label": "Number of Districts",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 1,
+									"max": 100,
+									"step": "1",
+									"value": "",
+									"required": false,
+									"type": "numInput"
+								},
+								"minoritySelect": {
+									"properties": "select",
+									"id": "singleMinSelect",
+									"label": "Minority Select",
+									"options": [
+										"African-American",
+										"Asian",
+										"Latin-American",
+										"White"
+									],
+									"selected": [],
+									"multiSelect": true,
+									"onChange": "updateMajMinSliders",
+									"eventArgs": "{ 'selectUrl':  $ctrl.select.url, 'sectionId': 'singleRun', 'selectedGroups': $ctrl.select.selected, 'sliderGroupId': 'minSettingsGroup', 'rangeProp': 'majMinRange' }",
+									"type": "select"
+								},
+								"minSettingsGroup": {
+									"type": "guiGroup",
+									"properties": "guiGroup",
+									"id": "singleMinMajPercent",
+									"sections": []
+								}
+							}
+						},
+						"flexOrder": 9,
+						"open": false,
+						"expandButton": "accordBtnClosed"
+					}
+				}
+			}
+		}
+}

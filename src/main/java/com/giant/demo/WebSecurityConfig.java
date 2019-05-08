@@ -3,6 +3,7 @@ package com.giant.demo;
 import com.giant.demo.filter.CsrfHeaderFilter;
 import com.giant.demo.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +25,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private ErrorAttributes errorAttributes;
+
+//    @Bean
+//    public AppErrorController errorController(){
+//        return new AppErrorController(errorAttributes);
+//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
@@ -45,7 +54,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .httpBasic()
                 .and()
-                .authorizeRequests().antMatchers("/index.html", "/login.html", "/", "/index", "/login").permitAll()
+                .authorizeRequests()
+                .antMatchers(
+                        "/public/index.html",
+                        "/public/login.html",
+                        "/public/**/**",
+                        "/**",
+                        "/public/index",
+                        "/public/login",
+                        "/resources/public/login.html",
+                        "/resources/public/index.html",
+                        "/resources/public/login",
+                        "/resources/public/index",
+                        "/resources/public/**",
+                        "/resources/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -58,10 +81,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
                     .logoutSuccessUrl("/")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
                 .csrfTokenRepository(csrfTokenRepository())
+                .and()
+                .exceptionHandling()
+                    .accessDeniedPage("/")
         ;
         /*http
                 .csrf().disable()

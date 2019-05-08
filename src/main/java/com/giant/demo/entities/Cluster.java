@@ -6,15 +6,16 @@ import org.locationtech.jts.geom.Geometry;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Cluster {
     @Id
-    private int clusterID;
+    private String clusterID;
     public int level = 0;
     @OneToMany
-    private Set<Precinct> containedPrecincts;
+    private List<Precinct> containedPrecincts;
     private Geometry boundary;
     @OneToOne
     private ObjectiveFunction objectiveFunction;
@@ -27,14 +28,11 @@ public class Cluster {
 
 
 
-    public Cluster() {
-    }
-
-    public Cluster(int clusterID) {
+    public Cluster(String clusterID) {
         this.clusterID = clusterID;
     }
 
-    public Cluster(int clusterID, Set<Precinct> containedPrecincts) {
+    public Cluster(String clusterID, ArrayList<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
     }
@@ -126,19 +124,19 @@ public class Cluster {
         return null;
     }
 
-    public int getClusterID() {
+    public String getClusterID() {
         return clusterID;
     }
 
-    public void setClusterID(int clusterID) {
+    public void setClusterID(String clusterID) {
         this.clusterID = clusterID;
     }
 
-    public Set<Precinct> getContainedPrecincts() {
+    public List<Precinct> getContainedPrecincts() {
         return containedPrecincts;
     }
 
-    public void setContainedPrecincts(Set<Precinct> containedPrecincts) {
+    public void setContainedPrecincts(ArrayList<Precinct> containedPrecincts) {
         this.containedPrecincts = containedPrecincts;
     }
 

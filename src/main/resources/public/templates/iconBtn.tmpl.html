@@ -1,0 +1,7 @@
+<md-button ng-class="$ctrl.button.classes" ng-if="$eval($ctrl.button.ifClause)" aria-label="{{$ctrl.button.id}}" ng-click="callClickFunc($ctrl.button.clickEvent, $eval($ctrl.button.eventArgs))">
+    <md-tooltip ng-if="$ctrl.button.tooltip != ''" md-direction="{{$ctrl.button.tooltipDir}}"  md-autohide="false">
+        {{$ctrl.button.tooltip}}
+    </md-tooltip>
+
+    <md-icon md-svg-src="{{$ctrl.button.icon}}" aria-label="{{$ctrl.button.id + 'Icon'}}"></md-icon>
+</md-button>
