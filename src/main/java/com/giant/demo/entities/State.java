@@ -42,7 +42,7 @@ public class State {
         }
         int i = 0;
         for(Cluster c : this.districts){
-            c.setClusterID(i++);
+            c.setClusterID(String.valueOf(i++));
         }
     }
 

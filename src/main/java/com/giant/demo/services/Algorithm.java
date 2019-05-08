@@ -92,7 +92,7 @@ public class Algorithm {
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
-            clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
+            //clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
         }
     }
 
