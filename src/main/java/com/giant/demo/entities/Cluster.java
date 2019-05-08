@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 public class Cluster {
     @Id
-    private String clusterID;
+    private int clusterID;
     public int level = 0;
     @OneToMany
     private List<Precinct> containedPrecincts;
@@ -28,14 +28,16 @@ public class Cluster {
 
 
 
-    public Cluster(String clusterID) {
-        this.clusterID = clusterID;
+    public Cluster() {
+
     }
 
-    public Cluster(String clusterID, ArrayList<Precinct> containedPrecincts) {
+    public Cluster(int clusterID, ArrayList<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
     }
+
+
 
     public boolean mergeInto(Cluster c){
         return false;
@@ -55,11 +57,11 @@ public class Cluster {
         return null;
     }
 
-    public String getClusterID() {
+    public int getClusterID() {
         return clusterID;
     }
 
-    public void setClusterID(String clusterID) {
+    public void setClusterID(int clusterID) {
         this.clusterID = clusterID;
     }
 
