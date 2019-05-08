@@ -205,6 +205,17 @@ public class ObjectiveFunction {
         return score;
     }
 
+    public double calculateEfficiencyGap(){
+        int numVotes = 0, numStateDemo = 0, numStateRep = 0;
+        for(Cluster c : this.state.getDistricts()){
+            int numDemo = 0, numRep = 0;
+            for(Precinct p : c.getContainedPrecincts()){
+                numDemo += p.getNumDemo();
+                numRep += p.getNumDemo();
+            }
+        }
+    }
+
     //measure how close the population of each cluster is so being #people / # districts
     public double calculatePopulationScore(){
         double score = 0, avgPop = this.state.getPopulation() / this.state.getDistricts().size();

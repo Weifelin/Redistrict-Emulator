@@ -21,6 +21,8 @@ public class Precinct {
     @JoinColumn(name = "precinctID")
     private Set<Precinct> neighbours;
     private PartyPreference partyPreference;
+    private int numDemo;
+    private int numRep;
 
     public Precinct() {
     }
@@ -84,5 +86,21 @@ public class Precinct {
 
     public void setPartyPreference(PartyPreference partyPreference) {
         this.partyPreference = partyPreference;
+    }
+
+    public int getNumDemo() {
+        return numDemo;
+    }
+
+    public void setNumDemo(int numDemo) {
+        this.numDemo = numDemo;
+    }
+
+    public int getNumRep() {
+        return numRep;
+    }
+
+    public void setNumRep(int numRep) {
+        this.numRep = numRep;
     }
 }
