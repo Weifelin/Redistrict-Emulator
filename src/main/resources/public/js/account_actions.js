@@ -1,27 +1,29 @@
 function login() {
-	var app = 
-	$mdDialog.show({
+    var appCtrl = angular.element("#appShell");
+    var userInfo = appCtrl.scope().userInfo;
+    var dialogService = appCtrl.injector().get('$mdDialog');
+    var toastService = appCtrl.injector().get('$mdToast');
+	dialogService.show({
         locals: {
-            user: app.username,
+            user: userInfo.username,
             pass: "",
             act: "login"
         },
         controller: LoginController,
-        templateUrl: 'login.tmpl.html',
+        templateUrl: 'templates/login.tmpl.html',
         parent: angular.element(document.body),
-        targetEvent: ev,
         clickOutsideToClose:false
     })
     .then(function(answer) {
         if (answer.action == "login") {
-            app.username = answer.username;
+            userInfo.username = answer.username;
             console.log(answer.username + " has logged in.");
-            $mdToast.showSimple("Welcome back " + app.username + "!");
+            toastService.showSimple("Welcome back " + answer.username + "!");
         }
         else if (answer.action == "signup") {
-            app.username = answer.username;
+            userInfo.username = answer.username;
             console.log(answer.username + " is now registered.");
-            $mdToast.showSimple("Welcome, " + app.username + "!");
+            toastService.showSimple("Welcome, " + answer.username + "!");
         }
         else {
             console.log("There is a disturbance in the login mechanism...");
@@ -51,4 +53,26 @@ function startSingleRun() {
 	var mainCtrlScope = angular.element("#appShell").scope();
 	var data = mainCtrlScope.content["singleRun"].packData();
 	// Make algorithm start request
+}
+
+function LoginController($scope, $mdDialog, user, pass, act) {
+    $scope.username = user;
+    $scope.password = pass;
+    $scope.act = act;
+    $scope.hide = function() {
+        $mdDialog.hide();
+    };
+
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+
+    $scope.answer = function(answer) {
+        var response = {
+            username: $scope.username,
+            password: $scope.password,
+            action: $scope.act
+        }
+        $mdDialog.hide(response);
+    };
 }

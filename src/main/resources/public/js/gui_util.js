@@ -1,6 +1,6 @@
 function findElem(sectionId, elementUrl) {
 	var currElem = angular.element("#appShell").scope().content[sectionId];
-	for(let i = 0; i < elementUrl.length; i++) {
+	for(var i = 0; i < elementUrl.length; i++) {
 		currElem = currElem[elementUrl[i]];
 	}
 	return currElem;
@@ -41,8 +41,8 @@ function updateMajMinSliders(args) {
 		var labelSuffix = "Slider";
 		// Compute difference between current sliders and selected ones
 		var currLabels = Object.keys(sliderGroup.sections);
-		var removeList= currLabels.filter(currLabel => 
-			!args["selectedGroups"].includes(currLabel.substring(0, currLabel.length - labelSuffix.length))); 
+		var removeList= currLabels.filter(currLabel =>
+			!args["selectedGroups"].includes(currLabel.substring(0, currLabel.length - labelSuffix.length)));
 		// Removing nonexistant group sliders
 		angular.forEach(removeList, function(group, index) {
 			delete this.sections[group+labelSuffix];
@@ -100,15 +100,15 @@ function parseGui(guiStructure, componentProp, url) {
 				var properties = componentProp[guiStructure["properties"]];
 				properties["url"] = url.slice();
 
-				let triggerUrl = url.slice();
+				var triggerUrl = url.slice();
 				triggerUrl.push("triggerButton");
-				let triggerProp = guiStructure["triggerButton"];
-				let triggerButton = parseGui(triggerProp, componentProp, triggerUrl);
+				var triggerProp = guiStructure["triggerButton"];
+				var triggerButton = parseGui(triggerProp, componentProp, triggerUrl);
 
-				let actions = [];
+				var actions = [];
 				url.push("actions");
-				for(let i = 0; i < guiStructure.actions.length; i++) {
-					let actionUrl = url.slice();
+				for(var i = 0; i < guiStructure.actions.length; i++) {
+					var actionUrl = url.slice();
 					actionUrl.push(i);
 					console.log(guiStructure.actions[i]);
 					actions.push(parseGui(guiStructure.actions[i], componentProp, actionUrl));
@@ -141,7 +141,7 @@ function parseGui(guiStructure, componentProp, url) {
 				var properties = componentProp[guiStructure["properties"]];
 				properties["url"] = url.slice();
 
-				let sections = {};
+				var sections = {};
 				url.push("sections");
 				for (var sectionID in guiStructure["sections"]) {
 					var section = guiStructure["sections"][sectionID];
@@ -165,15 +165,15 @@ function parseGui(guiStructure, componentProp, url) {
 				var properties = componentProp[guiStructure["properties"]];
 				properties["url"] = url.slice();
 
-				let expandUrl = url.slice();
+				var expandUrl = url.slice();
 				expandUrl.push("expandButton");
-				let expandProp = componentProp[guiStructure["expandButton"]];
+				var expandProp = componentProp[guiStructure["expandButton"]];
 				expandProp["id"] = properties["id"] + "Btn";
-				let expandButton = parseGui(expandProp, componentProp, expandUrl);
+				var expandButton = parseGui(expandProp, componentProp, expandUrl);
 
-				let contentUrl = url.slice();
+				var contentUrl = url.slice();
 				expandUrl.push("content");
-				let content =  parseGui(guiStructure["content"], componentProp, contentUrl);
+				var content =  parseGui(guiStructure["content"], componentProp, contentUrl);
 				return new AccordionTab(properties, 
 									  guiStructure["id"], guiStructure["title"], 
 									  content, guiStructure["flexOrder"],
