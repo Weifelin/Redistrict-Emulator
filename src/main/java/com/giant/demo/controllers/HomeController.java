@@ -1,13 +1,12 @@
 package com.giant.demo.controllers;
 
 
-import com.giant.demo.entities.BatchSummary;
 import com.giant.demo.entities.User;
+import com.giant.demo.services.Algorithm;
 import com.giant.demo.services.BatchService;
 import com.giant.demo.services.SecurityService;
 import com.giant.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +23,8 @@ public class HomeController {
     private UserService userService;
     @Autowired
     private SecurityService securityService;
+    @Autowired
+    private Algorithm algorithm;
 
     private BatchService batchService;
 
@@ -58,22 +59,8 @@ public class HomeController {
         return user; //show single batch.
     }
 
-
-
-
-//    @GetMapping("/error")
-//    public String handleError(HttpServletRequest request){
-//        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-//        if (status != null){
-//            Integer statusCode = Integer.valueOf(status.toString());
-//            if (statusCode == HttpStatus.UNAUTHORIZED.value()){
-//                return "index";
-//            }
-//        }
-//        return "error";
-//    }
-
-
+    @PostMapping("/single-run")
+    public
 
 
 }

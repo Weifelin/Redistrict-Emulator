@@ -17,6 +17,10 @@ public class ClusterEdge {
         this.cluster2 = cluster2;
     }
 
+    public boolean equals(ClusterEdge edge){
+        return this.cluster1.getClusterID() == edge.cluster1.getClusterID() || this.cluster1.getClusterID() == edge.cluster2.getClusterID() || this.cluster2.getClusterID() == edge.cluster1.getClusterID() || this.cluster2.getClusterID() == edge.cluster2.getClusterID();
+    }
+
     //used for sorting
     public int compareTo(ClusterEdge e2){
         double score = e2.getJoinability();

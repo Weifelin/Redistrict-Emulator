@@ -28,11 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ErrorAttributes errorAttributes;
 
-//    @Bean
-//    public AppErrorController errorController(){
-//        return new AppErrorController(errorAttributes);
-//    }
-
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); /*Dao is Data Access Object*/
