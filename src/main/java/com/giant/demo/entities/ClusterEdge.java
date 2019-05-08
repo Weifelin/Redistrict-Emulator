@@ -18,7 +18,7 @@ public class ClusterEdge {
     }
 
     public boolean equals(ClusterEdge edge){
-        return this.cluster1.getClusterID() == edge.cluster1.getClusterID() || this.cluster1.getClusterID() == edge.cluster2.getClusterID() || this.cluster2.getClusterID() == edge.cluster1.getClusterID() || this.cluster2.getClusterID() == edge.cluster2.getClusterID();
+        return this.cluster2.getClusterID() == edge.cluster2.getClusterID();
     }
 
     //used for sorting
@@ -52,10 +52,6 @@ public class ClusterEdge {
 
     public void calculateJoinability(){
 
-    }
-
-    public ClusterEdge mergeEdge(ClusterEdge c){
-        return null;
     }
 
 
