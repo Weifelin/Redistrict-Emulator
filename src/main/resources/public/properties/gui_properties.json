@@ -23,6 +23,12 @@
 		"flex": "",
 		"layout": []
 	},
+	"menuAction": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
 	"iconBtn": {
 		"classes": ["md-fab", "md-raised", "md-mini"],
 		"ifClause": "true",
@@ -97,6 +103,12 @@
 	},
 	"select": {
 		"classes": [],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"stateSelect": {
+		"classes": ["stateSelect", "md-raised", "layout-padding", "layout-row", "layout-align-center-center"],
 		"ifClause": "true",
 		"flex": "",
 		"layout": []

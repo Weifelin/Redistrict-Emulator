@@ -7,8 +7,8 @@
             </md-tooltip>
 		</span>
 	</div>
-	<md-slider flex="60" ng-model="$ctrl.slider.value" step="{{$ctrl.slider.step}}" min="{{$ctrl.slider.min}}" max="{{$ctrl.slider.max}}" aria-labeledby="{{$ctrl.slider.id + 'Label'}}" id="{{$ctrl.slider.id}}"></md-slider>
-	<md-input-container flex="nogrow">
+	<md-slider flex="40" ng-model="$ctrl.slider.value" step="{{$ctrl.slider.step}}" min="{{$ctrl.slider.min}}" max="{{$ctrl.slider.max}}" aria-labeledby="{{$ctrl.slider.id + 'Label'}}" id="{{$ctrl.slider.id}}"></md-slider>
+	<md-input-container flex="nogrow" class="md-block">
 		<input type="number" ng-model="$ctrl.slider.value" min="{{$ctrl.slider.min}}" max="{{$ctrl.slider.max}}" step="{{$ctrl.slider.step}}" aria-label="{{label}}" aria-controls="{{$ctrl.slider.id}}">
 	</md-input-container>
 </md-slider-container>

@@ -97,13 +97,23 @@ function parseGui(guiStructure, componentProp, url) {
 									   guiStructure["required"]);
 			break;
 			case "menu":
-				let triggerButton = parseGui(guiStructure["triggerButton"], componentProp, url);
-				let actions = [];
-				guiStructure.actions.forEach(function(action) {
-					actions.push(parseGui(action, componentProp, url));
-				});
-				
 				var properties = componentProp[guiStructure["properties"]];
+				properties["url"] = url.slice();
+
+				let triggerUrl = url.slice();
+				triggerUrl.push("triggerButton");
+				let triggerProp = guiStructure["triggerButton"];
+				let triggerButton = parseGui(triggerProp, componentProp, triggerUrl);
+
+				let actions = [];
+				url.push("actions");
+				for(let i = 0; i < guiStructure.actions.length; i++) {
+					let actionUrl = url.slice();
+					actionUrl.push(i);
+					console.log(guiStructure.actions[i]);
+					actions.push(parseGui(guiStructure.actions[i], componentProp, actionUrl));
+				}
+				
 				return new Menu(properties, 
 								guiStructure["open"], triggerButton, 
 								actions, guiStructure["direction"]);

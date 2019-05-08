@@ -153,3 +153,7 @@ body {
 	max-width: 20%;
 	margin: 0 auto;
 }
+
+.md-input {
+	width: auto;
+}
