@@ -5,16 +5,14 @@ import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import org.locationtech.jts.geom.Geometry;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 public class Precinct {
     @Id
-    private String precinctID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int precinctID;
     private StateE state;
     private int population;
     private Race majority;
@@ -23,24 +21,22 @@ public class Precinct {
     @JoinColumn(name = "precinctID")
     private Set<Precinct> neighbours;
     private PartyPreference partyPreference;
+    private int numDemo;
+    private int numRep;
 
     public Precinct() {
     }
 
-    public Precinct(String precinctID, StateE state, int population, Race majority, Geometry boundaries) {
-        this.precinctID = precinctID;
+    public Precinct(StateE state, int population, Race majority, Geometry boundaries) {
+
         this.state = state;
         this.population = population;
         this.majority = majority;
         this.boundaries = boundaries;
     }
 
-    public String getPrecinctID() {
+    public int getPrecinctID() {
         return precinctID;
-    }
-
-    public void setPrecinctID(String precinctID) {
-        this.precinctID = precinctID;
     }
 
     public StateE getState() {
@@ -90,5 +86,21 @@ public class Precinct {
 
     public void setPartyPreference(PartyPreference partyPreference) {
         this.partyPreference = partyPreference;
+    }
+
+    public int getNumDemo() {
+        return numDemo;
+    }
+
+    public void setNumDemo(int numDemo) {
+        this.numDemo = numDemo;
+    }
+
+    public int getNumRep() {
+        return numRep;
+    }
+
+    public void setNumRep(int numRep) {
+        this.numRep = numRep;
     }
 }

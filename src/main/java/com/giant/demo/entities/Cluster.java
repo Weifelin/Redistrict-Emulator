@@ -107,12 +107,12 @@ public class Cluster {
         for(ClusterEdge edge1 : this.edges){
             for(ClusterEdge edge2 : edges){
                 if(edge1.equals(edge2))
-                    edge1.mergeEdge(edge2);
+                    edge1.setJoinability((edge1.getJoinability() + edge2.getJoinability()) / 2);
                 else
                     this.addEdge(edge2);
             }
         }
-        return edges;
+        return this.edges;
     }
 
     public void addPopulation(int pop){
