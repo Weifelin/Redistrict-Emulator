@@ -3,6 +3,8 @@ package com.giant.demo.services;
 import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
+import com.giant.demo.repositories.PrecinctRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,10 @@ public class Algorithm {
     private ArrayList<ClusterEdge> candidatePairs;
     private List<Race> commmunitiesOfInterest;
     private State realState;
+    private Set<Cluster> clusters;
+
+    @Autowired
+    private PrecinctRepository precinctRepository;
 
     public Algorithm(){
         this.candidatePairs = null;
@@ -78,5 +84,14 @@ public class Algorithm {
         this.commmunitiesOfInterest = commmunitiesOfInterest;
     }
 
+    /*Initialize all precinct into clusters*/
+    public void initializeClusters(){
+        List<Precinct> allPrecinct =  precinctRepository.findAll();
+        for (int i=0; i<allPrecinct.size(); i++){
+            ArrayList<Precinct> precinctsList = new ArrayList<>();
+            precinctsList.add(allPrecinct.get(i));
+            clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
+        }
+    }
 
 }

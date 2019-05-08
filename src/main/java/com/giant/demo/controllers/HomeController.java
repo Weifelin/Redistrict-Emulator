@@ -8,11 +8,12 @@ import com.giant.demo.services.SecurityService;
 import com.giant.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -48,14 +49,15 @@ public class HomeController {
 //    }
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
+    public User register(@Valid @RequestBody User newUser, HttpServletRequest httpServletRequest){
         User user = userService.save(newUser);
         if (user != null) {
             securityService.autoLogin(newUser.getUsername(), newUser.getPassword(), httpServletRequest);
         }
 
-        return "single-batch"; //show single batch.
+        return user; //show single batch.
     }
+
 
 
 
