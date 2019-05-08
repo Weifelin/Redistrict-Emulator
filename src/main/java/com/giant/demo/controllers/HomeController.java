@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Map;
 
 
 @RestController
@@ -59,8 +60,8 @@ public class HomeController {
         return user; //show single batch.
     }
 
-    @PostMapping("/single-run")
-    public
+//    @PostMapping("/single-run")
+//    public
 
 
 }
