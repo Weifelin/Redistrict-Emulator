@@ -214,6 +214,7 @@ public class ObjectiveFunction {
                 numRep += p.getNumDemo();
             }
         }
+        return 0.0;
     }
 
     //measure how close the population of each cluster is so being #people / # districts
