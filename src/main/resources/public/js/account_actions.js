@@ -4,12 +4,20 @@ angular.module('AccountAction')
     .factory('AccountActionService', ['$http', '$cookies', '$rootScope'],
         function($http, $cookies, $rootScope) {
             var service = {
+                updateUserInfo: function() {
+
+                },
+                clearUserInfo: function() {
+
+                },
                 authUser: function(username, password, url, successCall, errorCall) {
                     // Salt password here
+                    var salt;
                     $http.post(url,
                         {
                             username: username,
-                            password: password
+                            password: password,
+                            salt: salt
                         })
                     .then(function(response) {
                         successCall(response);
@@ -18,63 +26,54 @@ angular.module('AccountAction')
                     });
                 },
                 logout: function() {
-                    
+                    // Add username as data and potentially add callback on success/failure
+                    $http.post('logout', {});
                 }
             };
+
+            return service;
+        })
+
+    .factory('AccountDialogService',
+        ['$http', '$mdDialog', '$mdToast', '$location'],
+        function($http, $mdDialog, $mdToast, $location) {
+            var service = {
+                open: function() {
+                    $location.path("login");
+                    $mdDialog.show({
+                        locals: {
+                            user: userInfo.username,
+                            pass: "",
+                            act: "login",
+                            isLoading: false
+                        },
+                        controller: LoginController,
+                        templateUrl: 'templates/login.tmpl.html',
+                        parent: angular.element(document.body),
+                        clickOutsideToClose:false
+                    })
+                        .then(function(answer) {
+                            if (answer.action == "login") {
+                                userInfo.username = answer.username;
+                                console.log(answer.username + " has logged in.");
+                                $mdToast.showSimple("Welcome back " + answer.username + "!");
+                            }
+                            else if (answer.action == "signup") {
+                                userInfo.username = answer.username;
+                                console.log(answer.username + " is now registered.");
+                                $mdToast.showSimple("Welcome, " + answer.username + "!");
+                            }
+                            else {
+                                console.log("There is a disturbance in the login mechanism...");
+                            }
+                        }, function() {
+                            console.log('User decided to continue as a guest.');
+                        });
+                }
+            };
+
+            return service;
         });
-
-function login() {
-    var appCtrl = angular.element("#appShell");
-    var userInfo = appCtrl.scope().userInfo;
-    var dialogService = appCtrl.injector().get('$mdDialog');
-    var toastService = appCtrl.injector().get('$mdToast');
-    var windowWrapper = appCtrl.injector().get('$window');
-    windowWrapper.history.pushState({}, "Log In", "login");
-	dialogService.show({
-        locals: {
-            user: userInfo.username,
-            pass: "",
-            act: "login"
-        },
-        controller: LoginController,
-        templateUrl: 'templates/login.tmpl.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose:false
-    })
-    .then(function(answer) {
-        if (answer.action == "login") {
-            userInfo.username = answer.username;
-            console.log(answer.username + " has logged in.");
-            toastService.showSimple("Welcome back " + answer.username + "!");
-        }
-        else if (answer.action == "signup") {
-            userInfo.username = answer.username;
-            console.log(answer.username + " is now registered.");
-            toastService.showSimple("Welcome, " + answer.username + "!");
-        }
-        else {
-            console.log("There is a disturbance in the login mechanism...");
-        }
-    }, function() {
-        console.log('User decided to continue as a guest.');
-    });
-}
-
-function loginRequest(credentials) {
-
-}
-
-function signupRequest(credentials) {
-
-}
-
-function logout() {
-	
-}
-
-function logoutRequest() {
-	
-}
 
 function startSingleRun() {
 	var mainCtrlScope = angular.element("#appShell").scope();
@@ -82,10 +81,12 @@ function startSingleRun() {
 	// Make algorithm start request
 }
 
-function LoginController($scope, $mdDialog, $location, user, pass, act) {
+function LoginController(AccountActionService, $scope, $mdDialog, $location, user,
+                         pass, act, isLoading) {
     $scope.username = user;
     $scope.password = pass;
     $scope.act = act;
+    $scope.isLoading = isLoading;
 
     $scope.hide = function() {
         $mdDialog.hide();
@@ -96,12 +97,14 @@ function LoginController($scope, $mdDialog, $location, user, pass, act) {
     };
 
     $scope.answer = function(answer) {
-        var response = {
-            username: $scope.username,
-            password: $scope.password,
-            action: $scope.act
-        }
-        $mdDialog.hide(response);
+        var response = {};
+        AccountActionService.authUser($scope.username, $scope.password, $scope.act,
+         function() {
+             $location.path('/');
+             $mdDialog.hide(response);
+        }, function() {
+
+        });
     };
 
     $scope.switchAction = function(newAction) {

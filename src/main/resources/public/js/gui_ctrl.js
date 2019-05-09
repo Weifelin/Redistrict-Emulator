@@ -13,16 +13,16 @@ angular.module('DistrictApp').component('guiGroup', {
 
 function TextBtnController($scope, $element, $attrs, $rootScope) {
 	var ctrl = this;
-  $scope.callClickFunc = function(funcName, args) {
-    if (ctrl.button.clickEvent != "") {
-      if (Object.keys(args).length == 0) {
-        $rootScope.funcMap[funcName]();
+    $scope.callClickFunc = function(funcName, args) {
+      if (ctrl.button.clickEvent != "") {
+        if (Object.keys(args).length == 0) {
+          $rootScope.funcMap[funcName]();
+        }
+        else {
+          $rootScope.funcMap[funcName](args);
+        }
       }
-      else {
-        $rootScope.funcMap[funcName](args);
-      }
-    }
-  };
+    };
 }
 
 angular.module('DistrictApp').component('textButton', {

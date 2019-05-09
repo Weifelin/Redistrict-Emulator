@@ -13,12 +13,14 @@ app.run(['$rootScope', '$cookies', '$http',
             $rootScope.globalData = {
                 user: {
                     username: "",
-                    userDataEnc: "",
+                    password: "",
                     userType: $rootScope.userTypes.GUEST
                 }
             };
         } else if ($rootScope.globalData.user) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globalData.user.userDataEnc;
+            $http.defaults.headers.common['Authorization'] = 'Basic ' +
+                                            $rootScope.globalData.user.username +
+                                            $rootScope.globalData.user.password;
         }
 
         $rootScope.funcMap = {
