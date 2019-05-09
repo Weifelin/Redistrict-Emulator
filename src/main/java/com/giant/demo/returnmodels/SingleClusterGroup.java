@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*A branch of PrecinctCLusterPair*/
-public class singleClusterGroup {
-    private StateE state;
-    private String clusterID;
+public class SingleClusterGroup {
+    private int clusterID;
     private List<Integer> precinctList;
 
-    public singleClusterGroup() {
+    public SingleClusterGroup() {
     }
 
-    public singleClusterGroup(StateE state, String clusterID) {
-        this.state = state;
+    public SingleClusterGroup(int clusterID) {
         this.clusterID = clusterID;
         precinctList = new ArrayList<>();
     }

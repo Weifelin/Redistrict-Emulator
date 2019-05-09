@@ -1,7 +1,9 @@
 package com.giant.demo.controllers;
 
 
+import com.giant.demo.entities.Job;
 import com.giant.demo.entities.User;
+import com.giant.demo.returnmodels.SimpleClusterGroups;
 import com.giant.demo.services.Algorithm;
 import com.giant.demo.services.BatchService;
 import com.giant.demo.services.SecurityService;
@@ -15,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Map;
 
 
 @RestController
@@ -61,7 +62,12 @@ public class HomeController {
     }
 
 
-
+    @PostMapping("/single-run")
+    public SimpleClusterGroups singleRun(@RequestBody Job job){
+        algorithm.setJob(job); /*Store job in algorithm until phase II. */
+        algorithm.initializeClusters();
+        return algorithm.graphPartition(algorithm.getClusters());
+    }
 
 
 }

@@ -1,5 +1,7 @@
 package com.giant.demo.returnmodels;
 
+import com.giant.demo.enums.StateE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,19 +17,26 @@ import java.util.List;
 *  precinctID1...precinctIDn    pre...   precinctIDn
 *
 * */
-public class SimppleClusterGroups {
+public class SimpleClusterGroups {
 
-    private List<singleClusterGroup> simpleClusterGourps;
+    private StateE state;
 
-    public SimppleClusterGroups() {
+    private List<SingleClusterGroup> simpleClusterGourps;
+
+    public SimpleClusterGroups() {
         simpleClusterGourps = new ArrayList<>();
     }
 
-    public List<singleClusterGroup> getSimpleClusterGourps() {
+    public List<SingleClusterGroup> getSimpleClusterGourps() {
         return simpleClusterGourps;
     }
 
-    public void addClusterGroup(singleClusterGroup singleClusterGroup){
+    public void addClusterGroup(SingleClusterGroup singleClusterGroup){
         simpleClusterGourps.add(singleClusterGroup);
     }
+
+    public void setState(StateE state) {
+        this.state = state;
+    }
+
 }
