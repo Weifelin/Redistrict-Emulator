@@ -74,7 +74,7 @@ function parseGui(guiStructure, componentProp, url) {
 				return new TextButton(properties, 
 									  guiStructure["id"], guiStructure["label"], 
 									  guiStructure["text"], guiStructure["clickEvent"], 
-									  guiStructure["eventArgs"], guiStructure["tooltip"], 
+					                  guiStructure["tooltip"],
 									  guiStructure["tooltipDir"]);
 			break;
 			case "iconBtn":
@@ -83,7 +83,7 @@ function parseGui(guiStructure, componentProp, url) {
 				return new IconButton(properties, 
 									  guiStructure["id"], guiStructure["label"], 
 									  guiStructure["icon"], guiStructure["clickEvent"], 
-									  guiStructure["eventArgs"], guiStructure["tooltip"], 
+									  guiStructure["tooltip"],
 									  guiStructure["tooltipDir"]);
 			break;
 			case "numInput":
@@ -159,7 +159,7 @@ function parseGui(guiStructure, componentProp, url) {
 									  guiStructure["id"], guiStructure["label"], 
 									  guiStructure["options"], guiStructure["selected"],
 									  guiStructure["multiSelect"], guiStructure["onChange"],
-									  guiStructure["eventArgs"]);
+									  );
 			break;
 			case "accordTab":
 				var properties = componentProp[guiStructure["properties"]];

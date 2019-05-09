@@ -152,7 +152,7 @@ class GuiGroup extends GuiObj {
 }
 
 class SelectDisplay extends GuiObj {
-	constructor(properties, id, label, options, selected, multiSelect, onChange, eventArgs) {
+	constructor(properties, id, label, options, selected, multiSelect, onChange) {
 		super(properties.url, properties.classes, properties.ifClause, properties.flex, properties.layout);
 		this.id = id;
 		this.label = label;
@@ -160,7 +160,6 @@ class SelectDisplay extends GuiObj {
 		this.selected = selected;
 		this.multiSelect = multiSelect;
 		this.onChange = onChange;
-		this.eventArgs = eventArgs;
 		this.type="select";
 	}
 

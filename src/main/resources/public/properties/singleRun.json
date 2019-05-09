@@ -28,8 +28,7 @@
 						"label": "singleRunBtn", 
 						"text": "Generate", 
 						"clickEvent": "startSingleRun",
-						"eventArgs": "{}",
-						"tooltip": "", 
+						"tooltip": "",
 						"tooltipDir": ""
 					}
 				}
@@ -223,7 +222,6 @@
 									"selected": [],
 									"multiSelect": true,
 									"onChange": "updateMajMinSliders",
-									"eventArgs": "{ 'selectUrl':  $ctrl.select.url, 'sectionId': 'singleRun', 'selectedGroups': $ctrl.select.selected, 'sliderGroupId': 'minSettingsGroup', 'rangeProp': 'majMinRange' }",
 									"type": "select"
 								},
 								"minSettingsGroup": {

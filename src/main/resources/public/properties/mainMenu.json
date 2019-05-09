@@ -15,8 +15,7 @@
 					"label": "", 
 					"icon": "img/icons/baseline-menu-24px.svg", 
 					"clickEvent": "",
-					"eventArgs": "", 
-					"tooltip": "", 
+					"tooltip": "",
 					"tooltipDir": ""
 				},
 				"actions" : [
@@ -27,8 +26,7 @@
 						"label": "singleRun", 
 						"icon": "img/icons/baseline-photo-24px.svg", 
 						"clickEvent": "changeMode",
-						"eventArgs": "{'mode': 'singleRun'}", 
-						"tooltip": "Single Run", 
+						"tooltip": "Single Run",
 						"tooltipDir": "bottom"
 					},
 					{
@@ -38,8 +36,7 @@
 						"label": "batchRun", 
 						"icon": "img/icons/baseline-add_photo_alternate-24px.svg", 
 						"clickEvent": "changeMode",
-						"eventArgs": "{'mode': 'batchRun'}", 
-						"tooltip": "Batch Run", 
+						"tooltip": "Batch Run",
 						"tooltipDir": "bottom"
 					},
 					{
@@ -59,8 +56,7 @@
 						"label": "logout", 
 						"icon": "img/icons/baseline-exit_to_app-24px.svg", 
 						"clickEvent": "logout",
-						"eventArgs": "{}", 
-						"tooltip": "Log Out", 
+						"tooltip": "Log Out",
 						"tooltipDir": "bottom"
 					}
 				]
@@ -77,8 +73,7 @@
 						"label": "prevStateBtn", 
 						"icon": "img/icons/baseline-navigate_before-24px.svg", 
 						"clickEvent": "advanceState",
-						"eventArgs": "{ 'sectionId': 'appMenu', 'buttonUrl': $ctrl.button.url, 'action': 'previous' }", 
-						"tooltip": "", 
+						"tooltip": "",
 						"tooltipDir": ""
 					},
 					"stateSelectBox": {
@@ -89,7 +84,6 @@
 						"selected": "",
 						"multiSelect": false,
 						"onChange": "setSelectedState",
-						"eventArgs": "{ 'state': $ctrl.select.selected }",
 						"type": "select"
 					},
 					"nextButton": {
@@ -99,8 +93,7 @@
 						"label": "nextStateBtn", 
 						"icon": "img/icons/baseline-navigate_next-24px.svg", 
 						"clickEvent": "advanceState",
-						"eventArgs": "{ 'sectionId': 'appMenu', 'buttonUrl': $ctrl.button.url, 'action': 'next' }", 
-						"tooltip": "", 
+						"tooltip": "",
 						"tooltipDir": ""
 					}
 				}

@@ -132,8 +132,7 @@
 		"label": "maximize", 
 		"icon": "img/icons/baseline-remove-24px.svg", 
 		"clickEvent": "changeTabState",
-		"eventArgs": "{'sectionId': 'singleRun', 'buttonUrl': $ctrl.button.url}", 
-		"tooltip": "", 
+		"tooltip": "",
 		"tooltipDir": ""
 	},
 	"accordBtnClosed": {
@@ -143,8 +142,7 @@
 		"label": "minimize", 
 		"icon": "img/icons/baseline-add-24px.svg", 
 		"clickEvent": "changeTabState",
-		"eventArgs": "{'sectionId': 'singleRun', 'buttonUrl': $ctrl.button.url}", 
-		"tooltip": "", 
+		"tooltip": "",
 		"tooltipDir": ""
 	}
 }
