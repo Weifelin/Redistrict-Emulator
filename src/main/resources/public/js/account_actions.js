@@ -1,3 +1,13 @@
+'use strict';
+
+angular.module('AccountAction')
+    .factory('AccountActionService', ['$http', '$cookies', '$rootScope'],
+        function($http, $cookies, $rootScope) {
+            var service = {
+
+            };
+        });
+
 function login() {
     var appCtrl = angular.element("#appShell");
     var userInfo = appCtrl.scope().userInfo;
@@ -57,7 +67,7 @@ function startSingleRun() {
 	// Make algorithm start request
 }
 
-function LoginController($scope, $mdDialog, $window, user, pass, act) {
+function LoginController($scope, $mdDialog, $location, user, pass, act) {
     $scope.username = user;
     $scope.password = pass;
     $scope.act = act;
@@ -82,6 +92,7 @@ function LoginController($scope, $mdDialog, $window, user, pass, act) {
     $scope.switchAction = function(newAction) {
         $scope.act = newAction;
         var title = ($scope.act == 'login') ? 'Log In' : 'Sign Up';
-        $window.history.replaceState({}, title, $scope.act);
+        $location.path($scope.act);
+        //$window.history.replaceState({}, title, $scope.act);
     }
 }

@@ -1,15 +1,33 @@
 'use strict';
+angular.module('AccountAction', []);
 
-var app = angular.module('DistrictApp', ['prop', 'ngMaterial', 'ngMessages', 'ngAnimate']);
+var app = angular.module('DistrictApp',
+    ['prop', 'AccountAction', 'ngCookies', 'ngMaterial', 'ngMessages', 'ngAnimate']);
 
-app.run(function($rootScope, $mdDialog, $mdToast) {
-	$rootScope.funcMap = {
-    		"changeTabState": changeTabState,
-    		"updateMajMinSliders": updateMajMinSliders,
-            "login": login,
-            "logout": logout
-    };
-});
+// Set up global variables (or pull from cookieStore)
+app.run(['$rootScope', '$cookies', '$http',
+    function($rootScope, $cookies, $http) {
+        $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
+        $rootScope.globalData = $cookies.get('globalData');
+        if (!$rootScope.globalData) {
+            $rootScope.globalData = {
+                user: {
+                    username: "",
+                    userDataEnc: "",
+                    userType: $rootScope.userTypes.GUEST
+                }
+            };
+        } else if ($rootScope.globalData.user) {
+            $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globalData.user.userDataEnc;
+        }
+
+        $rootScope.funcMap = {
+                "changeTabState": changeTabState,
+                "updateMajMinSliders": updateMajMinSliders,
+                "login": login,
+                "logout": logout
+        };
+}]);
 
 app.controller('AppCtrl', function(GenProp, $scope, $rootScope) {
     	var ctrl = this;
