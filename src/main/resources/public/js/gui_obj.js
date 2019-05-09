@@ -22,13 +22,12 @@ class GuiObj {
 }
 
 class TextButton extends GuiObj {
-	constructor(properties, id, label, text, clickEvent, eventArgs, tooltip, tooltipDir) {
+	constructor(properties, id, label, text, clickEvent, tooltip, tooltipDir) {
 		super(properties.url, properties.classes, properties.ifClause, properties.flex, properties.layout);
 		this.id = id; 
 		this.label = label;
 		this.text = text;
 		this.clickEvent = clickEvent;
-		this.eventArgs = eventArgs;
 		this.tooltip = tooltip;
 		this.tooltipDir = tooltipDir;
 		this.type="textBtn";
@@ -36,13 +35,12 @@ class TextButton extends GuiObj {
 }
 
 class IconButton extends GuiObj {
-	constructor(properties, id, label, icon, clickEvent, eventArgs, tooltip, tooltipDir) {
+	constructor(properties, id, label, icon, clickEvent,tooltip, tooltipDir) {
 		super(properties.url, properties.classes, properties.ifClause, properties.flex, properties.layout);
 		this.id = id; 
 		this.label = label;
 		this.icon = icon;
 		this.clickEvent = clickEvent;
-		this.eventArgs = eventArgs;
 		this.tooltip = tooltip;
 		this.tooltipDir = tooltipDir;
 		this.type="iconBtn";

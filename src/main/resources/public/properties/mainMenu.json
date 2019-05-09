@@ -48,9 +48,8 @@
 						"id": "login", 
 						"label": "login", 
 						"icon": "img/icons/baseline-person_outline-24px.svg", 
-						"clickEvent": "login",
-						"eventArgs": "{}", 
-						"tooltip": "Log In/Sign Up", 
+						"clickEvent": "AccountDialogueService.open()",
+          "tooltip": "Log In/Sign Up", 
 						"tooltipDir": "bottom"
 					},
 					{
