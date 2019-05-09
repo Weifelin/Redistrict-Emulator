@@ -23,8 +23,10 @@ public class User {
     @OneToMany
     @JoinColumn(name = "stateID")
     private List<State> states;
-    @Transient /*Ignore confirm password when putting into data.*/
+    /*
+    @Transient *//*Ignore confirm password when putting into data.*//*
     private String passwordConfirm;
+    */
     @Transient
     private List<BatchRun> batchRunList;
 
@@ -76,11 +78,11 @@ public class User {
         this.password = password;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
+//    public String getPasswordConfirm() {
+//        return passwordConfirm;
+//    }
+//
+//    public void setPasswordConfirm(String passwordConfirm) {
+//        this.passwordConfirm = passwordConfirm;
+//    }
 }
