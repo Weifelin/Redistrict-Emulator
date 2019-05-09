@@ -23,6 +23,7 @@ public class User {
     @OneToMany
     @JoinColumn(name = "stateID")
     private List<State> states;
+    private String salt;
     /*
     @Transient *//*Ignore confirm password when putting into data.*//*
     private String passwordConfirm;
@@ -34,12 +35,13 @@ public class User {
 
     }
 
-    public User(String username, UserType userType, String password) {
+    public User(String username, UserType userType, String password, String salt) {
         this.username = username;
         this.userType = userType;
         this.password = password;
         this.states = new ArrayList<>();
         this.batchRunList = new ArrayList<>();
+        this.salt = salt;
     }
 
     public void addState(State state){
@@ -78,7 +80,15 @@ public class User {
         this.password = password;
     }
 
-//    public String getPasswordConfirm() {
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    //    public String getPasswordConfirm() {
 //        return passwordConfirm;
 //    }
 //

@@ -25,4 +25,8 @@ public class UserService {
         newUser.setUserType(UserType.REGULAR);
         return userRepository.save(newUser);
     }
+
+    public String getSalt(String username){
+        return userRepository.findByUsername(username).getSalt();
+    }
 }

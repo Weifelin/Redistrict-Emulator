@@ -9,10 +9,7 @@ import com.giant.demo.services.BatchService;
 import com.giant.demo.services.SecurityService;
 import com.giant.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +54,6 @@ public class HomeController {
         if (user != null) {
             securityService.autoLogin(newUser.getUsername(), newUser.getPassword(), httpServletRequest);
         }
-
         return user; //show single batch.
     }
 
@@ -69,5 +65,9 @@ public class HomeController {
         return algorithm.graphPartition(algorithm.getClusters());
     }
 
+    @GetMapping("/{username}/salt")
+    public String getSalt(@PathVariable("username") String username){
+        return userService.getSalt(username);
+    }
 
 }
