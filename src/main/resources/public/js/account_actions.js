@@ -4,7 +4,22 @@ angular.module('AccountAction')
     .factory('AccountActionService', ['$http', '$cookies', '$rootScope'],
         function($http, $cookies, $rootScope) {
             var service = {
-
+                authUser: function(username, password, url, successCall, errorCall) {
+                    // Salt password here
+                    $http.post(url,
+                        {
+                            username: username,
+                            password: password
+                        })
+                    .then(function(response) {
+                        successCall(response);
+                    }, function(response) {
+                        errorCall(response);
+                    });
+                },
+                logout: function() {
+                    
+                }
             };
         });
 
