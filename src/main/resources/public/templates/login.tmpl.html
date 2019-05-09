@@ -3,7 +3,7 @@
     <md-dialog-content>
       <md-tabs md-dynamic-height md-border-bottom>
         <!-- Login -->
-        <md-tab label="login" ng-click="act='login'">
+        <md-tab label="login" ng-click="switchAction('login')">
           <md-content class="md-padding" layout="row" layout-wrap>
             <h1 class="md-headline" flex="100">Log In</h1>
             <md-input-container flex="100">
@@ -17,7 +17,7 @@
           </md-content>
         </md-tab>
         <!-- Signup -->
-        <md-tab label="signup" ng-click="act='signup'">
+        <md-tab label="signup" ng-click="switchAction('register')">
           <md-content class="md-padding" layout="row" layout-wrap>
             <h1 class="md-headline" flex="100">Register</h1>
             <md-input-container flex="100">

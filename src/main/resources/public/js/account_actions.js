@@ -3,6 +3,8 @@ function login() {
     var userInfo = appCtrl.scope().userInfo;
     var dialogService = appCtrl.injector().get('$mdDialog');
     var toastService = appCtrl.injector().get('$mdToast');
+    var windowWrapper = appCtrl.injector().get('$window');
+    windowWrapper.history.pushState({}, "Log In", "login");
 	dialogService.show({
         locals: {
             user: userInfo.username,
@@ -55,10 +57,11 @@ function startSingleRun() {
 	// Make algorithm start request
 }
 
-function LoginController($scope, $mdDialog, user, pass, act) {
+function LoginController($scope, $mdDialog, $window, user, pass, act) {
     $scope.username = user;
     $scope.password = pass;
     $scope.act = act;
+
     $scope.hide = function() {
         $mdDialog.hide();
     };
@@ -75,4 +78,10 @@ function LoginController($scope, $mdDialog, user, pass, act) {
         }
         $mdDialog.hide(response);
     };
+
+    $scope.switchAction = function(newAction) {
+        $scope.act = newAction;
+        var title = ($scope.act == 'login') ? 'Log In' : 'Sign Up';
+        $window.history.replaceState({}, title, $scope.act);
+    }
 }
