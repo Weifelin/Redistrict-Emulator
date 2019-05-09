@@ -4,12 +4,12 @@ import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
+import com.giant.demo.returnmodels.SimpleClusterGroups;
+import com.giant.demo.returnmodels.SingleClusterGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class Algorithm {
@@ -20,6 +20,8 @@ public class Algorithm {
     private List<Race> commmunitiesOfInterest;
     private State realState;
     private Set<Cluster> clusters;
+    private Job job;
+    private SimpleClusterGroups simpleClusterGroups;
 
     @Autowired
     private PrecinctRepository precinctRepository;
@@ -28,7 +30,7 @@ public class Algorithm {
         this.candidatePairs = null;
     }
 
-    public Set<Cluster> GraphPartition(Set<Cluster> clusters){
+    public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
         int level = 0;
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
@@ -51,7 +53,8 @@ public class Algorithm {
         }
         realState.setDistricts(clusters);
         realState.toDistrict();
-        return realState.getDistricts();
+        /*Setting up SimpleClusterGroups*/
+        return stateToSimpleClusterGroups(realState);
     }
 
     public int getGerrymanderingIndex() {
@@ -89,11 +92,43 @@ public class Algorithm {
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
         List<Precinct> allPrecinct =  precinctRepository.findAll();
+        Set<Cluster> clusters = new HashSet<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
-            //clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
+            clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
         }
+        this.clusters = clusters;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
+    }
+
+    public Set<Cluster> getClusters() {
+        return clusters;
+    }
+
+    private SimpleClusterGroups stateToSimpleClusterGroups(State realState){
+        SimpleClusterGroups groups = new SimpleClusterGroups();
+        Set<Cluster> districts = realState.getDistricts();
+        Iterator<Cluster> iterator = districts.iterator();
+        while(iterator.hasNext()){
+            Cluster district = iterator.next();
+            groups.addClusterGroup(districtToSingleClusterGroup(district));
+        }
+        return groups;
+    }
+
+    private SingleClusterGroup districtToSingleClusterGroup(Cluster district){
+        SingleClusterGroup singleClusterGroup = new SingleClusterGroup(district.getClusterID());
+        List<Precinct> precincts = district.getContainedPrecincts();
+        ListIterator<Precinct> iterator = precincts.listIterator();
+        while(iterator.hasNext()){
+            Precinct precinct = iterator.next();
+            singleClusterGroup.addPrecinctID(precinct.getPrecinctID());
+        }
+        return singleClusterGroup;
     }
 
 }
