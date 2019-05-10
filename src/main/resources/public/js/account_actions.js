@@ -11,16 +11,16 @@ angular.module('AccountAction')
 
                 },
                 authUser: function(username, password, url, successCall, errorCall) {
-                    // Salt password here
+                    //Salt password here
                     var pwd;
                     var salt;
-                    if (url == "/register"){
+                    if (url == "register"){
                         salt = generateSalt();
                         pwd = password;
                         pwd = pwd.concat(salt);
                     }
 
-                    if (url == "/login"){
+                    if (url == "login"){
                         var salturl;
                         salturl = "/"+username+"/salt";
                         salt = $http.get(salturl,{})
@@ -28,6 +28,7 @@ angular.module('AccountAction')
                         pwd = pwd.concat(salt);
                     }
                     /*Please do hash here*/
+                    //salt = generateSalt();
                     $http.post(url,
                         {
                             username: username,
@@ -110,17 +111,19 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
     };
 
     $scope.cancel = function() {
+        $location.path('/');
         $mdDialog.cancel();
     };
 
     $scope.answer = function(answer) {
         var response = {};
         AccountActionService.authUser($scope.username, $scope.password, $scope.act,
-         function() {
-             $location.path('/');
-             $mdDialog.hide(response);
-        }, function() {
-
+         function(successResponse) {
+            console.log(successResponse);
+            $location.path('/');
+            $mdDialog.hide(successResponse);
+        }, function(errResponse) {
+            console.log(errResponse);
         });
     };
 
