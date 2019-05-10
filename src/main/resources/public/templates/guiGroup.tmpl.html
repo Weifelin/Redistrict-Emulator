@@ -7,5 +7,5 @@
 	<slide-measure ng-if="section.type === 'slideMeasure'" slider="$ctrl.group.sections[sectionID]" ng-class="section.flex"></slide-measure>
 	<range-measure ng-if="section.type === 'rangeMeasure'" range="$ctrl.group.sections[sectionID]" ng-class="section.flex"></range-measure>
 	<select-display ng-if="section.type === 'select'" select="$ctrl.group.sections[sectionID]" ng-class="section.flex"></select-display>
-	<accordion-tab ng-repeat-end ng-if="section.type === 'accordTab'" accordion="$ctrl.group.sections[sectionID]" ng-class="section.flex"></accordion>
+	<accordion-tab ng-repeat-end ng-if="section.type === 'accordTab'" accordion="$ctrl.group.sections[sectionID]" ng-class="section.flex"></accordion-tab>
 </div>

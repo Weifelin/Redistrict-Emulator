@@ -25,11 +25,12 @@ angular.module('DistrictApp').component('textButton', {
 });
 
 function IconBtnController(AccountActionService, AccountDialogService, GeneralUtilService,
-                           $scope, $element, $attrs) {
+                           $scope, $element, $attrs, $rootScope) {
 	var ctrl = this;
 	$scope.AccountDialogService = AccountDialogService;
     $scope.AccountActionService = AccountActionService;
     $scope.GeneralUtilService = GeneralUtilService;
+    $scope.$rootScope = $rootScope;
 }
 
 angular.module('DistrictApp').component('iconButton', {
@@ -93,8 +94,9 @@ angular.module('DistrictApp').component('rangeMeasure', {
   }
 });
 
-function SelectController($scope, $element, $attrs, $rootScope) {
+function SelectController(GeneralUtilService, $scope, $element, $attrs) {
 	var ctrl = this;
+	$scope.GeneralUtilService = GeneralUtilService;
 }
 
 angular.module('DistrictApp').component('selectDisplay', {

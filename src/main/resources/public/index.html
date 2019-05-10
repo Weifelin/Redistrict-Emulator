@@ -58,6 +58,10 @@
       <!-- US Map -->
       <div leaflet (leafletMapReady)="onMapReady($event)" layout="column" flex="100%" id="map"></div>
 
+      <span class="usernameSlot" ng-if="$rootScope.globalData.user.username != ''">
+          {{$rootScope.globalData.user.username}}
+      </span>
+
       <single-run content="content" component-prop="componentProp"></single-run>
 		</div>
 	</body>

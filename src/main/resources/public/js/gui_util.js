@@ -10,9 +10,10 @@ angular.module('GuiUtil')
 	.factory('GeneralUtilService', ['$http', '$cookies', '$rootScope',
 		function() {
 			var service = {
-				changeTabState: function(tabSectionId) {
-					var accordionTab = angular.element("#" + tabSectionId).scope();
-					console.log(accordionTab);
+				changeTabState: function(buttonId) {
+					var tabSectionId = '#' + buttonId.replace('Btn', '');
+					var accordionToolbarScope = angular.element(tabSectionId).scope();
+					var accordionTab = accordionToolbarScope.$parent.$ctrl.accordion;
 
 					// Invert open value and update button icon
 					accordionTab.open = !accordionTab.open;
@@ -22,65 +23,42 @@ angular.module('GuiUtil')
 					} else {
 						accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnClosed"]["icon"];
 					}
+				},
+
+				updateMajMinSliders: function(selectedGroups, sliderGroupId, rangeProp) {
+					// Select element that holds Min and Max representation sliders (for each selected group)
+					var sliderGroup = angular.element('#'+sliderGroupId).scope().$parent.$ctrl.group;
+					var genProp = angular.element("#appShell").scope().componentProp;
+					var sliderStruct = genProp[rangeProp];
+					var labelSuffix = "Slider";
+
+					// Compute difference between current sliders and selected ones
+					var currLabels = Object.keys(sliderGroup.sections);
+					var removeList= currLabels.filter(currLabel =>
+						!selectedGroups.includes(currLabel.substring(0, currLabel.length - labelSuffix.length)));
+
+					// Removing nonexistant group sliders
+					angular.forEach(removeList, function(group, index) {
+						delete this.sections[group+labelSuffix];
+					}, sliderGroup);
+
+					// Adding new group sliders
+					angular.forEach(selectedGroups, function(group, index) {
+						var label = group+labelSuffix;
+						if (!currLabels.includes(label)) {
+							sliderStruct["id"] = "percent" + group;
+							sliderStruct["label"] = group + "Percentage Range";
+							var url = sliderGroup.url.slice();
+							url.push("sections");
+							var groupPercent = parseGui(sliderStruct, genProp, url);
+							this.sections[label] = groupPercent;
+						}
+					}, sliderGroup);
 				}
 			};
 
 			return service;
 		}]);
-/*
-function changeTabState(args) {
-	var argNames = Object.keys(args);
-	if (argNames.length == 2 && argNames.includes('buttonUrl') 
-		&& argNames.includes('sectionId')) {
-		// Remove button segment of url
-		var accordionUrl = args["buttonUrl"].slice(0, args["buttonUrl"].length - 1);
-		var accordionTab = findElem(args["sectionId"], accordionUrl);
-
-		// Invert open value and update button icon
-		accordionTab.open = !accordionTab.open;
-		var mainCtrlScope = angular.element("#appShell").scope();
-		if (accordionTab.open) {
-			accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnOpen"]["icon"];
-		} else {
-			accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnClosed"]["icon"];
-		}
-	}
-}*/
-
-function updateMajMinSliders(args) {
-	var argNames = Object.keys(args);
-	if (argNames.length == 5 && argNames.includes('selectUrl') 
-		&& argNames.includes('sectionId') && argNames.includes('selectedGroups')
-		&& argNames.includes('sliderGroupId') && argNames.includes('rangeProp')) {
-		// Remove select segment of url
-		var containerUrl = args["selectUrl"].slice(0, args["selectUrl"].length - 1);
-		var container = findElem(args["sectionId"], containerUrl);
-
-		// Select element that holds Min and Max representation sliders (for each selected group)
-		var sliderGroup = container[args["sliderGroupId"]];
-		var genProp = angular.element("#appShell").scope().componentProp;
-		var sliderStruct = genProp[args["rangeProp"]];
-		var labelSuffix = "Slider";
-		// Compute difference between current sliders and selected ones
-		var currLabels = Object.keys(sliderGroup.sections);
-		var removeList= currLabels.filter(currLabel =>
-			!args["selectedGroups"].includes(currLabel.substring(0, currLabel.length - labelSuffix.length)));
-		// Removing nonexistant group sliders
-		angular.forEach(removeList, function(group, index) {
-			delete this.sections[group+labelSuffix];
-		}, sliderGroup);
-		// Adding new group sliders
-		angular.forEach(args["selectedGroups"], function(group, index) {
-			var label = group+labelSuffix;
-			if (!currLabels.includes(label)) {
-				sliderStruct["id"] = "percent" + group;
-				sliderStruct["label"] = group + "Percentage Range";
-				var groupPercent = parseGui(sliderStruct, genProp);
-	  			this.sections[label] = groupPercent;
-			}
-		}, sliderGroup);
-	}
-}
 
 function parseGui(guiStructure, componentProp, url) {
 	if (guiStructure && "type" in guiStructure) {
@@ -190,7 +168,7 @@ function parseGui(guiStructure, componentProp, url) {
 				var expandUrl = url.slice();
 				expandUrl.push("expandButton");
 				var expandProp = componentProp[guiStructure["expandButton"]];
-				expandProp["id"] = properties["id"] + "Btn";
+				expandProp["id"] = guiStructure["id"] + "Btn";
 				var expandButton = parseGui(expandProp, componentProp, expandUrl);
 
 				var contentUrl = url.slice();

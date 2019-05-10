@@ -161,7 +161,7 @@
 					"partFairTab": {
 						"type": "accordTab",
 						"properties": "accordTab",
-						"id": "6",
+						"id": "partFairTab",
 						"title": "Partisan Fairness",
 						"content": {
 							"type": "guiGroup",
@@ -189,7 +189,7 @@
 					"majMinTab": {
 						"type": "accordTab",
 						"properties": "accordTab",
-						"id": "6",
+						"id": "majMinTab",
 						"title": "Majority-Minority Districts",
 						"content": {
 							"type": "guiGroup",
@@ -215,13 +215,12 @@
 									"label": "Minority Select",
 									"options": [
 										"African-American",
-										"Asian",
-										"Latin-American",
-										"White"
+										"Asian/Pacific Islander",
+										"Latin-American"
 									],
 									"selected": [],
 									"multiSelect": true,
-									"onChange": "updateMajMinSliders",
+									"onChange": "GeneralUtilService.updateMajMinSliders($ctrl.select.selected, 'singleMinMajPercent', 'majMinRange')",
 									"type": "select"
 								},
 								"minSettingsGroup": {

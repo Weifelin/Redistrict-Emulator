@@ -87,7 +87,8 @@
 		"max": 100,
 		"step": 1,
 		"value": 50,
-		"type": "rangeMeasure"
+		"type": "rangeMeasure",
+		"childProperties": "slideMeasure"
 	},
 	"menu": {
 		"classes": ["md-fab-top-right", "md-scale"],
@@ -131,7 +132,7 @@
 		"id": "", 
 		"label": "maximize", 
 		"icon": "img/icons/baseline-remove-24px.svg", 
-		"clickEvent": "GeneralUtilService.changeTabState('singleRunTabs')",
+		"clickEvent": "GeneralUtilService.changeTabState($ctrl.button.id)",
 		"tooltip": "",
 		"tooltipDir": ""
 	},
@@ -141,7 +142,7 @@
 		"id": "", 
 		"label": "minimize", 
 		"icon": "img/icons/baseline-add-24px.svg", 
-		"clickEvent": "GeneralUtilService.changeTabState('singleRunTabs')",
+		"clickEvent": "GeneralUtilService.changeTabState($ctrl.button.id)",
 		"tooltip": "",
 		"tooltipDir": ""
 	}

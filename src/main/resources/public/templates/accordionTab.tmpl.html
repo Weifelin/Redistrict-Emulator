@@ -1,5 +1,5 @@
 <!-- Toolbar -->
-<md-toolbar class="md-accent accordTab" ng-if="$eval($ctrl.accordion.ifClause)" flex-order="{{$ctrl.accordion.flexOrder}}">
+<md-toolbar id="{{$ctrl.accordion.id}}" class="md-accent accordTab" ng-if="$eval($ctrl.accordion.ifClause)" flex-order="{{$ctrl.accordion.flexOrder}}">
 	<div class="md-toolbar-tools">
 		<h6 class="md-subhead" flex>{{$ctrl.accordion.title}}</h6>
 		<icon-button button="$ctrl.accordion.expandButton"></icon-button>
