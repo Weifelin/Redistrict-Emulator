@@ -4,11 +4,29 @@ angular.module('AccountAction')
     .factory('AccountActionService', ['$http', '$cookies', '$rootScope', '$q',
         function($http, $cookies, $rootScope, $q) {
             var service = {
-                updateUserInfo: function() {
+                updateUserInfo: function(username, password, userType) {
+                    $rootScope.globalData.user = {
+                        username: username,
+                        password: password,
+                        userType: userType
+                    };
 
+                    $http.defaults.headers.common['Authorization'] = 'Basic ' +
+                        $rootScope.globalData.user.username +
+                        $rootScope.globalData.user.password;
+                    $cookies.put('globalData', $rootScope.globalData);
                 },
                 clearUserInfo: function() {
-
+                    $rootScope.globalData = {
+                        user: {
+                            username: "",
+                            password: "",
+                            userType: $rootScope.userTypes.GUEST
+                        },
+                        mode: "singleRun",
+                        selectedState: ""
+                    };
+                    $http.defaults.headers.common['Authorization'] = 'Basic ';
                 },
                 authUser: function(username, password, url, successCall, errorCall) {
                     //Salt password here
@@ -35,7 +53,6 @@ angular.module('AccountAction')
 
                     saltPromise.then(function(saltResponse) {
                         salt = saltResponse.data.saltString;
-                        //console.log(salt);
                         /*Please do hash here*/
                         //salt = generateSalt();
                         var data = {
@@ -44,7 +61,6 @@ angular.module('AccountAction')
                             salt: salt,
                             userType: $rootScope.userTypes.REGULAR
                         };
-                        //console.log(data);
                         $http.post(url, data)
                             .then(function(response) {
                                 successCall(response);
@@ -58,7 +74,10 @@ angular.module('AccountAction')
                 },
                 logout: function() {
                     // Add username as data and potentially add callback on success/failure
-                    $http.post('logout', {});
+                    $http.post('logout', {})
+                        .then(function(response) {
+                            this.clearUserInfo();
+                        });
                 }
             };
 
@@ -85,12 +104,10 @@ angular.module('AccountAction')
                     })
                         .then(function(answer) {
                             if (answer.action == "login") {
-                                userInfo.username = answer.username;
                                 console.log(answer.username + " has logged in.");
                                 $mdToast.showSimple("Welcome back " + answer.username + "!");
                             }
-                            else if (answer.action == "signup") {
-                                userInfo.username = answer.username;
+                            else if (answer.action == "register") {
                                 console.log(answer.username + " is now registered.");
                                 $mdToast.showSimple("Welcome, " + answer.username + "!");
                             }
@@ -133,9 +150,12 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
         var response = {};
         AccountActionService.authUser($scope.username, $scope.password, $scope.act,
          function(successResponse) {
-            console.log(successResponse);
+            AccountActionService.updateUserInfo($scope.username, $scope.password, $scope.act);
             $location.path('/');
-            $mdDialog.hide(successResponse);
+            response.username = $scope.username;
+            response.password = $scope.password;
+            response.action = $scope.act;
+            $mdDialog.hide(response);
         }, function(errResponse) {
             console.log(errResponse);
         });
