@@ -23,8 +23,18 @@ public class Precinct {
     private PartyPreference partyPreference;
     private int numDemo;
     private int numRep;
+    private int votes;
+    private String name;
 
-    public Precinct() {
+    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon){
+        this.precinctID = precinctID;
+        this.name = name;
+        this.population = pop;
+        this.votes = votes;
+        this.numDemo = (int) demo;
+        this.numRep = (int) rep;
+        this.boundaries = polygon;
+
     }
 
     public Precinct(StateE state, int population, Race majority, Geometry boundaries) {

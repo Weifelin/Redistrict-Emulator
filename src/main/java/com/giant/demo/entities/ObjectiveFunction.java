@@ -207,14 +207,29 @@ public class ObjectiveFunction {
 
     public double calculateEfficiencyGap(){
         int numVotes = 0, numStateDemo = 0, numStateRep = 0;
+        double rWaste = 0.0, dWaste = 0.0;
         for(Cluster c : this.state.getDistricts()){
             int numDemo = 0, numRep = 0;
+            int numDLoss = 0, numDExcess = 0, numRLoss = 0, numRExcess = 0;
             for(Precinct p : c.getContainedPrecincts()){
                 numDemo += p.getNumDemo();
                 numRep += p.getNumDemo();
+
             }
+            if(numDemo  > numRep) {
+                numDExcess += Math.floorDiv(numDemo - numRep, 2);
+                numRLoss += numRep;
+            }
+            else if(numRep > numDemo) {
+                numRExcess += Math.floorDiv(numRep - numDemo, 2);
+                numDLoss += numDemo;
+            }
+            rWaste += numRExcess + numRLoss;
+            dWaste += numDExcess + numDLoss;
+            numStateDemo += numDemo;
+            numStateRep += numRep;
         }
-        return 0.0;
+        return (numStateDemo > numStateRep) ? dWaste / this.state.getDistricts().size() : rWaste / this.state.getDistricts().size();
     }
 
     //measure how close the population of each cluster is so being #people / # districts
