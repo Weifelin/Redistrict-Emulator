@@ -4,6 +4,7 @@ package com.giant.demo.controllers;
 import com.giant.demo.entities.Job;
 import com.giant.demo.entities.Salt;
 import com.giant.demo.entities.User;
+import com.giant.demo.preprocessing.PreProcess;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
 import com.giant.demo.services.Algorithm;
@@ -28,6 +29,8 @@ public class HomeController {
     private SecurityService securityService;
     @Autowired
     private Algorithm algorithm;
+    @Autowired
+    private PreProcess preProcess;
 
     private BatchService batchService;
 
@@ -41,7 +44,8 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView index(){
-        //return new ModelAndView("index");
+
+        preProcess.loadPrecincts();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;

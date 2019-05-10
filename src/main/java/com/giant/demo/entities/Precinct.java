@@ -3,6 +3,8 @@ package com.giant.demo.entities;
 import com.giant.demo.enums.PartyPreference;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
@@ -16,6 +18,8 @@ public class Precinct {
     private StateE state;
     private int population;
     private Race majority;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
     private Geometry boundaries;
     @ManyToMany
     @JoinColumn(name = "precinctID")
@@ -25,6 +29,10 @@ public class Precinct {
     private int numRep;
     private int votes;
     private String name;
+
+
+    public Precinct() {
+    }
 
     public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon){
         this.precinctID = precinctID;
