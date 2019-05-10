@@ -13,7 +13,6 @@ import java.util.Set;
 @Entity
 public class Precinct {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int precinctID;
     private StateE state;
     private int population;

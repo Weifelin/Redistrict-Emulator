@@ -57,12 +57,12 @@ public class HomeController {
 //    }
 
     @PostMapping("/register")
-    public User register(@Valid @RequestBody UserModel newUser, HttpServletRequest httpServletRequest){
+    public UserModel register(@Valid @RequestBody UserModel newUser, HttpServletRequest httpServletRequest){
         User user = userService.save(newUser);
         if (user != null) {
             securityService.autoLogin(user.getUsername(), newUser.getPassword(), httpServletRequest);
         }
-        return user; //show single batch.
+        return new UserModel(user.getUsername(), user.getUserType(), user.getPassword(), user.getSalt().getSaltString()); //show single batch.
     }
 
 

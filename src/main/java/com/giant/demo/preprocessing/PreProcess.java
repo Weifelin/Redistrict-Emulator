@@ -25,6 +25,7 @@ import java.util.Set;
 public class PreProcess {
     @Autowired
     private PreprocessService preprocessService;
+    private static int counter = 0;
 
     public PreProcess(){
 
@@ -80,13 +81,13 @@ public class PreProcess {
             }
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
-            System.out.println(polygon.toText().length());
+
 
 
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
 
             preprocessService.savePrecinct(precinct);
-
+            System.out.println(counter++);
 
         }
     }
