@@ -158,8 +158,7 @@ function parseGui(guiStructure, componentProp, url) {
 				return new SelectDisplay(properties, 
 									  guiStructure["id"], guiStructure["label"], 
 									  guiStructure["options"], guiStructure["selected"],
-									  guiStructure["multiSelect"], guiStructure["onChange"],
-									  );
+									  guiStructure["multiSelect"], guiStructure["onChange"]);
 			break;
 			case "accordTab":
 				var properties = componentProp[guiStructure["properties"]];
