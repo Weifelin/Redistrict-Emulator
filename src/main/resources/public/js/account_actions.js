@@ -14,13 +14,13 @@ angular.module('AccountAction')
                     // Salt password here
                     var pwd;
                     var salt;
-                    if (url == "/register"){
+                    if (url == "register"){
                         salt = generateSalt();
                         pwd = password;
                         pwd = pwd.concat(salt);
                     }
 
-                    if (url == "/login"){
+                    if (url == "login"){
                         var salturl;
                         salturl = "/"+username+"/salt";
                         salt = $http.get(salturl,{})
