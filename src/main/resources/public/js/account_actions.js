@@ -32,7 +32,8 @@ angular.module('AccountAction')
                         {
                             username: username,
                             password: pwd,
-                            salt: salt
+                            salt: salt,
+                            userType: $rootScope.userTypes.REGULAR
                         })
                     .then(function(response) {
                         successCall(response);
