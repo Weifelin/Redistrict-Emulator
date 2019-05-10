@@ -82,10 +82,15 @@ function Map(info) {
 	 */
 	 function geoSetup() {
 		// Loading the JSON file
+
 		maplet.geojsonLayer = new L.GeoJSON.AJAX("gz_2010_us_040_00_500k.json", {
 		    style: style,
 		    onEachFeature: onEachFeature
-		}); 
+		});
+		/*maplet.geojsonLayer = new L.GeoJSON.AJAX("NJPrecincts.json", {
+			style: style,
+			onEachFeature: onEachFeature
+		});*/
 
 		/**
 		 * Leaflet Map

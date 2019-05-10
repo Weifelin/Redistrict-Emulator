@@ -48,6 +48,7 @@ app.run(['$rootScope', '$cookies', '$http',
 
 app.controller('AppCtrl', function(GenProp, $scope, $rootScope) {
     	var ctrl = this;
+    	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
     	$scope.componentProp = GenProp.query();
         // Query backend for state list (with initial data)
