@@ -35,7 +35,7 @@ angular.module('AccountAction')
 
                     saltPromise.then(function(saltResponse) {
                         salt = saltResponse.data.saltString;
-                        console.log(salt);
+                        //console.log(salt);
                         /*Please do hash here*/
                         //salt = generateSalt();
                         var data = {
@@ -44,7 +44,7 @@ angular.module('AccountAction')
                             salt: salt,
                             userType: $rootScope.userTypes.REGULAR
                         };
-                        console.log(data);
+                        //console.log(data);
                         $http.post(url, data)
                             .then(function(response) {
                                 successCall(response);
