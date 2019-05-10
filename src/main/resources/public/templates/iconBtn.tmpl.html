@@ -1,4 +1,4 @@
-<md-button ng-class="$ctrl.button.classes" ng-if="$eval($ctrl.button.ifClause)" aria-label="{{$ctrl.button.id}}" ng-click="callClickFunc($ctrl.button.clickEvent, $eval($ctrl.button.eventArgs))">
+<md-button ng-class="$ctrl.button.classes" ng-if="$eval($ctrl.button.ifClause)" aria-label="{{$ctrl.button.id}}" ng-click="$eval($ctrl.button.clickEvent)">
     <md-tooltip ng-if="$ctrl.button.tooltip != ''" md-direction="{{$ctrl.button.tooltipDir}}"  md-autohide="false">
         {{$ctrl.button.tooltip}}
     </md-tooltip>

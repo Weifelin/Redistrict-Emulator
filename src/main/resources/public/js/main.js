@@ -2,7 +2,25 @@
 angular.module('AccountAction', []);
 
 var app = angular.module('DistrictApp',
-    ['prop', 'AccountAction', 'ngCookies', 'ngMaterial', 'ngMessages', 'ngAnimate']);
+    ['prop', 'AccountAction', 'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'ngAnimate']);
+
+// Configure routes
+app.config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
+    $locationProvider.hashPrefix('');
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
+    $routeProvider
+        .when('/login', {
+            controller: 'LoginController',
+            template: ' '
+        })
+        .when('/register', {
+            controller: 'LoginController',
+            template: ' '
+        });
+}]);
 
 // Set up global variables (or pull from cookieStore)
 app.run(['$rootScope', '$cookies', '$http',
@@ -22,13 +40,6 @@ app.run(['$rootScope', '$cookies', '$http',
                                             $rootScope.globalData.user.username +
                                             $rootScope.globalData.user.password;
         }
-
-        $rootScope.funcMap = {
-                "changeTabState": changeTabState,
-                "updateMajMinSliders": updateMajMinSliders,
-                "login": login,
-                "logout": logout
-        };
 }]);
 
 app.controller('AppCtrl', function(GenProp, $scope, $rootScope) {

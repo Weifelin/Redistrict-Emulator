@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('AccountAction')
-    .factory('AccountActionService', ['$http', '$cookies', '$rootScope'],
+    .factory('AccountActionService', ['$http', '$cookies', '$rootScope',
         function($http, $cookies, $rootScope) {
             var service = {
                 updateUserInfo: function() {
@@ -32,17 +32,17 @@ angular.module('AccountAction')
             };
 
             return service;
-        })
+        }])
 
     .factory('AccountDialogService',
-        ['$http', '$mdDialog', '$mdToast', '$location'],
+        ['$http', '$mdDialog', '$mdToast', '$location',
         function($http, $mdDialog, $mdToast, $location) {
             var service = {
                 open: function() {
                     $location.path("login");
                     $mdDialog.show({
                         locals: {
-                            user: userInfo.username,
+                            user: "",
                             pass: "",
                             act: "login",
                             isLoading: false
@@ -73,7 +73,7 @@ angular.module('AccountAction')
             };
 
             return service;
-        });
+        }]);
 
 function startSingleRun() {
 	var mainCtrlScope = angular.element("#appShell").scope();
@@ -87,6 +87,7 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
     $scope.password = pass;
     $scope.act = act;
     $scope.isLoading = isLoading;
+    $scope.errorMsg = "";
 
     $scope.hide = function() {
         $mdDialog.hide();
@@ -110,7 +111,7 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
     $scope.switchAction = function(newAction) {
         $scope.act = newAction;
         var title = ($scope.act == 'login') ? 'Log In' : 'Sign Up';
-        $location.path($scope.act);
+        $location.path('/' + $scope.act);
         //$window.history.replaceState({}, title, $scope.act);
     }
 }

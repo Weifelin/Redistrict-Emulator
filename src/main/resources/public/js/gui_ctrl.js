@@ -11,18 +11,8 @@ angular.module('DistrictApp').component('guiGroup', {
   }
 });
 
-function TextBtnController($scope, $element, $attrs, $rootScope) {
+function TextBtnController($scope, $element, $attrs) {
 	var ctrl = this;
-    $scope.callClickFunc = function(funcName, args) {
-      if (ctrl.button.clickEvent != "") {
-        if (Object.keys(args).length == 0) {
-          $rootScope.funcMap[funcName]();
-        }
-        else {
-          $rootScope.funcMap[funcName](args);
-        }
-      }
-    };
 }
 
 angular.module('DistrictApp').component('textButton', {
@@ -34,18 +24,10 @@ angular.module('DistrictApp').component('textButton', {
   }
 });
 
-function IconBtnController($scope, $element, $attrs, $rootScope) {
+function IconBtnController(AccountActionService, AccountDialogService, $scope, $element, $attrs) {
 	var ctrl = this;
-  $scope.callClickFunc = function(funcName, args) {
-    if (ctrl.button.clickEvent != "") {
-      if (Object.keys(args).length == 0) {
-        $rootScope.funcMap[funcName]();
-      }
-      else {
-        $rootScope.funcMap[funcName](args);
-      }
-    }
-  };
+	$scope.AccountDialogService = AccountDialogService;
+    $scope.AccountActionService = AccountActionService;
 }
 
 angular.module('DistrictApp').component('iconButton', {
@@ -111,17 +93,6 @@ angular.module('DistrictApp').component('rangeMeasure', {
 
 function SelectController($scope, $element, $attrs, $rootScope) {
 	var ctrl = this;
-
-  $scope.callChangeFunc = function(funcName, args) {
-    if (ctrl.select.clickEvent != "") {
-      if (Object.keys(args).length == 0) {
-        $rootScope.funcMap[funcName]();
-      }
-      else {
-        $rootScope.funcMap[funcName](args);
-      }
-    }
-  };
 }
 
 angular.module('DistrictApp').component('selectDisplay', {
