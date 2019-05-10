@@ -4,8 +4,8 @@ import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
-import com.giant.demo.returnmodels.SimpleClusterGroups;
-import com.giant.demo.returnmodels.SingleClusterGroup;
+import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
+import com.giant.demo.returnreceivemodels.SingleClusterGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

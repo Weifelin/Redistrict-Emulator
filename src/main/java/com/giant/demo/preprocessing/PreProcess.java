@@ -48,15 +48,15 @@ public class PreProcess {
             //how to read in shape file
 
             GeometryFactory geometryFactory = new GeometryFactory();
-            Polygon polygon = geometryFactory.createPolygon(shape.get("coordinates"));
+            //Polygon polygon = geometryFactory.createPolygon(shape.get("coordinates"));
 
 
 
             //System.out.println(polygon.npoints);
 
 
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
-            precinctRepository.save(precinct);
+            //Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
+            //precinctRepository.save(precinct);
         }
     }
 

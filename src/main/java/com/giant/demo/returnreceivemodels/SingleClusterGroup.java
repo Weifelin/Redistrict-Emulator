@@ -1,6 +1,4 @@
-package com.giant.demo.returnmodels;
-
-import com.giant.demo.enums.StateE;
+package com.giant.demo.returnreceivemodels;
 
 import java.util.ArrayList;
 import java.util.List;

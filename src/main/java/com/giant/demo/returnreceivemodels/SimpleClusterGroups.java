@@ -1,4 +1,4 @@
-package com.giant.demo.returnmodels;
+package com.giant.demo.returnreceivemodels;
 
 import com.giant.demo.enums.StateE;
 
