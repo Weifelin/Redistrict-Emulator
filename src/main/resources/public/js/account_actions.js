@@ -29,13 +29,13 @@ angular.module('AccountAction')
                     }
                     /*Please do hash here*/
                     //salt = generateSalt();
-                    $http.post(url,
-                        {
-                            username: username,
-                            password: pwd,
-                            salt: salt,
-                            userType: $rootScope.userTypes.REGULAR
-                        })
+                    var data = {
+                        username: username,
+                        password: pwd,
+                        salt: salt,
+                        userType: $rootScope.userTypes.REGULAR
+                    };
+                    $http.post(url, data)
                     .then(function(response) {
                         successCall(response);
                     }, function(response) {

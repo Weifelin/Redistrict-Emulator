@@ -1,4 +1,5 @@
 'use strict';
+angular.module('GuiUtil', []);
 angular.module('AccountAction', []);
 
 var app = angular.module('DistrictApp',

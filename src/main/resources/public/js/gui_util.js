@@ -6,6 +6,27 @@ function findElem(sectionId, elementUrl) {
 	return currElem;
 }
 
+angular.module('GuiUtil')
+	.factory('GeneralUtilService', ['$http', '$cookies', '$rootScope',
+		function() {
+			var service = {
+				changeTabState: function(tabSectionId) {
+					var accordionTab = angular.element("#" + tabSectionId).scope();
+
+					// Invert open value and update button icon
+					accordionTab.open = !accordionTab.open;
+					var mainCtrlScope = angular.element("#appShell").scope();
+					if (accordionTab.open) {
+						accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnOpen"]["icon"];
+					} else {
+						accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnClosed"]["icon"];
+					}
+				}
+			};
+
+			return service;
+		}]);
+/*
 function changeTabState(args) {
 	var argNames = Object.keys(args);
 	if (argNames.length == 2 && argNames.includes('buttonUrl') 
@@ -23,7 +44,7 @@ function changeTabState(args) {
 			accordionTab.expandButton.icon = mainCtrlScope.componentProp["accordBtnClosed"]["icon"];
 		}
 	}
-}
+}*/
 
 function updateMajMinSliders(args) {
 	var argNames = Object.keys(args);
