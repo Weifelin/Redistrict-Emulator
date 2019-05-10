@@ -79,6 +79,11 @@
 			<artifactId>org.json.simple</artifactId>
 			<version>0.4</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.geotools/gt-geojson -->
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geojson</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

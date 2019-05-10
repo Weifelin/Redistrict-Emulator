@@ -2,6 +2,7 @@ package com.giant.demo.preprocessing;
 
 import com.giant.demo.entities.Precinct;
 import com.giant.demo.repositories.PrecinctRepository;
+import com.giant.demo.services.PreprocessService;
 import org.json.simple.parser.ParseException;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
@@ -10,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Service;
+
+import javax.management.ObjectInstance;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,13 +21,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+@Service
 public class PreProcess {
     @Autowired
-    private PrecinctRepository precinctRepository;
+    private PreprocessService preprocessService;
+    private static int counter = 0;
 
     public PreProcess(){
-        this.precinctRepository = null;
-        this.loadPrecincts();
+
     }
 
     public void loadPrecincts() {
@@ -32,7 +37,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("C:\\Users\\wwalt\\OneDrive\\Documents\\GitHub\\demo\\src\\main\\resources\\public\\precincts.json"));
+            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/precincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -78,9 +83,12 @@ public class PreProcess {
             Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
 
 
+
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
-            precinctRepository.save(precinct);
-            
+
+            preprocessService.savePrecinct(precinct);
+            System.out.println(counter++);
+
         }
     }
 
