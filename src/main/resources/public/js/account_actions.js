@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('AccountAction')
-    .factory('AccountActionService', ['$http', '$cookies', '$rootScope',
-        function($http, $cookies, $rootScope) {
+    .factory('AccountActionService', ['$http', '$cookies', '$rootScope', '$q',
+        function($http, $cookies, $rootScope, $q) {
             var service = {
                 updateUserInfo: function() {
 
@@ -14,32 +14,46 @@ angular.module('AccountAction')
                     //Salt password here
                     var pwd;
                     var salt;
+                    var saltPromise;
                     if (url == "register"){
                         salt = generateSalt();
                         pwd = password;
                         pwd = pwd.concat(salt);
+                        saltPromise = $q(function(resolve, reject) {
+                            resolve({ data: { saltString: salt } });
+                        });
                     }
 
                     if (url == "login"){
                         var salturl;
                         salturl = "/"+username+"/salt";
-                        salt = $http.get(salturl,{})
+                        saltPromise = $http.get(salturl,{})
+
                         pwd = password;
                         pwd = pwd.concat(salt);
                     }
-                    /*Please do hash here*/
-                    //salt = generateSalt();
-                    var data = {
-                        username: username,
-                        password: pwd,
-                        salt: salt,
-                        userType: $rootScope.userTypes.REGULAR
-                    };
-                    $http.post(url, data)
-                    .then(function(response) {
-                        successCall(response);
-                    }, function(response) {
-                        errorCall(response);
+
+                    saltPromise.then(function(saltResponse) {
+                        salt = saltResponse.data.saltString;
+                        console.log(salt);
+                        /*Please do hash here*/
+                        //salt = generateSalt();
+                        var data = {
+                            username: username,
+                            password: pwd,
+                            salt: salt,
+                            userType: $rootScope.userTypes.REGULAR
+                        };
+                        console.log(data);
+                        $http.post(url, data)
+                            .then(function(response) {
+                                successCall(response);
+                            }, function(response) {
+                                errorCall(response);
+                            });
+
+                    }, function(saltError) {
+                        errorCall(saltError);
                     });
                 },
                 logout: function() {
@@ -139,5 +153,5 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
 function generateSalt() {
     var salt = Math.random().toString(36).substring(2, 15) +
                Math.random().toString(36).substring(2, 15);
-    return salt;
+    return salt.toString();
 }

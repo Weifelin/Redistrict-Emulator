@@ -1,11 +1,26 @@
 package com.giant.demo;
 
+import com.giant.demo.entities.Precinct;
+import com.giant.demo.preprocessing.PreProcess;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /*
 @SpringBootApplication does the following:
@@ -20,8 +35,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class DemoApplication extends SpringBootServletInitializer {
 
-	
+
 	public static void main(String[] args) {
+		PreProcess data = new PreProcess();
 		SpringApplication.run(DemoApplication.class, args);
 	}
 
