@@ -12,6 +12,7 @@ angular.module('GuiUtil')
 			var service = {
 				changeTabState: function(tabSectionId) {
 					var accordionTab = angular.element("#" + tabSectionId).scope();
+					console.log(accordionTab);
 
 					// Invert open value and update button icon
 					accordionTab.open = !accordionTab.open;

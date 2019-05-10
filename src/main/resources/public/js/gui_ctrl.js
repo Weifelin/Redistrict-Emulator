@@ -24,10 +24,12 @@ angular.module('DistrictApp').component('textButton', {
   }
 });
 
-function IconBtnController(AccountActionService, AccountDialogService, $scope, $element, $attrs) {
+function IconBtnController(AccountActionService, AccountDialogService, GeneralUtilService,
+                           $scope, $element, $attrs) {
 	var ctrl = this;
 	$scope.AccountDialogService = AccountDialogService;
     $scope.AccountActionService = AccountActionService;
+    $scope.GeneralUtilService = GeneralUtilService;
 }
 
 angular.module('DistrictApp').component('iconButton', {

@@ -131,7 +131,7 @@
 		"id": "", 
 		"label": "maximize", 
 		"icon": "img/icons/baseline-remove-24px.svg", 
-		"clickEvent": "changeTabState",
+		"clickEvent": "GeneralUtilService.changeTabState('singleRunTabs')",
 		"tooltip": "",
 		"tooltipDir": ""
 	},
@@ -141,7 +141,7 @@
 		"id": "", 
 		"label": "minimize", 
 		"icon": "img/icons/baseline-add-24px.svg", 
-		"clickEvent": "changeTabState",
+		"clickEvent": "GeneralUtilService.changeTabState('singleRunTabs')",
 		"tooltip": "",
 		"tooltipDir": ""
 	}

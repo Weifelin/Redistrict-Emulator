@@ -36,7 +36,7 @@
 			"measureTabs": {
 				"type": "guiGroup",
 				"properties": "accordContainer",
-				"id": "accordContainer",
+				"id": "singleRunTabs",
 				"sections": {
 					"compactnessTab": {
 						"type": "accordTab",

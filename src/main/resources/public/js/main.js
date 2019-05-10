@@ -3,7 +3,8 @@ angular.module('GuiUtil', []);
 angular.module('AccountAction', []);
 
 var app = angular.module('DistrictApp',
-    ['prop', 'AccountAction', 'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'ngAnimate']);
+    ['prop', 'AccountAction', 'GuiUtil', 'ngRoute', 'ngCookies',
+            'ngMaterial', 'ngMessages', 'ngAnimate']);
 
 // Configure routes
 app.config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
