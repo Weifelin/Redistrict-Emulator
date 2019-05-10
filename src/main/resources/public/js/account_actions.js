@@ -110,17 +110,19 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
     };
 
     $scope.cancel = function() {
+        $location.path('/');
         $mdDialog.cancel();
     };
 
     $scope.answer = function(answer) {
         var response = {};
         AccountActionService.authUser($scope.username, $scope.password, $scope.act,
-         function() {
-             $location.path('/');
-             $mdDialog.hide(response);
-        }, function() {
-
+         function(successResponse) {
+            console.log(successResponse);
+            $location.path('/');
+            $mdDialog.hide(successResponse);
+        }, function(errResponse) {
+            console.log(errResponse);
         });
     };
 
