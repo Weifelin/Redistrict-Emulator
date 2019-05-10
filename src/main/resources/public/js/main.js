@@ -35,7 +35,9 @@ app.run(['$rootScope', '$cookies', '$http',
                     username: "",
                     password: "",
                     userType: $rootScope.userTypes.GUEST
-                }
+                },
+                mode: "singleRun",
+                selectedState: ""
             };
         } else if ($rootScope.globalData.user) {
             $http.defaults.headers.common['Authorization'] = 'Basic ' +
