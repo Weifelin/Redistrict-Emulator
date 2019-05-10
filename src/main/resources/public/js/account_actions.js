@@ -11,7 +11,7 @@ angular.module('AccountAction')
 
                 },
                 authUser: function(username, password, url, successCall, errorCall) {
-                    // Salt password here
+                    //Salt password here
                     var pwd;
                     var salt;
                     if (url == "register"){
@@ -28,6 +28,7 @@ angular.module('AccountAction')
                         pwd = pwd.concat(salt);
                     }
                     /*Please do hash here*/
+                    //salt = generateSalt();
                     $http.post(url,
                         {
                             username: username,
