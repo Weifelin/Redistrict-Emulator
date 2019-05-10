@@ -16,15 +16,15 @@ angular.module('AccountAction')
                     var salt;
                     if (url == "/register"){
                         salt = generateSalt();
-                        pwd = password.toString();
+                        pwd = password;
                         pwd = pwd.concat(salt);
                     }
 
                     if (url == "/login"){
                         var salturl;
                         salturl = "/"+username+"/salt";
-                        salt = $http.get(salt,{})
-                        pwd = password.toString();
+                        salt = $http.get(salturl,{})
+                        pwd = password;
                         pwd = pwd.concat(salt);
                     }
                     /*Please do hash here*/
