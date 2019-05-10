@@ -17,18 +17,6 @@
 		"flex": "flex-10",
 		"layout": []
 	},
-	"menuTrigger": {
-		"classes": ["md-fab"],
-		"ifClause": "true",
-		"flex": "",
-		"layout": []
-	},
-	"menuAction": {
-		"classes": ["md-fab", "md-raised", "md-mini"],
-		"ifClause": "true",
-		"flex": "",
-		"layout": []
-	},
 	"iconBtn": {
 		"classes": ["md-fab", "md-raised", "md-mini"],
 		"ifClause": "true",
@@ -93,6 +81,42 @@
 	"menu": {
 		"classes": ["md-fab-top-right", "md-scale"],
 		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"menuTrigger": {
+		"classes": ["md-fab"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"menuAction": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "true",
+		"flex": "",
+		"layout": []
+	},
+	"loginBtn": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "$rootScope.globalData.user.username == ''",
+		"flex": "",
+		"layout": []
+	},
+	"logoutBtn": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "$rootScope.globalData.user.username != ''",
+		"flex": "",
+		"layout": []
+	},
+	"singleRunMenuBtn": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "$rootScope.globalData.mode == 'singleRun'",
+		"flex": "",
+		"layout": []
+	},
+	"batchRunMenuBtn": {
+		"classes": ["md-fab", "md-raised", "md-mini"],
+		"ifClause": "$rootScope.globalData.mode == 'batchRun'",
 		"flex": "",
 		"layout": []
 	},

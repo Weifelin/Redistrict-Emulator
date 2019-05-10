@@ -21,7 +21,7 @@
 				"actions" : [
 					{
 						"type": "iconBtn",
-						"properties": "menuAction", 
+						"properties": "singleRunMenuBtn",
 						"id": "singleRun", 
 						"label": "singleRun", 
 						"icon": "img/icons/baseline-photo-24px.svg", 
@@ -31,7 +31,7 @@
 					},
 					{
 						"type": "iconBtn",
-						"properties": "menuAction", 
+						"properties": "batchRunMenuBtn",
 						"id": "batchRun", 
 						"label": "batchRun", 
 						"icon": "img/icons/baseline-add_photo_alternate-24px.svg", 
@@ -41,7 +41,7 @@
 					},
 					{
 						"type": "iconBtn",
-						"properties": "menuAction", 
+						"properties": "loginBtn",
 						"id": "login", 
 						"label": "login", 
 						"icon": "img/icons/baseline-person_outline-24px.svg", 
@@ -51,7 +51,7 @@
 					},
 					{
 						"type": "iconBtn",
-						"properties": "menuAction", 
+						"properties": "logoutBtn",
 						"id": "logout", 
 						"label": "logout", 
 						"icon": "img/icons/baseline-exit_to_app-24px.svg", 

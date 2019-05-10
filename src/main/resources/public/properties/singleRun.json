@@ -102,34 +102,6 @@
 						"open": true,
 						"expandButton": "accordBtnOpen"
 					},
-					"contigTab": {
-						"type": "accordTab",
-						"properties": "accordTab",
-						"id": "contigTab",
-						"title": "Contiguity",
-						"content": {
-							"type": "guiGroup",
-							"properties": "guiGroup",
-							"id": "contigContent",
-							"sections": {
-								"contigSlider": {	
-									"properties": "slideMeasure",
-									"id": "1",
-									"label": "Contiguity",
-									"tooltip": "",
-									"tooltipDir": "",
-									"min": 0,
-									"max": 1,
-									"step": 0.01,
-									"value": 0.5,
-									"type": "slideMeasure"
-								}
-							}
-						},
-						"flexOrder": 3,
-						"open": false,
-						"expandButton": "accordBtnClosed"
-					},
 					"popEqTab": {
 						"type": "accordTab",
 						"properties": "accordTab",
@@ -172,6 +144,18 @@
 									"properties": "slideMeasure",
 									"id": "1",
 									"label": "Partisan Fairness",
+									"tooltip": "",
+									"tooltipDir": "",
+									"min": 0,
+									"max": 1,
+									"step": 0.01,
+									"value": 0.5,
+									"type": "slideMeasure"
+								},
+								"efficiencyGapSlider": {
+									"properties": "slideMeasure",
+									"id": "1",
+									"label": "Efficiency Gap",
 									"tooltip": "",
 									"tooltipDir": "",
 									"min": 0,
