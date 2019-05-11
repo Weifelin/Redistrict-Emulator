@@ -39,7 +39,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newNJPrecincts.json"));
+            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newPrecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
