@@ -92,19 +92,29 @@ public class Algorithm {
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
         List<Precinct> allPrecinct =  precinctRepository.findAll();
-        Set<Cluster> clusters = new HashSet<>();
+        List<Cluster> clusters = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
             clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
         }
         initializeEdges(clusters, allPrecinct);
-        this.clusters = clusters;
+        Set<Cluster> ret = new HashSet<>(clusters);
+        this.clusters = ret;
     }
 
-    public void initializeEdges(Set<Cluster> clusters, List<Precinct> precincts){
-        for(Precinct p : precincts){
-            //for(int ID : p.getNeighbours())
+    public void initializeEdges(List<Cluster> clusters, List<Precinct> precincts){
+        Map<Integer, Cluster>  tempC = new HashMap<>();
+        Map<Integer, Precinct>  tempP = new HashMap<>();
+        for(int i = 0; i < clusters.size(); i++){
+            tempP.put(precincts.get(i).getPrecinctID(), precincts.get(i));
+            tempC.put(clusters.get(i).getClusterID(), clusters.get(i));
+        }
+        for(int i = 0; i < precincts.size(); i++){
+            for(int ID : precincts.get(i).getTempNs()){
+                precincts.get(i).getNeighbours().add(tempP.get(ID));
+                clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
+            }
         }
     }
 
