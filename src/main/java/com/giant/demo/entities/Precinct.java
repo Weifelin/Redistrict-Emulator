@@ -28,7 +28,7 @@ public class Precinct {
     private int numRep;
     private int votes;
     @Transient
-    public int[] tempNs;
+    private int[] tempNs;
     private String name;
     @OneToOne
     private Demographics demogrpahics;
@@ -142,5 +142,9 @@ public class Precinct {
 
     public void setDemogrpahics(Demographics demogrpahics) {
         this.demogrpahics = demogrpahics;
+    }
+
+    public int[] getTempNs() {
+        return tempNs;
     }
 }
