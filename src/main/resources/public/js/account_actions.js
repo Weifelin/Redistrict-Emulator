@@ -11,7 +11,7 @@ angular.module('AccountAction')
                         userType: userType
                     };
 
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' +
+                    $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
                         $rootScope.globalData.user.username +
                         $rootScope.globalData.user.password;
                     $cookies.put('globalData', $rootScope.globalData);
@@ -26,7 +26,8 @@ angular.module('AccountAction')
                         mode: "singleRun",
                         selectedState: ""
                     };
-                    $http.defaults.headers.common['Authorization'] = 'Basic ';
+
+                    $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ';
                 };
             service.authUser = function(username, password, url, successCall, errorCall) {
                     //Salt password here
@@ -58,6 +59,7 @@ angular.module('AccountAction')
                             salt: salt,
                             userType: $rootScope.userTypes.REGULAR
                         };
+                        console.log(data);
                         $http.post(url, data)
                             .then(function(response) {
                                 successCall(response);

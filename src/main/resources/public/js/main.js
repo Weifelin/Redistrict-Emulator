@@ -40,7 +40,7 @@ app.run(['$rootScope', '$cookies', '$http',
                 selectedState: ""
             };
         } else if ($rootScope.globalData.user) {
-            $http.defaults.headers.common['Authorization'] = 'Basic ' +
+            $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
                                             $rootScope.globalData.user.username +
                                             $rootScope.globalData.user.password;
         }

@@ -120,4 +120,12 @@ public class Precinct {
     public void setNumRep(int numRep) {
         this.numRep = numRep;
     }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
