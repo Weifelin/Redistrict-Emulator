@@ -58,7 +58,7 @@ public class PreProcess {
             double africanAmerican = (int) (long) p.get("African-American") / pop;
             double asian = (int) (long) p.get("Asian") / pop;
             double latinAmerican = (int) (long) p.get("African-American") / pop;
-            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican);
+            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
 
             Map shape = (Map) p.get("shape");
 
