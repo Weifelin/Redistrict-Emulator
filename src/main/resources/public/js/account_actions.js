@@ -3,8 +3,8 @@
 angular.module('AccountAction')
     .factory('AccountActionService', ['$http', '$cookies', '$rootScope', '$q',
         function($http, $cookies, $rootScope, $q) {
-            var service = {
-                updateUserInfo: function(username, password, userType) {
+            var service = this;
+            service.updateUserInfo = function(username, password, userType) {
                     $rootScope.globalData.user = {
                         username: username,
                         password: password,
@@ -15,8 +15,8 @@ angular.module('AccountAction')
                         $rootScope.globalData.user.username +
                         $rootScope.globalData.user.password;
                     $cookies.put('globalData', $rootScope.globalData);
-                },
-                clearUserInfo: function() {
+                };
+            service.clearUserInfo = function() {
                     $rootScope.globalData = {
                         user: {
                             username: "",
@@ -27,8 +27,8 @@ angular.module('AccountAction')
                         selectedState: ""
                     };
                     $http.defaults.headers.common['Authorization'] = 'Basic ';
-                },
-                authUser: function(username, password, url, successCall, errorCall) {
+                };
+            service.authUser = function(username, password, url, successCall, errorCall) {
                     //Salt password here
                     var pwd;
                     var salt;
@@ -68,15 +68,14 @@ angular.module('AccountAction')
                     }, function(saltError) {
                         errorCall(saltError);
                     });
-                },
-                logout: function() {
+                };
+            service.logout = function() {
                     // Add username as data and potentially add callback on success/failure
                     $http.post('logout', {})
                         .then(function(response) {
-                            this.clearUserInfo();
+                            service.clearUserInfo();
                         });
-                }
-            };
+                };
 
             return service;
         }])
