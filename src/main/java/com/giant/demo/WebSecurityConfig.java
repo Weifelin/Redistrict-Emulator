@@ -3,10 +3,12 @@ package com.giant.demo;
 import com.giant.demo.filter.CsrfHeaderFilter;
 import com.giant.demo.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         which will be captured and processed by client side, and redirect to different pages.
         */
         http
+                .csrf().disable()
                 .httpBasic()
                 .and()
                 .authorizeRequests()
@@ -73,7 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                     .invalidateHttpSession(true)
                     .clearAuthentication(true)
-                    .logoutSuccessUrl("/")
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)

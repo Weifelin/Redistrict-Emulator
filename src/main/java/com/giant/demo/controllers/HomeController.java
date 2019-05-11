@@ -7,10 +7,7 @@ import com.giant.demo.entities.User;
 import com.giant.demo.preprocessing.PreProcess;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
-import com.giant.demo.services.Algorithm;
-import com.giant.demo.services.BatchService;
-import com.giant.demo.services.SecurityService;
-import com.giant.demo.services.UserService;
+import com.giant.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,8 @@ public class HomeController {
     private Algorithm algorithm;
     @Autowired
     private PreProcess preProcess;
+    @Autowired
+    private GeoJsonService geoJsonService;
 
     private BatchService batchService;
 
@@ -45,7 +44,7 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView index(){
 
-        //preProcess.loadPrecincts();
+        //geoJsonService.createGeoJson();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;

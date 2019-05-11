@@ -11,7 +11,7 @@ angular.module('AccountAction')
                         userType: userType
                     };
 
-                    $http.defaults.headers.common['Authorization'] = 'Basic ' +
+                    $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
                         $rootScope.globalData.user.username +
                         $rootScope.globalData.user.password;
                     $cookies.put('globalData', $rootScope.globalData);
@@ -26,7 +26,7 @@ angular.module('AccountAction')
                         mode: "singleRun",
                         selectedState: ""
                     };
-                    $http.defaults.headers.common['Authorization'] = 'Basic ';
+                    $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ';
                 },
                 authUser: function(username, password, url, successCall, errorCall) {
                     //Salt password here
@@ -35,8 +35,6 @@ angular.module('AccountAction')
                     var saltPromise;
                     if (url == "register"){
                         salt = generateSalt();
-                        pwd = password;
-                        pwd = pwd.concat(salt);
                         saltPromise = $q(function(resolve, reject) {
                             resolve({ data: { saltString: salt } });
                         });
@@ -46,13 +44,12 @@ angular.module('AccountAction')
                         var salturl;
                         salturl = "/"+username+"/salt";
                         saltPromise = $http.get(salturl,{})
-
-                        pwd = password;
-                        pwd = pwd.concat(salt);
                     }
 
                     saltPromise.then(function(saltResponse) {
                         salt = saltResponse.data.saltString;
+                        pwd = password;
+                        pwd = pwd.concat(salt);
                         /*Please do hash here*/
                         //salt = generateSalt();
                         var data = {
@@ -61,6 +58,7 @@ angular.module('AccountAction')
                             salt: salt,
                             userType: $rootScope.userTypes.REGULAR
                         };
+                        console.log(data);
                         $http.post(url, data)
                             .then(function(response) {
                                 successCall(response);
