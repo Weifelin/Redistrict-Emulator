@@ -39,7 +39,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newprecincts.json"));
+            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newPrecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -55,13 +55,11 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
-            double africanAmerican = (int) (long) p.get("africanAmerican") / pop;
-            double asian = (int) (long) p.get("asian") / pop;
-            double latinAmerican = (int) (long) p.get("latinAmerican") / pop;
+            double africanAmerican = (long) p.get("africanAmerican") / pop;
+            double asian = (long) p.get("asian") / pop;
+            double latinAmerican = (long) p.get("latinAmerican") / pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
             int[] tempNs = (int[]) p.get("neighbor");
-
-
 
             Map shape = (Map) p.get("shape");
 
