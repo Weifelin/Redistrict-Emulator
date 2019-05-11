@@ -79,8 +79,8 @@
 					"stateSelectBox": {
 						"properties": "select",
 						"id": "stateChoice",
-						"label": "stateChoice",
-						"options": [],
+						"label": "Select State",
+						"options": ["New Jersey", "Wisconsin", "Virginia"],
 						"selected": "",
 						"multiSelect": false,
 						"onChange": "setSelectedState",

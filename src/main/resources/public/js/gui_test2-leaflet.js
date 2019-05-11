@@ -82,14 +82,14 @@ function Map(info) {
 	 */
 	 function geoSetup() {
 		// Loading the JSON file
-
-		maplet.geojsonLayer = new L.GeoJSON.AJAX("gz_2010_us_040_00_500k.json", {
-		    style: style,
-		    onEachFeature: onEachFeature
-		});
-		/*maplet.geojsonLayer = new L.GeoJSON.AJAX("NJPrecincts.json", {
+		console.log(maplet.uiInfo.states);
+		maplet.geojsonLayer = new L.geoJSON(maplet.uiInfo.states, {
 			style: style,
 			onEachFeature: onEachFeature
+		});
+		/*maplet.geojsonLayer = new L.GeoJSON.AJAX("gz_2010_us_040_00_500k.json", {
+		    style: style,
+		    onEachFeature: onEachFeature
 		});*/
 
 		/**

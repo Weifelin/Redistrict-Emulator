@@ -6,7 +6,6 @@ function SingleRunController(SingleRunProp, $scope, $rootScope, $element, $attrs
 
   var singleRunStruct = SingleRunProp.query();
   singleRunStruct.$promise.then(function() {
-    console.log(ctrl.content);
     ctrl.content[ctrl.sectionId] = parseGui(singleRunStruct, ctrl.componentProp, []);
   });
 }

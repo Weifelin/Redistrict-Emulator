@@ -6,7 +6,6 @@ function AppMenuController(AppMenuProp, $scope, $rootScope, $element, $attrs) {
 
   var appMenuStruct = AppMenuProp.query();
   appMenuStruct.$promise.then(function() {
-    console.log(ctrl.content);
     ctrl.content[ctrl.sectionId] = parseGui(appMenuStruct, ctrl.componentProp, []);
   });
 }
