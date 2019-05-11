@@ -109,14 +109,14 @@
 		"layout": []
 	},
 	"singleRunMenuBtn": {
-		"classes": ["md-fab", "md-raised", "md-mini"],
-		"ifClause": "$rootScope.globalData.mode == 'singleRun'",
+		"classes": ["md-fab", "md-raised", "md-mini", "currMode"],
+		"ifClause": "true",
 		"flex": "",
 		"layout": []
 	},
 	"batchRunMenuBtn": {
 		"classes": ["md-fab", "md-raised", "md-mini"],
-		"ifClause": "$rootScope.globalData.mode == 'batchRun'",
+		"ifClause": "$rootScope.globalData.user.username != ''",
 		"flex": "",
 		"layout": []
 	},

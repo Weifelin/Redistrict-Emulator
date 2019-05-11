@@ -63,7 +63,7 @@
           {{$rootScope.globalData.user.username}}
       </span>
 
-      <single-run content="content" component-prop="componentProp"></single-run>
+      <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
 		</div>
 	</body>
 </html>
