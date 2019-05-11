@@ -1,6 +1,8 @@
 package com.giant.demo.preprocessing;
 
+import com.giant.demo.entities.Demographics;
 import com.giant.demo.entities.Precinct;
+import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.services.PreprocessService;
 import org.json.simple.parser.ParseException;
@@ -37,7 +39,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/precincts.json"));
+            obj = parser.parse(new FileReader("C:\\Users\\wwalt\\OneDrive\\Documents\\GitHub\\demo\\src\\main\\resources\\public\\precincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -53,6 +55,10 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
+            double africanAmerican = (int) (long) p.get("African-American") / pop;
+            double asian = (int) (long) p.get("Asian") / pop;
+            double latinAmerican = (int) (long) p.get("African-American") / pop;
+            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican);
 
             Map shape = (Map) p.get("shape");
 
@@ -81,10 +87,10 @@ public class PreProcess {
             }
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
+            StateE stateE = StateE.NJ;
 
 
-
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);
