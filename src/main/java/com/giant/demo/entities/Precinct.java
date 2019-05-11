@@ -27,6 +27,8 @@ public class Precinct {
     private int numDemo;
     private int numRep;
     private int votes;
+    @Transient
+    public int[] tempNs;
     private String name;
     @OneToOne
     private Demographics demogrpahics;
@@ -35,7 +37,7 @@ public class Precinct {
     public Precinct() {
     }
 
-    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon, Demographics demographics, StateE state){
+    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon, Demographics demographics, StateE state, int[] tempNs){
         this.precinctID = precinctID;
         this.name = name;
         this.population = pop;
@@ -45,6 +47,7 @@ public class Precinct {
         this.boundaries = polygon;
         this.demogrpahics = demographics;
         this.state = state;
+        this.tempNs = tempNs;
 
     }
 

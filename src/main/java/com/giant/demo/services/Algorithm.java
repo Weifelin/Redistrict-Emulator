@@ -103,7 +103,9 @@ public class Algorithm {
     }
 
     public void initializeEdges(Set<Cluster> clusters, List<Precinct> precincts){
-        //for(Precincts)
+        for(Precinct p : precincts){
+            //for(int ID : p.getNeighbours())
+        }
     }
 
     public void setJob(Job job) {

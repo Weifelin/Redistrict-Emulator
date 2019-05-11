@@ -59,6 +59,9 @@ public class PreProcess {
             double asian = (int) (long) p.get("asian") / pop;
             double latinAmerican = (int) (long) p.get("latinAmerican") / pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
+            int[] tempNs = (int[]) p.get("neighbor");
+
+
 
             Map shape = (Map) p.get("shape");
 
@@ -90,7 +93,7 @@ public class PreProcess {
             StateE stateE = StateE.NJ;
 
 
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, tempNs);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);
