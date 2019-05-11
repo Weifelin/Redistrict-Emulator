@@ -11,7 +11,6 @@ public class Demographics{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int demoID;
     private double african_american;
-    private double white;
     private double asian;
     private double latin_american;
     @Transient
@@ -20,18 +19,14 @@ public class Demographics{
     public Demographics() {
     }
 
-    public Demographics(double aa, double w, double a, double la){
+    public Demographics(double aa, double a, double la){
         this.african_american = aa;
-        this.white = w;
         this.asian = a;
         this.latin_american = la;
     }
 
     public double getAfricanAmerican(){
         return african_american;
-    }
-    public double getWhite(){
-        return white;
     }
     public double getAsian(){
         return asian;

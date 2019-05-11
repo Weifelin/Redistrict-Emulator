@@ -1,6 +1,8 @@
 package com.giant.demo.preprocessing;
 
+import com.giant.demo.entities.Demographics;
 import com.giant.demo.entities.Precinct;
+import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.services.PreprocessService;
 import org.json.simple.parser.ParseException;
@@ -53,9 +55,10 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
-            Integer africanAmerican = (int) (long) p.get("African-American");
-            Integer asian = (int) (long) p.get("Asian");
-            Integer latinAmerican = (int) (long) p.get("African-American");
+            double africanAmerican = (int) (long) p.get("African-American") / pop;
+            double asian = (int) (long) p.get("Asian") / pop;
+            double latinAmerican = (int) (long) p.get("African-American") / pop;
+            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican);
 
             Map shape = (Map) p.get("shape");
 
@@ -84,10 +87,10 @@ public class PreProcess {
             }
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
+            StateE stateE = StateE.NJ;
 
 
-
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);

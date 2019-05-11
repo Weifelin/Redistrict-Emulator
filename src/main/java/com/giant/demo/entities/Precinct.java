@@ -28,12 +28,13 @@ public class Precinct {
     private int numRep;
     private int votes;
     private String name;
+    private Demographics demogrpahics;
 
 
     public Precinct() {
     }
 
-    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon){
+    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon, Demographics demographics, StateE state){
         this.precinctID = precinctID;
         this.name = name;
         this.population = pop;
@@ -41,6 +42,8 @@ public class Precinct {
         this.numDemo = (int) demo;
         this.numRep = (int) rep;
         this.boundaries = polygon;
+        this.demogrpahics = demographics;
+        this.state = state;
 
     }
 
@@ -127,5 +130,13 @@ public class Precinct {
 
     public String getName() {
         return name;
+    }
+
+    public Demographics getDemogrpahics() {
+        return demogrpahics;
+    }
+
+    public void setDemogrpahics(Demographics demogrpahics) {
+        this.demogrpahics = demogrpahics;
     }
 }
