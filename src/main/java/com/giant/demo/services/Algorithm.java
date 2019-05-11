@@ -98,7 +98,12 @@ public class Algorithm {
             precinctsList.add(allPrecinct.get(i));
             clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
         }
+        initializeEdges(clusters, allPrecinct);
         this.clusters = clusters;
+    }
+
+    public void initializeEdges(Set<Cluster> clusters, List<Precinct> precincts){
+        //for(Precincts)
     }
 
     public void setJob(Job job) {
