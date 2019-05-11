@@ -60,7 +60,7 @@ public class PreProcess {
             double latinAmerican = (long) p.get("latinAmerican") / pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
             int[] tempNs = (int[]) p.get("neighbor");
-
+            
             Map shape = (Map) p.get("shape");
 
             //how to read in shape file
