@@ -78,7 +78,7 @@ public class GeoJsonService {
         stringBuffer.append(tail);
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/GeoNJPrecincts.json")));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/TestGeoNJPrecincts.json")));
             writer.write(stringBuffer.toString());
             writer.flush();
             writer.close();
@@ -98,10 +98,10 @@ public class GeoJsonService {
         stringBuffer.append("\"numDemo\": "+precinct.getNumDemo()+",\n");
         stringBuffer.append("\"numRep\": "+precinct.getNumRep()+",\n");
         stringBuffer.append("\"votes\": "+precinct.getVotes()+",\n");
-        stringBuffer.append("\"name\": "+"\""+precinct.getName()+"\"\n");
-        stringBuffer.append("\"africanAmerican\": "+"\""+precinct.getDemogrpahics().getAfricanAmerican()+"\"\n");
-        stringBuffer.append("\"asian\": "+"\""+precinct.getDemogrpahics().getAsian()+"\"\n");
-        stringBuffer.append("\"latinAmerican\": "+"\""+precinct.getDemogrpahics().getLatinAmerican()+"\"\n");
+        stringBuffer.append("\"name\": "+"\""+precinct.getName()+"\",\n");
+        stringBuffer.append("\"africanAmerican\": "+precinct.getDemogrpahics().getAfricanAmerican()+",\n");
+        stringBuffer.append("\"asian\": "+precinct.getDemogrpahics().getAsian()+",\n");
+        stringBuffer.append("\"latinAmerican\": "+precinct.getDemogrpahics().getLatinAmerican()+"\n");
         return stringBuffer;
     }
 
