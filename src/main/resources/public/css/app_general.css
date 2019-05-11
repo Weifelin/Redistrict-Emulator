@@ -14,7 +14,7 @@ body {
 	overflow: hidden;
 }
 
-b {
+.userToast {
 	color: rgba(249, 42, 163, 1.0);
 }
 

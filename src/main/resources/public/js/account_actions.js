@@ -106,7 +106,6 @@ angular.module('AccountAction')
                                 //$mdToast.showSimple("Welcome back " + answer.username + "!");
                                 $mdToast.show({
                                     controller: LoginToastController,
-                                    controllerAs: 'ctrl',
                                     bindToController: true,
                                     templateUrl: 'loginToast.tmpl.html',
                                     locals: { message: "Welcome back ", username: answer.username }
@@ -117,7 +116,6 @@ angular.module('AccountAction')
                                 //$mdToast.showSimple("Welcome, " + answer.username + "!");
                                 $mdToast.show({
                                     controller: LoginToastController,
-                                    controllerAs: 'ctrl',
                                     bindToController: true,
                                     templateUrl: 'loginToast.tmpl.html',
                                     locals: { message: "Welcome, ", username: answer.username }
