@@ -103,23 +103,11 @@ angular.module('AccountAction')
                         .then(function(answer) {
                             if (answer.action == "login") {
                                 console.log(answer.username + " has logged in.");
-                                //$mdToast.showSimple("Welcome back " + answer.username + "!");
-                                $mdToast.show({
-                                    controller: LoginToastController,
-                                    bindToController: true,
-                                    templateUrl: 'loginToast.tmpl.html',
-                                    locals: { message: "Welcome back ", username: answer.username }
-                                });
+                                $mdToast.showSimple("Welcome back " + answer.username + "!");
                             }
                             else if (answer.action == "register") {
                                 console.log(answer.username + " is now registered.");
-                                //$mdToast.showSimple("Welcome, " + answer.username + "!");
-                                $mdToast.show({
-                                    controller: LoginToastController,
-                                    bindToController: true,
-                                    templateUrl: 'loginToast.tmpl.html',
-                                    locals: { message: "Welcome, ", username: answer.username }
-                                });
+                                $mdToast.showSimple("Welcome, " + answer.username + "!");
                             }
                             else {
                                 console.log("There is a disturbance in the login mechanism...");
@@ -178,11 +166,6 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
         //$window.history.replaceState({}, title, $scope.act);
     }
 
-}
-
-function LoginToastController($scope, message, username) {
-    $scope.message = message;
-    $scope.username = username;
 }
 
 function generateSalt() {

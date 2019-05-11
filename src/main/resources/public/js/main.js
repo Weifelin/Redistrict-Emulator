@@ -71,5 +71,5 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) 
                 ctrl.usMap = new Map($scope.uiInfo);
                 ctrl.usMap.mapSetup();
             });
-});
+});S
 
