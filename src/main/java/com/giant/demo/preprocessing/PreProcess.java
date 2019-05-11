@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.management.ObjectInstance;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PreProcess {
@@ -39,7 +36,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newprecincts.json"));
+            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newPrecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -55,12 +52,20 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
-            double africanAmerican = (int) (long) p.get("africanAmerican") / pop;
-            double asian = (int) (long) p.get("asian") / pop;
-            double latinAmerican = (int) (long) p.get("latinAmerican") / pop;
+            double africanAmerican = (long) p.get("africanAmerican") / pop;
+            double asian = (long) p.get("asian") / pop;
+            double latinAmerican = (long) p.get("latinAmerican") / pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
-            int[] tempNs = (int[]) p.get("neighbor");
 
+            JSONArray array = (JSONArray) p.get("neighbor");
+
+            int[] numbers = new int[array.size()];
+            int index = 0;
+            for (Object o : array) {
+                numbers[index++] = (int) (long) o;
+            }
+
+            //System.out.println(Arrays.toString(numbers));*/
 
 
             Map shape = (Map) p.get("shape");
@@ -76,7 +81,7 @@ public class PreProcess {
 
 
 
-            int index = 0;
+            index = 0;
             if(coords.size() == 1){
                 coords = (JSONArray) coords.get(0);
             }
@@ -93,7 +98,7 @@ public class PreProcess {
             StateE stateE = StateE.NJ;
 
 
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, tempNs);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);
