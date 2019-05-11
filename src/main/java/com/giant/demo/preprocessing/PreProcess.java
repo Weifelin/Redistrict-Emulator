@@ -53,6 +53,9 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
+            Integer africanAmerican = (int) (long) p.get("African-American");
+            Integer asian = (int) (long) p.get("Asian");
+            Integer latinAmerican = (int) (long) p.get("African-American");
 
             Map shape = (Map) p.get("shape");
 
