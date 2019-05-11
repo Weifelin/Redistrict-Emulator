@@ -99,6 +99,9 @@ public class GeoJsonService {
         stringBuffer.append("\"numRep\": "+precinct.getNumRep()+",\n");
         stringBuffer.append("\"votes\": "+precinct.getVotes()+",\n");
         stringBuffer.append("\"name\": "+"\""+precinct.getName()+"\"\n");
+        stringBuffer.append("\"africanAmerican\": "+"\""+precinct.getDemogrpahics().getAfricanAmerican()+"\"\n");
+        stringBuffer.append("\"asian\": "+"\""+precinct.getDemogrpahics().getAsian()+"\"\n");
+        stringBuffer.append("\"latinAmerican\": "+"\""+precinct.getDemogrpahics().getLatinAmerican()+"\"\n");
         return stringBuffer;
     }
 
