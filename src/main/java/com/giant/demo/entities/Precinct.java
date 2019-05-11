@@ -28,6 +28,7 @@ public class Precinct {
     private int numRep;
     private int votes;
     private String name;
+    @OneToOne
     private Demographics demogrpahics;
 
 
