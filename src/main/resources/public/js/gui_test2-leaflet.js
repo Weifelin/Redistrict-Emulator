@@ -10,7 +10,7 @@ function Map(info) {
 	this.mapSetup = function() {
 		geoSetup();
 		infoPanelSetup();
-	}
+	};
 
 	/**
 	 * Helper functions

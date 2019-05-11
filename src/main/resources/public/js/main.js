@@ -7,7 +7,8 @@ var app = angular.module('DistrictApp',
             'ngMaterial', 'ngMessages', 'ngAnimate']);
 
 // Configure routes
-app.config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
+app.config(['$locationProvider', '$routeProvider', '$mdToastProvider',
+    function ($locationProvider, $routeProvider, $mdToastProvider) {
     $locationProvider.hashPrefix('');
     $locationProvider.html5Mode({
         enabled: true,
@@ -22,6 +23,21 @@ app.config(['$locationProvider', '$routeProvider', function ($locationProvider, 
             controller: 'LoginController',
             template: ' '
         });
+
+    $mdToastProvider.addPreset('testPreset', {
+        options: function(message, username) {
+            return {
+                template:
+                    '<md-toast>' +
+                        '<div class="md-toast-content">' +
+                            message + '<b>' + username + '</b>!' +
+                        '</div>' +
+                    '</md-toast>',
+                controllerAs: 'toast',
+                bindToController: true
+            };
+        }
+    });
 }]);
 
 // Set up global variables (or pull from cookieStore)

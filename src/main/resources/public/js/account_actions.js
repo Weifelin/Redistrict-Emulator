@@ -103,11 +103,13 @@ angular.module('AccountAction')
                         .then(function(answer) {
                             if (answer.action == "login") {
                                 console.log(answer.username + " has logged in.");
-                                $mdToast.showSimple("Welcome back " + answer.username + "!");
+                                //$mdToast.showSimple("Welcome back " + answer.username + "!");
+                                $mdToast.show($mdToast.testPreset("Welcome back ", answer.username));
                             }
                             else if (answer.action == "register") {
                                 console.log(answer.username + " is now registered.");
-                                $mdToast.showSimple("Welcome, " + answer.username + "!");
+                                //$mdToast.showSimple("Welcome, " + answer.username + "!");
+                                $mdToast.show($mdToast.testPreset("Welcome, ", answer.username));
                             }
                             else {
                                 console.log("There is a disturbance in the login mechanism...");
