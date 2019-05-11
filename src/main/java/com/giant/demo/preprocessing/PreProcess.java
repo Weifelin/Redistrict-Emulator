@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.management.ObjectInstance;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PreProcess {
@@ -59,8 +56,18 @@ public class PreProcess {
             double asian = (long) p.get("asian") / pop;
             double latinAmerican = (long) p.get("latinAmerican") / pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
-            int[] tempNs = (int[]) p.get("neighbor");
-            
+
+            JSONArray array = (JSONArray) p.get("neighbor");
+
+            int[] numbers = new int[array.size()];
+            int index = 0;
+            for (Object o : array) {
+                numbers[index++] = (int) (long) o;
+            }
+
+            //System.out.println(Arrays.toString(numbers));*/
+
+
             Map shape = (Map) p.get("shape");
 
             //how to read in shape file
@@ -74,7 +81,7 @@ public class PreProcess {
 
 
 
-            int index = 0;
+            index = 0;
             if(coords.size() == 1){
                 coords = (JSONArray) coords.get(0);
             }
@@ -91,7 +98,7 @@ public class PreProcess {
             StateE stateE = StateE.NJ;
 
 
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, tempNs);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);

@@ -46,7 +46,7 @@ public class HomeController {
 
 
         preProcess.loadPrecincts();
-        //sgeoJsonService.createGeoJson();
+        //geoJsonService.createGeoJson();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
