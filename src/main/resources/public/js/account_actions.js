@@ -52,7 +52,7 @@ angular.module('AccountAction')
                         pwd = password;
                         pwd = pwd.concat(salt);
                         /*Please do hash here*/
-                        //salt = generateSalt();
+
                         var data = {
                             username: username,
                             password: pwd,
