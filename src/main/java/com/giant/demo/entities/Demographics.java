@@ -13,16 +13,18 @@ public class Demographics{
     private double african_american;
     private double asian;
     private double latin_american;
+    private int population;
     @Transient
     private Set<Race> races;
 
     public Demographics() {
     }
 
-    public Demographics(double aa, double a, double la){
+    public Demographics(double aa, double a, double la, int pop){
         this.african_american = aa;
         this.asian = a;
         this.latin_american = la;
+        this.population = pop;
     }
 
     public double getAfricanAmerican(){
@@ -41,5 +43,13 @@ public class Demographics{
 
     public void setRaces(Set<Race> races) {
         this.races = races;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
     }
 }

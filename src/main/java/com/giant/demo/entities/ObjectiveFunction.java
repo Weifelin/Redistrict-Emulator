@@ -90,10 +90,6 @@ public class ObjectiveFunction {
                 demoScore = 1 / distance(demo.getAsian(), this.state.getWeights().getArange());
                 count++;
             }
-            else if(this.state.getDemographics().getRaces().contains(Race.White)) {
-                demoScore = 1/ distance(demo.getWhite(), this.state.getWeights().getWrange());
-                count++;
-            }
             else if(this.state.getDemographics().getRaces().contains(Race.Latin_American)){
                 demoScore = 1 / distance(demo.getLatinAmerican(), this.state.getWeights().getLArange());
                 count++;
@@ -106,7 +102,9 @@ public class ObjectiveFunction {
                 minScores.put(Measures.Demographics, demoScore);
             }
             score += demoScore;
-            if(demo.getWhite() < demo.getLatinAmerican() || demo.getWhite() < demo.getAsian() || demo.getWhite() < demo.getAfricanAmerican())
+            int pop = demo.getPopulation();
+            int white = pop - (int) (demo.getLatinAmerican()*pop) - (int) (demo.getAsian()*pop) - (int)(demo.getAfricanAmerican()*pop);
+            if(white < demo.getLatinAmerican() || white < demo.getAsian() || white < demo.getAfricanAmerican())
                 mmDistricts++;
         }
         score /= this.state.getNumOfDistricts();

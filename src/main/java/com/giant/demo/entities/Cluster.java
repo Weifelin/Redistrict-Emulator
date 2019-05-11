@@ -25,6 +25,7 @@ public class Cluster {
     @OneToOne
     private Demographics demographics;
     private PartyPreference partyPreference;
+    private boolean isMajorityMinority;
 
 
 
@@ -165,5 +166,13 @@ public class Cluster {
 
     public void setDemographics(Demographics demographics) {
         this.demographics = demographics;
+    }
+
+    public boolean isMajorityMinority() {
+        int pop = demographics.getPopulation();
+        int white = pop - (int) (demographics.getLatinAmerican()*pop) - (int) (demographics.getAsian()*pop) - (int)(demographics.getAfricanAmerican()*pop);
+        if(white < demographics.getLatinAmerican() || white < demographics.getAsian() || white < demographics.getAfricanAmerican())
+            return true;
+        return false;
     }
 }

@@ -39,7 +39,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("C:\\Users\\wwalt\\OneDrive\\Documents\\GitHub\\demo\\src\\main\\resources\\public\\precincts.json"));
+            obj = parser.parse(new FileReader("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/newprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -55,10 +55,13 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
-            double africanAmerican = (int) (long) p.get("African-American") / pop;
-            double asian = (int) (long) p.get("Asian") / pop;
-            double latinAmerican = (int) (long) p.get("African-American") / pop;
-            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican);
+            double africanAmerican = (int) (long) p.get("africanAmerican") / pop;
+            double asian = (int) (long) p.get("asian") / pop;
+            double latinAmerican = (int) (long) p.get("latinAmerican") / pop;
+            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
+            int[] tempNs = (int[]) p.get("neighbor");
+
+
 
             Map shape = (Map) p.get("shape");
 
@@ -90,7 +93,7 @@ public class PreProcess {
             StateE stateE = StateE.NJ;
 
 
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, tempNs);
 
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++);

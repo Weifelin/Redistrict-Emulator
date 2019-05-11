@@ -44,8 +44,9 @@ public class HomeController {
     @GetMapping("/")
     public ModelAndView index(){
 
-        //geoJsonService.createGeoJson();
-        preProcess.loadPrecincts();
+
+        //preProcess.loadPrecincts();
+        geoJsonService.createGeoJson();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
