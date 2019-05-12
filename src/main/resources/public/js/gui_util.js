@@ -57,6 +57,7 @@ angular.module('GuiUtil')
 				},
 
 				selectState: function(stateId) {
+					console.log($rootScope);
 					if ($rootScope.globalData.programState == $rootScope.programStates.FREE) {
 						var map = angular.element("#appShell").scope().usMap;
 						var stateLayer = map.geojsonLayer.getLayer(map.getState(stateId));
