@@ -36,7 +36,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("C:\\Users\\wwalt\\OneDrive\\Documents\\GitHub\\demo\\src\\main\\resources\\public\\newPrecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/newprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -52,9 +52,9 @@ public class PreProcess {
             Integer votes = (int) (double) p.get("votes");
             Double demo = (double) p.get("demo");
             Double rep = (double) p.get("rep");
-            double africanAmerican = (long) p.get("africanAmerican") / pop;
-            double asian = (long) p.get("asian") / pop;
-            double latinAmerican = (long) p.get("latinAmerican") / pop;
+            double africanAmerican = (long) p.get("africanAmerican") / (double)pop;
+            double asian = (long) p.get("asian") / (double)pop;
+            double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
