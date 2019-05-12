@@ -165,16 +165,16 @@ public class Algorithm {
     public Move getMoveFromDistrict(Cluster startDistrict){
         Set<Precinct> precincts = null;
         for(Precinct p : precincts){
-            for(int n : p.getTempNs()){
-                Precinct temp = null;
-                if((temp = startDistrict.getPrecinct(n)) == null){
+            for(Precinct n : p.getNeighbours()){
+                Precinct neighbor = realState.getCluster(n.getClusterID());
+                if(!c.getContainedClusters().contains(neighbor)){
                     Cluster neighbor = realState.findCluster(temp);
                     Move move = testMove(neighbor, startDistrict, p);
                     if(move != null){
                         currDistrict = startDistrict;
                         return move;
                     }
-                    move = testMove(startDistrict, neighbor, temp);
+                    move = testMove(startDistrict, neighbor, neighbor);
                     if(move != null){
                         currDistrict = startDistrict;
                         return move;
@@ -182,5 +182,6 @@ public class Algorithm {
                 }
             }
         }
+        return null;
     }*/
 }
