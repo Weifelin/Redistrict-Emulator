@@ -70,6 +70,7 @@ function Map(info) {
 	// Maps listener functions to state layer
 	function onEachFeature(feature, layer) {
 		maplet.leaf_states.push(feature.properties.NAME);
+		layer._leaflet_id = feature.properties.id;
 	    layer.on({
 	        mouseover: highlightFeature,
 	        mouseout: resetHighlight,

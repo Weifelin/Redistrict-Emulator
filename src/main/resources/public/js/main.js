@@ -30,6 +30,7 @@ app.config(['$locationProvider', '$routeProvider',
 app.run(['$rootScope', '$cookies', '$http',
     function($rootScope, $cookies, $http, GeoDataService) {
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
+        $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.globalData = $cookies.get('globalData');
         if (!$rootScope.globalData) {
             $rootScope.globalData = {
@@ -39,7 +40,8 @@ app.run(['$rootScope', '$cookies', '$http',
                     userType: $rootScope.userTypes.GUEST
                 },
                 mode: "singleRun",
-                selectedState: ""
+                selectedState: "",
+                programState: $rootScope.programStates.FREE
             };
         } else if ($rootScope.globalData.user) {
             $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +

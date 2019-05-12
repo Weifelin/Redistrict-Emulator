@@ -56,9 +56,10 @@ angular.module('GuiUtil')
 					}, sliderGroup);
 				},
 
-				selectState: function() {
+				selectState: function(stateId) {
 					var map = angular.element("#appShell").scope().$ctrl.usMap;
-					map.geojsonLayer.get();
+					var stateLayer = map.geojsonLayer.getLayer(stateId);
+					console.log(stateLayer);
 				}
 			};
 
