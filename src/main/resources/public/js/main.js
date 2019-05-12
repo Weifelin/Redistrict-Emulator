@@ -1,13 +1,15 @@
 'use strict';
+angular.module('GeoUtil', []);
 angular.module('GuiUtil', []);
-angular.module('AccountAction', []);
+angular.module('AccountAction', ['ngMaterial', 'ngMessages']);
 
 var app = angular.module('DistrictApp',
-    ['prop', 'AccountAction', 'GuiUtil', 'ngRoute', 'ngCookies',
+    ['prop', 'AccountAction', 'GuiUtil', 'GeoUtil', 'ngRoute', 'ngCookies',
             'ngMaterial', 'ngMessages', 'ngAnimate']);
 
 // Configure routes
-app.config(['$locationProvider', '$routeProvider', function ($locationProvider, $routeProvider) {
+app.config(['$locationProvider', '$routeProvider',
+    function ($locationProvider, $routeProvider) {
     $locationProvider.hashPrefix('');
     $locationProvider.html5Mode({
         enabled: true,
@@ -26,8 +28,9 @@ app.config(['$locationProvider', '$routeProvider', function ($locationProvider, 
 
 // Set up global variables (or pull from cookieStore)
 app.run(['$rootScope', '$cookies', '$http',
-    function($rootScope, $cookies, $http) {
+    function($rootScope, $cookies, $http, GeoDataService) {
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
+        $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.globalData = $cookies.get('globalData');
         if (!$rootScope.globalData) {
             $rootScope.globalData = {
@@ -37,7 +40,8 @@ app.run(['$rootScope', '$cookies', '$http',
                     userType: $rootScope.userTypes.GUEST
                 },
                 mode: "singleRun",
-                selectedState: ""
+                selectedState: "",
+                programState: $rootScope.programStates.FREE
             };
         } else if ($rootScope.globalData.user) {
             $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
@@ -46,25 +50,28 @@ app.run(['$rootScope', '$cookies', '$http',
         }
 }]);
 
-app.controller('AppCtrl', function(GenProp, $scope, $rootScope) {
+app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) {
     	var ctrl = this;
     	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
-    	$scope.componentProp = GenProp.query();
-        // Query backend for state list (with initial data)
+    	GenProp.query().$promise
+            .then(function(componentProp) {
+                $scope.componentProp = componentProp;
+            });
  
     	$scope.content = {};
- 
-    	$scope.userInfo = {
-    		username : "",
-    		level : "guest"
-    	};
 
-    	// Map Setup 
-    	$scope.uiInfo = {
-        	selectedState: ""
-	    };
-	    ctrl.usMap = new Map($scope.uiInfo);
-	    ctrl.usMap.mapSetup();
-});
+    	// Map Setup
+        // Query backend for state list (with initial data)
+        $rootScope.statesGeoJSON = GeoDataService.loadStates().query().$promise
+            .then(function(statesGeoJSON) {
+                $rootScope.statesGeoJSON = statesGeoJSON;
+                $scope.uiInfo = {
+                    selectedState: "",
+                    states: $rootScope.statesGeoJSON
+                };
+                ctrl.usMap = new Map($scope.uiInfo);
+                ctrl.usMap.mapSetup();
+            });
+});S
 

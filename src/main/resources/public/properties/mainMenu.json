@@ -79,11 +79,11 @@
 					"stateSelectBox": {
 						"properties": "select",
 						"id": "stateChoice",
-						"label": "stateChoice",
-						"options": [],
+						"label": "Select State",
+						"options": ["New Jersey", "Wisconsin", "Virginia"],
 						"selected": "",
 						"multiSelect": false,
-						"onChange": "setSelectedState",
+						"onChange": "GeneralUtilService.selectState($ctrl.select.selected)",
 						"type": "select"
 					},
 					"nextButton": {

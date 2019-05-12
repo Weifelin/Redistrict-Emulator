@@ -10,7 +10,7 @@ function Map(info) {
 	this.mapSetup = function() {
 		geoSetup();
 		infoPanelSetup();
-	}
+	};
 
 	/**
 	 * Helper functions
@@ -70,6 +70,7 @@ function Map(info) {
 	// Maps listener functions to state layer
 	function onEachFeature(feature, layer) {
 		maplet.leaf_states.push(feature.properties.NAME);
+		layer._leaflet_id = feature.properties.id;
 	    layer.on({
 	        mouseover: highlightFeature,
 	        mouseout: resetHighlight,
@@ -82,14 +83,14 @@ function Map(info) {
 	 */
 	 function geoSetup() {
 		// Loading the JSON file
-
-		maplet.geojsonLayer = new L.GeoJSON.AJAX("gz_2010_us_040_00_500k.json", {
-		    style: style,
-		    onEachFeature: onEachFeature
-		});
-		/*maplet.geojsonLayer = new L.GeoJSON.AJAX("NJPrecincts.json", {
+		console.log(maplet.uiInfo.states);
+		maplet.geojsonLayer = new L.geoJSON(maplet.uiInfo.states, {
 			style: style,
 			onEachFeature: onEachFeature
+		});
+		/*maplet.geojsonLayer = new L.GeoJSON.AJAX("gz_2010_us_040_00_500k.json", {
+		    style: style,
+		    onEachFeature: onEachFeature
 		});*/
 
 		/**
