@@ -52,6 +52,7 @@ angular.module('AccountAction')
                         pwd = password;
                         pwd = pwd.concat(salt);
                         /*Please do hash here*/
+                        pwd = sha256('pwd');
 
                         var data = {
                             username: username,
