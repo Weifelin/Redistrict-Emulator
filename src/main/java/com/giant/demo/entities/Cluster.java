@@ -175,4 +175,12 @@ public class Cluster {
             return true;
         return false;
     }
+
+    public Precinct getPrecinct(int n){
+        for(Precinct p : this.getContainedPrecincts()){
+            if(p.getPrecinctID() == n)
+                return p;
+        }
+        return null;
+    }
 }

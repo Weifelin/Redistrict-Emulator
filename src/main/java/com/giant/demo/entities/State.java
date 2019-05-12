@@ -151,4 +151,12 @@ public class State {
     public void setWeights(Job weights) {
         this.weights = weights;
     }
+
+    public Cluster findCluster(Precinct p){
+        for(Cluster c : this.getDistricts()){
+            if(c.getContainedPrecincts().contains(p))
+                return c;
+        }
+        return null;
+    }
 }
