@@ -2,25 +2,14 @@ package com.giant.demo.services;
 
 import com.giant.demo.entities.Precinct;
 import com.giant.demo.repositories.PrecinctRepository;
-import org.json.JSONException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.CoordinateSequence;
-import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wololo.geojson.Feature;
-import org.wololo.geojson.GeoJSON;
-import org.wololo.geojson.GeoJSONFactory;
-import org.wololo.jts2geojson.GeoJSONWriter;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -39,6 +28,7 @@ public class GeoJsonService {
         String tail = "}";
         stringBuffer.append(head);
         int size = precinctList.size();
+        int counter = 0;
         while(iterator.hasNext()){
             String precinctComma = ","; /*Last Precinct don't have it*/
             if (iterator.nextIndex() == size-1){
@@ -73,6 +63,7 @@ public class GeoJsonService {
             precinctBuffer.append(precinctTail);
             precinctBuffer.append(precinctComma);
             stringBuffer.append(precinctBuffer);
+            System.out.println(counter++);
         }
         stringBuffer.append("]"); //feature tail
         stringBuffer.append(tail);
