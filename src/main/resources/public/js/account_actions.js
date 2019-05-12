@@ -11,10 +11,11 @@ angular.module('AccountAction')
                         userType: userType
                     };
 
+                    $cookies.put('globalData', $rootScope.globalData);
+
                     $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
                         $rootScope.globalData.user.username +
                         $rootScope.globalData.user.password;
-                    $cookies.put('globalData', $rootScope.globalData);
                 };
             service.clearUserInfo = function() {
                     $rootScope.globalData = {
@@ -24,8 +25,10 @@ angular.module('AccountAction')
                             userType: $rootScope.userTypes.GUEST
                         },
                         mode: "singleRun",
-                        selectedState: ""
+                        selectedState: "",
+                        programState: $rootScope.programStates.FREE
                     };
+                    $cookies.remove('globalData');
 
                     $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ';
                 };

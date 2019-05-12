@@ -148,4 +148,40 @@ public class Algorithm {
         return singleClusterGroup;
     }
 
+
+    public Set<Precinct> getBorderingPrecincts(Cluster c){
+        Set<Precinct> precincts = new HashSet<>();
+        for(Precinct p : c.getContainedPrecincts()){
+            if(p.getBoundaries().touches(c.getBoundary().getBoundary()))
+                precincts.add(p);
+        }
+        return precincts;
+    }
+
+
+
+    /*
+
+    public Move getMoveFromDistrict(Cluster startDistrict){
+        Set<Precinct> precincts = null;
+        for(Precinct p : precincts){
+            for(Precinct n : p.getNeighbours()){
+                Precinct neighbor = realState.getCluster(n.getClusterID());
+                if(!c.getContainedClusters().contains(neighbor)){
+                    Cluster neighbor = realState.findCluster(temp);
+                    Move move = testMove(neighbor, startDistrict, p);
+                    if(move != null){
+                        currDistrict = startDistrict;
+                        return move;
+                    }
+                    move = testMove(startDistrict, neighbor, neighbor);
+                    if(move != null){
+                        currDistrict = startDistrict;
+                        return move;
+                    }
+                }
+            }
+        }
+        return null;
+    }*/
 }

@@ -28,7 +28,7 @@ app.config(['$locationProvider', '$routeProvider',
 
 // Set up global variables (or pull from cookieStore)
 app.run(['$rootScope', '$cookies', '$http',
-    function($rootScope, $cookies, $http, GeoDataService) {
+    function($rootScope, $cookies, $http) {
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
         $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.globalData = $cookies.get('globalData');
@@ -70,8 +70,8 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) 
                     selectedState: "",
                     states: $rootScope.statesGeoJSON
                 };
-                ctrl.usMap = new Map($scope.uiInfo);
-                ctrl.usMap.mapSetup();
+                $scope.usMap = new Map($scope.uiInfo);
+                $scope.usMap.mapSetup();
             });
-});S
+});
 
