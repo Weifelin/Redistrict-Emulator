@@ -4,12 +4,16 @@ function Map(info) {
 	this.geojsonLayer;
 	this.infoCtrl;
 	var maplet = this;
-	this.leaf_states = [];
+	this.leaf_states = {};
 	this.uiInfo = info;
 
 	this.mapSetup = function() {
 		geoSetup();
 		infoPanelSetup();
+	};
+
+	maplet.getState = function(stateId) {
+		return maplet.leaf_states[stateId];
 	};
 
 	/**
@@ -53,11 +57,11 @@ function Map(info) {
 	}
 
 	// Zooms map to fit state
-	function zoomToFeature(e) {
+	maplet.zoomToFeature = function(e) {
 		var layer = e.target;
 	    maplet.uiInfo.selectedState = layer.feature.properties.NAME;
 		var bounds = e.target.getBounds();
-		var SHIFT = 2.5;
+		var SHIFT = 0.5;
 		bounds = bounds.toBBoxString(); // 'southwest_lng,southwest_lat,northeast_lng,northeast_lat'
 		bounds = bounds.split(",");
 		for(var i = 0; i < bounds.length; i++){
@@ -69,12 +73,10 @@ function Map(info) {
 
 	// Maps listener functions to state layer
 	function onEachFeature(feature, layer) {
-		maplet.leaf_states.push(feature.properties.NAME);
-		layer._leaflet_id = feature.properties.id;
 	    layer.on({
 	        mouseover: highlightFeature,
 	        mouseout: resetHighlight,
-	        click: zoomToFeature
+	        click: maplet.zoomToFeature
 	    });
 	}
 
@@ -114,6 +116,12 @@ function Map(info) {
 		tileLayer.addTo(maplet.map);
 
 		maplet.geojsonLayer.addTo(maplet.map);
+		console.log(maplet.geojsonLayer);
+		maplet.geojsonLayer.eachLayer(function(layer) {
+			if (layer.feature) {
+				maplet.leaf_states[layer.feature.properties.id] = layer._leaflet_id;
+			}
+		});
 	}
 
 	/**

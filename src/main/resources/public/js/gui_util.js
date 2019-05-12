@@ -8,7 +8,7 @@ function findElem(sectionId, elementUrl) {
 
 angular.module('GuiUtil')
 	.factory('GeneralUtilService', ['$http', '$cookies', '$rootScope',
-		function() {
+		function($http, $cookies, $rootScope) {
 			var service = {
 				changeTabState: function(buttonId) {
 					var tabSectionId = '#' + buttonId.replace('Btn', '');
@@ -57,9 +57,11 @@ angular.module('GuiUtil')
 				},
 
 				selectState: function(stateId) {
-					var map = angular.element("#appShell").scope().$ctrl.usMap;
-					var stateLayer = map.geojsonLayer.getLayer(stateId);
-					console.log(stateLayer);
+					if ($rootScope.globalData.programState == $rootScope.programStates.FREE) {
+						var map = angular.element("#appShell").scope().usMap;
+						var stateLayer = map.geojsonLayer.getLayer(map.getState(stateId));
+						map.zoomToFeature({ target: stateLayer });
+					}
 				}
 			};
 
