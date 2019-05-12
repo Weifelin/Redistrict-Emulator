@@ -70,8 +70,8 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) 
                     selectedState: "",
                     states: $rootScope.statesGeoJSON
                 };
-                ctrl.usMap = new Map($scope.uiInfo);
-                ctrl.usMap.mapSetup();
+                $scope.usMap = new Map($scope.uiInfo);
+                $scope.usMap.mapSetup();
             });
-});S
+});
 
