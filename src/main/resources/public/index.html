@@ -47,6 +47,7 @@
         <script type="text/javascript" src="js/prop.service.js"></script>
         <script type="text/javascript" src="js/gui_obj.js"></script>
         <script type="text/javascript" src="js/main.js"></script>
+        <script type="text/javascript" src="js/geo_util.js"></script>
         <script type="text/javascript" src="js/gui_util.js"></script>
         <script type="text/javascript" src="js/account_actions.js"></script>
         <script type="text/javascript" src="js/gui_ctrl.js"></script>
@@ -64,7 +65,7 @@
           {{$rootScope.globalData.user.username}}
       </span>
 
-      <single-run content="content" component-prop="componentProp"></single-run>
+      <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
 		</div>
 	</body>
 </html>

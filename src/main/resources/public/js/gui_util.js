@@ -54,6 +54,12 @@ angular.module('GuiUtil')
 							this.sections[label] = groupPercent;
 						}
 					}, sliderGroup);
+				},
+
+				selectState: function(stateId) {
+					var map = angular.element("#appShell").scope().$ctrl.usMap;
+					var stateLayer = map.geojsonLayer.getLayer(stateId);
+					console.log(stateLayer);
 				}
 			};
 
