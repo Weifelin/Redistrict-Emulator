@@ -96,6 +96,7 @@ public class Algorithm {
     public void initializeClusters(){
         List<Precinct> allPrecinct =  precinctRepository.findAll();
         System.out.println("allPrecincts: " + allPrecinct.size());
+        System.out.println(allPrecinct.get(1).toString());
         List<Cluster> clusters = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();

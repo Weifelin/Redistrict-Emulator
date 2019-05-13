@@ -147,4 +147,14 @@ public class Precinct {
     public int[] getTempNs() {
         return tempNs;
     }
+
+    @Override
+    public String toString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("state: "+state.toString()+"\n");
+        stringBuffer.append("population: "+population+"\n");
+        stringBuffer.append("majority: "+majority.toString()+"\n");
+        stringBuffer.append("partyPreference: "+partyPreference.toString()+"\n");
+        return stringBuffer.toString();
+    }
 }
