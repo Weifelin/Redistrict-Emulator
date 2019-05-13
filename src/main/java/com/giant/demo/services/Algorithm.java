@@ -52,6 +52,7 @@ public class Algorithm {
             level++;
         }
         realState = new State();
+        realState.setNumOfDistricts(12);
         realState.setDistricts(clusters);
         realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
