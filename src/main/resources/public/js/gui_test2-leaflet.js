@@ -5,7 +5,7 @@ function Map(info) {
 	this.geojsonLayer;
 	this.districtLayer;
 	this.precinctLayer;
-	this.infoCtrl;
+	this.stateInfoCtrl;
 	this.layers;
 	this.layerCtrl;
 	maplet.GeoDataService;
@@ -13,6 +13,7 @@ function Map(info) {
 	maplet.stateCallback;
 	maplet.colorIndex;
 	maplet.colorQueue = [];
+	maplet.disStyleMap = {};
 	this.leaf_states = {};
 	this.uiInfo = info;
 
@@ -60,9 +61,10 @@ function Map(info) {
 	// Style Functions
 	maplet.genColorList = function(numDistricts) {
 		maplet.colorIndex = 0;
-		for (var i = 0; i < 360; i += (360 / numDistricts)) {
+		var shift = Math.floor(Math.random() * 360);
+		for (var i = shift; i < (360 + shift); i += (360 / numDistricts)) {
 			var color = {};
-			color.hue = (i).toString();
+			color.hue = (i % 360).toString();
 			color.sat = (90 + Math.round(Math.random() * 10)).toString() + '%';
 			color.light = (50 + Math.round(Math.random() * 10)).toString() + '%';
 			maplet.colorQueue.push(color);
@@ -81,25 +83,28 @@ function Map(info) {
 
 	function districtStyle(feature) {
 		var colorSettings;
+		var style;
 		if (maplet.colorQueue.length > 0) {
 			colorSettings= maplet.colorQueue.splice(maplet.colorIndex, 1)[0];
 			var queueLength = maplet.colorQueue.length;
 			maplet.colorIndex = (maplet.colorIndex + Math.floor(queueLength / 2)) % queueLength;
+
+			var color = "hsl(" + colorSettings.hue + ", " +
+				colorSettings.sat + ", " +
+				colorSettings.light + ")";
+			style = {
+				fillColor: color,
+				weight: 2,
+				opacity: 1,
+				color: color,
+				fillOpacity: 0.4
+			};
+			maplet.disStyleMap[feature.properties.DISTRICT] = style;
 		} else {
-			colorSettings = { hue: 0, sat: 0, light: 0 };
+			style = maplet.disStyleMap[feature.properties.DISTRICT];
 		}
-		var color = "hsl(" + colorSettings.hue + ", " +
-							 colorSettings.sat + ", " +
-							 colorSettings.light + ")";
-		console.log(feature);
-		console.log(color);
-		return {
-			fillColor: color,
-			weight: 2,
-			opacity: 1,
-			color: color,
-			fillOpacity: 0.4
-		};
+
+		return style;
 	}
 
 	function precinctStyle(feature) {
@@ -118,7 +123,6 @@ function Map(info) {
 
 	    layer.setStyle({
 	        weight: 5,
-	        color: '#666',
 	        dashArray: '',
 	        fillOpacity: 0.4
 	    });
@@ -126,17 +130,35 @@ function Map(info) {
 	    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
 	        layer.bringToFront();
 	    }
-
-	    //  Update Info control with highlighted state's property
-	    maplet.infoCtrl.update(layer.feature.properties);
+	}
+	function highlightState(e) {
+		highlightFeature(e);
+		//  Update Info control with highlighted state's property
+		maplet.stateInfoCtrl.update(e.target.feature.properties);
+	}
+	function highlightDistrict(e) {
+		highlightFeature(e);
+		//  Update Info control with highlighted districts's property
+		maplet.disInfoCtrl.update(e.target.feature.properties);
+	}
+	function highlightPrecinct(e) {
+		highlightFeature(e);
+		//  Update Info control with highlighted precincts's property
+		maplet.precInfoCtrl.update(e.target.feature.properties);
 	}
 
 	// Resets state to original style
-	function resetHighlight(e) {
-	    maplet.geojsonLayer.resetStyle(e.target);
-	    // Remove state info
-		// Place selector (based on type of feature)
-	    maplet.infoCtrl.update();
+	function resetState(e) {
+		maplet.geojsonLayer.resetStyle(e.target);
+		maplet.stateInfoCtrl.update();
+	}
+	function resetDistrict(e) {
+		maplet.districtLayer.resetStyle(e.target);
+		maplet.disInfoCtrl.update();
+	}
+	function resetPrecinct(e) {
+		maplet.precinctLayer.resetStyle(e.target);
+		maplet.precInfoCtrl.update();
 	}
 
 	// Zooms map to fit state
@@ -160,24 +182,24 @@ function Map(info) {
 	// Maps listener functions to various layer
 	function onEachState(feature, layer) {
 	    layer.on({
-	        mouseover: highlightFeature,
-	        mouseout: resetHighlight,
+	        mouseover: highlightState,
+	        mouseout: resetState,
 	        click: maplet.zoomToState
 	    });
 	}
 
 	function onEachDistrict(feature, layer) {
-		/*layer.on({
-			mouseover: highlightFeature,
-			mouseout: resetHighlight
-		});*/
+		layer.on({
+			mouseover: highlightDistrict,
+			mouseout: resetDistrict
+		});
 	}
 
 	function onEachPrecinct(feature, layer) {
-		/*layer.on({
-			mouseover: highlightFeature,
-			mouseout: resetHighlight
-		});*/
+		layer.on({
+			mouseover: highlightPrecinct,
+			mouseout: resetPrecinct
+		});
 	}
 
 	/**
@@ -195,6 +217,8 @@ function Map(info) {
 		 */
 		var mapboxAccessToken = "sk.eyJ1IjoiZHJzZWNhbnQiLCJhIjoiY2pzOW4yZm8zMGVhNTRhcno5OGUzOHZpeiJ9.q5a-WOex7gnG3-BhKbs5XQ";
 		maplet.map = L.map('map').setView([37.8, -96], 4);
+		maplet.map.on('overlayadd', onOverlayAdd);
+		maplet.map.on('overlayremove', onOverlayRemove);
 
 		var tileLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + mapboxAccessToken, {
 		    id: 'mapbox.light',
@@ -226,28 +250,153 @@ function Map(info) {
 		});
 	}
 
+	function onOverlayAdd(e) {
+		switch(e.name) {
+			case "States":
+				showStatePanel();
+				break;
+			case "Current Congressional Districts":
+				showDistrictPanel();
+				break;
+			case "Precincts":
+				showPrecinctPanel();
+				break;
+		}
+	}
+	function onOverlayRemove(e) {
+		switch(e.name) {
+			case "States":
+				hideStatePanel();
+				break;
+			case "Current Congressional Districts":
+				hideDistrictPanel();
+				break;
+			case "Precincts":
+				hidePrecinctPanel();
+				break;
+		}
+	}
+
 	/**
 	 * State Info Panel
 	 */
 	function infoPanelSetup() {
-		maplet.infoCtrl = L.control();
-		maplet.infoCtrl.setPosition('bottomleft');
+		statePanelSetup();
+		districtPanelSetup();
+		precinctPanelSetup();
+	}
 
-		maplet.infoCtrl.onAdd = function (map) {
-		    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-		    this.update();
-		    return this._div;
+	function statePanelSetup() {
+		maplet.stateInfoCtrl = L.control();
+		maplet.stateInfoCtrl.setPosition('bottomleft');
+
+		maplet.stateInfoCtrl.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
 		};
 
 		// Update info control based on feature properties
-		maplet.infoCtrl.update = function (props) {
-		    this._div.innerHTML = '<h4>State Metrics</h4>' +  (props ?
-		        '<i>' + props.NAME + '</i><br />' + props.CENSUSAREA + ' people / mi<sup>2</sup>' +
-		        '<br />' + props.STATE + ' districts' 
-		        : 'Hover over a state');
-		    this._div.innerHTML += '<br>Zoom: ' + maplet.map.getZoom();
+		maplet.stateInfoCtrl.update = function (props) {
+			this._div.innerHTML = '<h4>State Metrics</h4>' +  (props ?
+				'<i>' + props.NAME + '</i><br />' + props.CENSUSAREA + ' people / mi<sup>2</sup>' +
+				'<br />' + props.STATE + ' districts'
+				: 'Hover over a state');
+			this._div.innerHTML += '<br>Zoom: ' + maplet.map.getZoom();
 		};
 
-		maplet.infoCtrl.addTo(maplet.map);
+		//maplet.stateInfoCtrl.addTo(maplet.map);
+		showStatePanel();
+	}
+	function showStatePanel() {
+		maplet.map.addControl(maplet.stateInfoCtrl);
+	}
+	function hideStatePanel() {
+		maplet.map.removeControl(maplet.stateInfoCtrl);
+	}
+
+	function districtPanelSetup() {
+		maplet.disInfoCtrl = L.control();
+		maplet.disInfoCtrl.setPosition('bottomleft');
+
+		maplet.disInfoCtrl.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+
+		// Update info control based on feature properties
+		maplet.disInfoCtrl.update = function (props) {
+			this._div.innerHTML = '<h4>District Metrics</h4>' +  (props ?
+				'District Number: ' + props.DISTRICT
+				: 'Hover over a district');
+		};
+
+		//maplet.disInfoCtrl.addTo(maplet.map);
+	}
+	function showDistrictPanel() {
+		maplet.map.addControl(maplet.disInfoCtrl);
+	}
+	function hideDistrictPanel() {
+		maplet.map.removeControl(maplet.disInfoCtrl);
+	}
+
+	function precinctPanelSetup() {
+		maplet.precInfoCtrl = L.control();
+		maplet.precInfoCtrl.setPosition('bottomleft');
+
+		maplet.precInfoCtrl.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+
+		// Update info control based on feature properties
+		maplet.precInfoCtrl.update = function (props) {
+			this._div.innerHTML = '<h4>Precinct Metrics</h4>' +  (props ?
+				'<i>' + props.name + '</i><br />' +
+				'Population: ' + formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'<h6>Demographic Distribution</h6>' +
+				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />'
+				: 'Hover over a precinct');
+		};
+
+		//maplet.precInfoCtrl.addTo(maplet.map);
+	}
+	function showPrecinctPanel() {
+		maplet.map.addControl(maplet.precInfoCtrl);
+	}
+	function hidePrecinctPanel() {
+		maplet.map.removeControl(maplet.precInfoCtrl);
+	}
+
+	// Info Panel Helper functions
+	function formatNumber(num) {
+		var numRepr = (num).toString();
+		var commaGap = 3;
+		var result = "";
+		var gapCount = commaGap;
+		for (var i = numRepr.length - 1; i >= 0; i--) {
+			if (gapCount == 0) {
+				result = numRepr[i] + ',' + result;
+				gapCount = commaGap;
+			} else {
+				result = numRepr[i] + result;
+				gapCount--;
+			}
+		}
+		return result;
+	}
+
+	function formatPercent(num) {
+		var numStr = (num * 100).toString();
+		var endIndex = (numStr.length > 4) ? 4 : numStr.length;
+		var result = numStr.substring(0, endIndex) + '%';
+		return result;
 	}
 }

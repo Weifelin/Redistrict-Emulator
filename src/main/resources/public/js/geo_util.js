@@ -38,7 +38,7 @@ angular.module('GeoUtil')
             });
         };
         service.loadStatePrecincts = function(stateId) {
-            var url = "GeoNJPrecincts.json";
+            var url = "TestGeoNJPrecincts.json";
             return $resource(url, {}, {
                 query: {
                     method: "GET",
