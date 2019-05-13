@@ -38,7 +38,7 @@ body {
 @media (max-device-width: 600px) {
   .lock-size .md-fab-top-right {
     top: 15px;
-    right: 15px; 
+    right: 50%;
   } 
 }
 

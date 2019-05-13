@@ -20,7 +20,7 @@ angular.module('GeoUtil')
                 }
             });
         };
-        service.loadStateDistrict = function(stateID) {
+        service.loadStateDistricts = function(stateId) {
             var url = "originalCongressionalDistricts.json";
             return $resource(url, {}, {
                 query: {
@@ -37,7 +37,7 @@ angular.module('GeoUtil')
                 }
             });
         };
-        service.loadStatePrecinct = function(stateID) {
+        service.loadStatePrecincts = function(stateId) {
             var url = "GeoNJPrecincts.json";
             return $resource(url, {}, {
                 query: {

@@ -61,7 +61,7 @@ angular.module('GuiUtil')
 					if ($rootScope.globalData.programState == $rootScope.programStates.FREE) {
 						var map = angular.element("#appShell").scope().usMap;
 						var stateLayer = map.geojsonLayer.getLayer(map.getState(stateId));
-						map.zoomToFeature({ target: stateLayer });
+						map.zoomToState({ target: stateLayer });
 					}
 				}
 			};
