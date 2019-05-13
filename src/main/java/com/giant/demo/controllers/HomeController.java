@@ -10,12 +10,25 @@ import com.giant.demo.returnreceivemodels.UserModel;
 import com.giant.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
+import java.io.IOException;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 
 @RestController
@@ -27,9 +40,11 @@ public class HomeController {
     @Autowired
     private Algorithm algorithm;
     @Autowired
-    private PreProcess preProcess;
+    private UserDetailsServiceImpl userDetailsService;
     @Autowired
-    private GeoJsonService geoJsonService;
+    private AuthenticationProvider authenticationProvider;
+
+
 
     private BatchService batchService;
 
@@ -54,6 +69,7 @@ public class HomeController {
 //        return batchService.getBatchSummary();
 //    }
 
+    @CrossOrigin
     @PostMapping("/register")
     public UserModel register(@Valid @RequestBody UserModel newUser, HttpServletRequest httpServletRequest){
         User user = userService.save(newUser);
@@ -61,6 +77,53 @@ public class HomeController {
             securityService.autoLogin(user.getUsername(), newUser.getPassword(), httpServletRequest);
         }
         return new UserModel(user.getUsername(), user.getUserType(), user.getPassword(), user.getSalt().getSaltString()); //show single batch.
+    }
+
+
+    @CrossOrigin
+    //@PostMapping("/login")
+    @RequestMapping(value="/login-process", method=RequestMethod.POST)
+    public UserModel login(@Valid @RequestBody UserModel userModel, HttpServletRequest request, HttpServletResponse response){
+        String username = userModel.getUsername();
+        String password = userModel.getPassword();
+        UserRules userRules = (UserRules) userDetailsService.loadUserByUsername(username);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        if (bCryptPasswordEncoder.matches(password, userRules.getPassword())){
+            UsernamePasswordAuthenticationToken authReq
+                    = new UsernamePasswordAuthenticationToken(username, userRules.getPassword());
+            Authentication auth = authenticationProvider.authenticate(authReq);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(auth);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            UserModel ret = new UserModel(username, userModel.getUserType(), "PASS", userModel.getSalt());
+            return ret;
+        }
+
+        try {
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Login Error");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new UserModel();
+    }
+
+    @CrossOrigin
+    //@PostMapping("/logout")
+    @RequestMapping(value="/logout-process", method=RequestMethod.POST)
+    public HttpStatus logout(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // concern you
+
+        User currUser = userService.getUser(auth.getName()); // some of DAO or Service...
+
+        SecurityContextLogoutHandler ctxLogOut = new SecurityContextLogoutHandler(); // concern you
+
+        if( currUser == null ){
+            ctxLogOut.logout(request, response, auth); // concern you
+        }
+
+        return HttpStatus.ACCEPTED;
     }
 
 
