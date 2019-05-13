@@ -50,7 +50,7 @@ app.run(['$rootScope', '$cookies', '$http',
         }
 }]);
 
-app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) {
+app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, $mdToast) {
     	var ctrl = this;
     	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
@@ -71,6 +71,27 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope) 
                     states: $rootScope.statesGeoJSON
                 };
                 $scope.usMap = new Map($scope.uiInfo);
+                $scope.usMap.GeoDataService = GeoDataService;
+                $scope.usMap.$mdToast = $mdToast;
+                $scope.usMap.stateCallback = function(stateId, map) {
+                    // Load precincts and districts, ensuring both load properly
+                    var precinctFetch = map.GeoDataService.loadStatePrecincts(stateId).query().$promise;
+                    map.GeoDataService.loadStateDistricts(stateId).query().$promise
+                        .then(function(districtGeoJSON) {
+                            precinctFetch.then(function(precinctGeoJSON) {
+                                map.initDistricts(districtGeoJSON);
+                                map.initPrecincts(precinctGeoJSON);
+                            }, function() {
+                                map.$mdToast.showSimple("Could not load Precincts for " +
+                                    map.uiInfo.selectedState + ".");
+                                // Insert deselect state
+                            });
+                        }, function() {
+                            map.$mdToast.showSimple("Could not load Districts for " +
+                                                map.uiInfo.selectedState + ".");
+                            // Insert deselect state
+                        });
+                };
                 $scope.usMap.mapSetup();
             });
 });
