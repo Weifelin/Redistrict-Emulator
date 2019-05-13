@@ -16,6 +16,7 @@ public class Job {
     private double contiguityWeight;
     private double populationWeight;
     private double partisanWeight;
+    private int numDistricts;
     @Transient
     private Pair<Double, Double> AArange;
     @Transient
@@ -25,15 +26,17 @@ public class Job {
     @Transient
     private Pair<Double, Double> LArange;
 
+
     public Job() {
     }
 
-    public Job(double demo, double comp, double cont, double pop, double party){
+    public Job(double demo, double comp, double cont, double pop, double party, int numDistricts){
         this.demographicsWeight = demo;
         this.compactnessWeight = comp;
         this.contiguityWeight = cont;
         this.populationWeight = pop;
         this.partisanWeight = party;
+        this.numDistricts = numDistricts;
     }
 
     public double getDemographicsWeight() {
@@ -108,5 +111,13 @@ public class Job {
 
     public void setLArange(Pair<Double, Double> LArange) {
         this.LArange = LArange;
+    }
+
+    public int getNumDistricts() {
+        return numDistricts;
+    }
+
+    public void setNumDistricts(int numDistricts) {
+        this.numDistricts = numDistricts;
     }
 }

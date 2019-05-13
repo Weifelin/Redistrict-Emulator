@@ -34,7 +34,7 @@ public class Algorithm {
         int level = 0;
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
-        int end = (int) (Math.log(this.realState.getNumOfDistricts()));
+        int end = (int) (Math.log(job.getNumDistricts()));
         for(int i =  start; i > end; i--){
             for(Cluster c : clusters){
                 if(c.level < level){
