@@ -51,6 +51,7 @@ public class Algorithm {
             }
             level++;
         }
+        System.out.println("cluster #: " +clusters.size());
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());
         realState.setDistricts(clusters);
@@ -94,6 +95,7 @@ public class Algorithm {
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
         List<Precinct> allPrecinct =  precinctRepository.findAll();
+        System.out.println("allPrecincts: " + allPrecinct.size());
         List<Cluster> clusters = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();

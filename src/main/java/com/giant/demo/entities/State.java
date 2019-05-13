@@ -36,7 +36,7 @@ public class State {
     //makes sure the number of districts equals the number specified
     public void toDistrict(){
         while(this.districts.size() != numOfDistricts){
-            Cluster breakdown = minPopulation();
+            Cluster breakdown = minPopulation();  /* <---- this returns null*/
             this.districts.remove(breakdown);
             breakCluster(breakdown);
         }
@@ -67,10 +67,11 @@ public class State {
 
     //returns cluster with min population
     public Cluster minPopulation(){
+        System.out.println("num of dis: "+ this.districts.size());
         int min = 0;
         Cluster ret = null;
         for(Cluster c : this.districts){
-            if(min == 0 || min > ret.getPopulation()){
+            if(min == 0 || min > c.getPopulation()){
                 ret = c;
                 min = ret.getPopulation();
             }

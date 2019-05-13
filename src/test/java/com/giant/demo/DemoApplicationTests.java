@@ -9,17 +9,25 @@ import org.json.simple.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
 
 @RunWith(SpringRunner.class)
+@Transactional
+@SpringBootTest
+@AutoConfigureMockMvc
 public class DemoApplicationTests {
 
 
@@ -27,7 +35,7 @@ public class DemoApplicationTests {
 	static class AlgorithmTestConfig{
 
 		@Bean
-		public Algorithm algorithm() {
+		public Algorithm algorithmBean() {
 			return new Algorithm();
 		}
 	}
@@ -35,7 +43,7 @@ public class DemoApplicationTests {
 	@Autowired
 	private Algorithm algorithm;
 
-	@MockBean
+	@Mock
 	private PrecinctRepository precinctRepository;
 
 	@Before
