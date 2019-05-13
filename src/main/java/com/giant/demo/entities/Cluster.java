@@ -20,7 +20,7 @@ public class Cluster {
     @OneToOne
     private ObjectiveFunction objectiveFunction;
     @Transient
-    private ArrayList<ClusterEdge> edges;
+    private List<ClusterEdge> edges;
     private int population;
     @OneToOne
     private Demographics demographics;
@@ -36,6 +36,7 @@ public class Cluster {
     public Cluster(int clusterID, ArrayList<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
+        this.edges = new ArrayList<>();
     }
 
     public boolean mergeInto(Cluster c){
@@ -92,7 +93,7 @@ public class Cluster {
         return this.population;
     }
 
-    public ArrayList<ClusterEdge> getEdges() {
+    public List<ClusterEdge> getEdges() {
         return edges;
     }
 
@@ -104,7 +105,7 @@ public class Cluster {
         this.edges = edges;
     }
 
-    public ArrayList<ClusterEdge> combineEdges(ArrayList<ClusterEdge> edges){
+    public List<ClusterEdge> combineEdges(List<ClusterEdge> edges){
         for(ClusterEdge edge1 : this.edges){
             for(ClusterEdge edge2 : edges){
                 if(edge1.equals(edge2))
