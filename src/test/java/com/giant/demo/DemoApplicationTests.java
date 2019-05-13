@@ -40,7 +40,7 @@ public class DemoApplicationTests {
 
 	@Before
 	public void setUp(){
-		Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 10); /*double demo, double comp, double cont, double pop, double party*/
+		Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
 		algorithm.setJob(job); /*Store job in algorithm until phase II. */
 		algorithm.initializeClusters();
 
@@ -49,7 +49,8 @@ public class DemoApplicationTests {
 
 	@Test
 	public void GraphPartisionTest(){
-		Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 10); /*double demo, double comp, double cont, double pop, double party*/
+
+		Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
 		algorithm.setJob(job); /*Store job in algorithm until phase II. */
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
