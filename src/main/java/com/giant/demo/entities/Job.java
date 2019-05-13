@@ -25,6 +25,9 @@ public class Job {
     @Transient
     private Pair<Double, Double> LArange;
 
+    public Job() {
+    }
+
     public Job(double demo, double comp, double cont, double pop, double party){
         this.demographicsWeight = demo;
         this.compactnessWeight = comp;
