@@ -55,7 +55,9 @@ public class PreProcess {
             double africanAmerican = (long) p.get("africanAmerican") / (double)pop;
             double asian = (long) p.get("asian") / (double)pop;
             double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
-            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, pop);
+            double white = (long) p.get("white") / (double)pop;
+            double other = (long) p.get("other") / (double)pop;
+            Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
 
