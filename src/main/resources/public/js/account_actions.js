@@ -44,7 +44,7 @@ angular.module('AccountAction')
                         });
                     }
 
-                    if (url == "login"){
+                    if (url == "login-process"){
                         var salturl;
                         salturl = "/"+username+"/salt";
                         saltPromise = $http.get(salturl,{})
@@ -55,7 +55,7 @@ angular.module('AccountAction')
                         pwd = password;
                         pwd = pwd.concat(salt);
                         /*Please do hash here*/
-                        pwd = sha256('pwd');
+                        pwd = sha256(pwd);
 
                         var data = {
                             username: username,
@@ -91,12 +91,12 @@ angular.module('AccountAction')
         function($http, $mdDialog, $mdToast, $location) {
             var service = {
                 open: function() {
-                    $location.path("login");
+                    $location.path("login-process");
                     $mdDialog.show({
                         locals: {
                             user: "",
                             pass: "",
-                            act: "login",
+                            act: "login-process",
                             isLoading: false
                         },
                         controller: LoginController,
@@ -105,7 +105,7 @@ angular.module('AccountAction')
                         clickOutsideToClose:false
                     })
                         .then(function(answer) {
-                            if (answer.action == "login") {
+                            if (answer.action == "login-process") {
                                 console.log(answer.username + " has logged in.");
                                 $mdToast.showSimple("Welcome back " + answer.username + "!");
                             }
@@ -165,7 +165,7 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
 
     $scope.switchAction = function(newAction) {
         $scope.act = newAction;
-        var title = ($scope.act == 'login') ? 'Log In' : 'Sign Up';
+        var title = ($scope.act == 'login-process') ? 'Log In' : 'Sign Up';
         $location.path('/' + $scope.act);
         //$window.history.replaceState({}, title, $scope.act);
     }

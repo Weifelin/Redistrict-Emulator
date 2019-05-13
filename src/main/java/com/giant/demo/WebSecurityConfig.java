@@ -22,7 +22,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(value = "resources")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -48,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         The server side will be sending Unauthorized error,
         which will be captured and processed by client side, and redirect to different pages.
         */
+
         http
                 .csrf().disable()
                 .httpBasic()
@@ -67,23 +67,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/resources/public/**",
                         "/resources/**")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                .anyRequest().permitAll()
+                //.authenticated()
                 .and()
                 .formLogin()
-                    .loginPage("/login")
+                .loginPage("/login")
                 .and()
-                .logout()
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logout().logoutUrl("/logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .and()
                 .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class)
                 .csrf()
                 .csrfTokenRepository(csrfTokenRepository())
                 .and()
                 .exceptionHandling()
-                    .accessDeniedPage("/")
+                .accessDeniedPage("/")
         ;
         /*http
                 .csrf().disable()
