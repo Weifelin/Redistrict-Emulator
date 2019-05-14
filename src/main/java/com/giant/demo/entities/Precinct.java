@@ -55,7 +55,7 @@ public class Precinct {
         this.partyPreference = (best >= (votes - numRep - numDemo)) ? primary : PartyPreference.GREEN;
         //Find Majority Race
         Race maj = Race.White;
-        double race = (1.0 - demographics.getAsian() - demographics.getAfricanAmerican() - demographics.getLatinAmerican()) * 0.95;
+        double race = demographics.getWhite();
         if (demographics.getAsian() >= race) {
             maj = Race.Asian;
             race = demographics.getAsian();

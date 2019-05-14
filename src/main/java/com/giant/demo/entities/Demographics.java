@@ -56,4 +56,20 @@ public class Demographics{
     public void setPopulation(int population) {
         this.population = population;
     }
+
+    public double getWhite() {
+        return white;
+    }
+
+    public void setWhite(double white) {
+        this.white = white;
+    }
+
+    public double getOther() {
+        return other;
+    }
+
+    public void setOther(double other) {
+        this.other = other;
+    }
 }
