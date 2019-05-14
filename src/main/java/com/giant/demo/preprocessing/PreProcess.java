@@ -36,7 +36,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/newprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/vaprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -49,14 +49,14 @@ public class PreProcess {
             Integer precinctID = (int) (long) p.get("precinctID");
             String name = (String) p.get("name");
             Integer pop = (int) (long) p.get("pop");
-            Integer votes = (int) (double) p.get("votes");
-            Double demo = (double) p.get("demo");
-            Double rep = (double) p.get("rep");
-            double africanAmerican = (double)p.get("africanAmerican") / (double)pop;
-            double asian = (double) p.get("asian") / (double)pop;
-            double latinAmerican = (double) p.get("latinAmerican") / (double)pop;
-            double white = (double) p.get("white") / (double)pop;
-            double other = (double) p.get("other") / (double)pop;
+            Integer votes = (int) (long) p.get("votes");
+            Double demo = Long.valueOf((long)p.get("demo")).doubleValue() ;
+            Double rep = Long.valueOf((long) p.get("rep")).doubleValue();
+            double africanAmerican = (long)p.get("africanAmerican") / (double)pop;
+            double asian = (long) p.get("asian") / (double)pop;
+            double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
+            double white = (long) p.get("white") / (double)pop;
+            double other = (long) p.get("other") / (double)pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
@@ -97,7 +97,7 @@ public class PreProcess {
             }
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
-            StateE stateE = StateE.NJ;
+            StateE stateE = StateE.VA;
 
 
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
