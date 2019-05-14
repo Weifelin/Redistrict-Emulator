@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class Algorithm {
@@ -23,11 +25,14 @@ public class Algorithm {
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
 
+    private static ConcurrentLinkedQueue<Move> moveQueue;
+
     @Autowired
     private PrecinctRepository precinctRepository;
 
     public Algorithm(){
         this.candidatePairs = null;
+        moveQueue = new ConcurrentLinkedQueue<>();
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
@@ -58,6 +63,11 @@ public class Algorithm {
         realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
+    }
+
+
+    public void generateMoves(){
+
     }
 
     public int getGerrymanderingIndex() {
