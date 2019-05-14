@@ -11,7 +11,7 @@ angular.module('AccountAction')
                         userType: userType
                     };
 
-                    $cookies.put('globalData', $rootScope.globalData);
+                    $cookies.putObject('globalData', $rootScope.globalData);
 
                     $http.defaults.headers.common['XSRF-TOKEN'] = 'Basic ' +
                         $rootScope.globalData.user.username +

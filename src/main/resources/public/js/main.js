@@ -2,10 +2,11 @@
 angular.module('GeoUtil', []);
 angular.module('GuiUtil', []);
 angular.module('AccountAction', ['ngMaterial', 'ngMessages']);
+angular.module('AlgoUtil', []);
 
 var app = angular.module('DistrictApp',
-    ['prop', 'AccountAction', 'GuiUtil', 'GeoUtil', 'ngRoute', 'ngCookies',
-            'ngMaterial', 'ngMessages', 'ngAnimate']);
+    ['prop', 'AccountAction', 'GuiUtil', 'GeoUtil', 'AlgoUtil',
+            'ngRoute', 'ngCookies', 'ngMaterial', 'ngMessages', 'ngAnimate']);
 
 // Configure routes
 app.config(['$locationProvider', '$routeProvider',
@@ -32,7 +33,7 @@ app.run(['$rootScope', '$cookies', '$http',
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
         $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.globalData = $cookies.get('globalData');
-        if (!$rootScope.globalData) {
+        if (!$rootScope.globalData || $rootScope.globalData == "[object Object]") {
             $rootScope.globalData = {
                 user: {
                     username: "",
@@ -62,12 +63,13 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
     	$scope.content = {};
 
     	// Map Setup
+        $scope.usMap;
         // Query backend for state list (with initial data)
         $rootScope.statesGeoJSON = GeoDataService.loadStates().query().$promise
             .then(function(statesGeoJSON) {
                 $rootScope.statesGeoJSON = statesGeoJSON;
                 $scope.uiInfo = {
-                    selectedState: "",
+                    "$rootScope": $rootScope,
                     states: $rootScope.statesGeoJSON
                 };
                 $scope.usMap = new Map($scope.uiInfo);
@@ -94,5 +96,13 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
                 };
                 $scope.usMap.mapSetup();
             });
+        $rootScope.$watch('globalData.programState', function(newVal, oldVal) {
+            if (newVal == $rootScope.programStates.RUNNING &&
+                oldVal == $rootScope.programStates.FREE) {
+                $scope.usMap.initClusters();
+                $scope.usMap.moveCluster(4807, 4807, 747);
+                $scope.usMap.moveCluster(4729, 4729, 747);
+            }
+        });
 });
 
