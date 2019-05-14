@@ -45,6 +45,8 @@ public class HomeController {
     private AuthenticationProvider authenticationProvider;
     @Autowired
     private PreProcess preProcess;
+    @Autowired
+    private GeoJsonService geoJsonService;
 
 
     private BatchService batchService;
@@ -59,8 +61,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView index(){
-
-        preProcess.loadPrecincts();
+        
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;

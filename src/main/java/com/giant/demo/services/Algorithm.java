@@ -67,8 +67,22 @@ public class Algorithm {
 
 
     public void generateMoves(){
-
+        boolean foundMove = true;
+        int move_count = 0;
+        int max_attempts = 10000;
+        while (foundMove && move_count < max_attempts){
+            foundMove = false;
+            Cluster worst_district = getWorstDistrict(realState);
+            List<Precinct> borderPrecincts = getBorderingPrecincts(worst_district);
+            Iterator<Precinct> iterator = borderPrecincts.listIterator();
+            while (iterator.hasNext()){
+                Precinct precinct = iterator.next();
+                List<Precinct> neighbours;
+            }
+        }
     }
+
+
 
     public int getGerrymanderingIndex() {
         return gerrymanderingIndex;
@@ -164,13 +178,18 @@ public class Algorithm {
     }
 
 
-    public Set<Precinct> getBorderingPrecincts(Cluster c){
-        Set<Precinct> precincts = new HashSet<>();
+
+    public List<Precinct> getBorderingPrecincts(Cluster c){
+        List<Precinct> precincts = new LinkedList<>();
         for(Precinct p : c.getContainedPrecincts()){
             if(p.getBoundaries().touches(c.getBoundary().getBoundary()))
                 precincts.add(p);
         }
         return precincts;
+    }
+
+    private Cluster getWorstDistrict(State realState) {
+        return null;
     }
 
 
