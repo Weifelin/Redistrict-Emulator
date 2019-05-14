@@ -61,7 +61,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView index(){
-        
+        //preProcess.loadPrecincts();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;

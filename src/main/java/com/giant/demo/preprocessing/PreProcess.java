@@ -43,6 +43,8 @@ public class PreProcess {
             e.printStackTrace();
         }
         JSONObject jo = (JSONObject) obj;
+        Map<Integer, Precinct> precinctMap = new HashMap<>();
+        Set<Precinct> allPrecincts = new HashSet<>();
         for (Iterator iterator = jo.keySet().iterator(); iterator.hasNext(); ) {
             String key = (String) iterator.next();
             Map p = (Map) jo.get(key);
@@ -101,10 +103,17 @@ public class PreProcess {
 
 
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
+            precinctMap.put(precinctID, precinct);
 
-            preprocessService.savePrecinct(precinct);
             System.out.println(counter++);
 
+        }
+        for(Precinct precinct : allPrecincts) {
+            Set<Precinct> neighbors = new HashSet<>();
+            for (int i : precinct.getTempNs())
+                neighbors.add(precinctMap.get(i));
+            precinct.setNeighbours(neighbors);
+            preprocessService.savePrecinct(precinct);
         }
     }
 
