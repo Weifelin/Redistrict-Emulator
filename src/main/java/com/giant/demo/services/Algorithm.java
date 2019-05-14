@@ -77,11 +77,41 @@ public class Algorithm {
             Iterator<Precinct> iterator = borderPrecincts.listIterator();
             while (iterator.hasNext()){
                 Precinct precinct = iterator.next();
-                List<Precinct> neighbours;
+                Set<Precinct> neighbours = precinct.getNeighbours();
+                Iterator<Precinct> setIterator = neighbours.iterator();
+                while (setIterator.hasNext()){
+                    Precinct neighour = setIterator.next();
+                    if (precinct.getCluster().getClusterID() != neighour.getCluster().getClusterID()){
+                        Move move1 = new Move(precinct, precinct.getCluster(), neighour.getCluster());
+                        if (testMove(move1)){ /* */
+                            excuteMove(move1); /**/
+                            foundMove = true;
+                            moveQueue.add(move1);
+                            break;
+                        }else {
+                            Move move2 = new Move(neighour, neighour.getCluster(), precinct.getCluster());
+                            if (testMove(move2)){
+                                excuteMove(move2);
+                                foundMove = true;
+                                moveQueue.add(move2);
+                            }
+                        }
+                    }
+
+                    if (foundMove == true){
+                        break; /*break inner while loop*/
+                    }
+                }
             }
         }
     }
 
+    private void excuteMove(Move move1) {
+    }
+
+    private boolean testMove(Move move1) {
+        return false;
+    }
 
 
     public int getGerrymanderingIndex() {
@@ -121,27 +151,26 @@ public class Algorithm {
         List<Precinct> allPrecinct =  precinctRepository.findAll();
         System.out.println("allPrecincts: " + allPrecinct.size());
         System.out.println(allPrecinct.get(1).toString());
-        List<Cluster> clusters = new ArrayList<>();
+        List<Cluster> clusterList = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
-            clusters.add(new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList));
+            Cluster cluster = new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList);
+            cluster.getContainedPrecincts().get(i).setCluster(cluster);
+            clusterList.add(cluster);
         }
-        initializeEdges(clusters, allPrecinct);
-        Set<Cluster> ret = new HashSet<>(clusters);
+        initializeEdges(clusterList, allPrecinct);
+        Set<Cluster> ret = new HashSet<>(clusterList);
         this.clusters = ret;
     }
 
     public void initializeEdges(List<Cluster> clusters, List<Precinct> precincts){
         Map<Integer, Cluster>  tempC = new HashMap<>();
-        Map<Integer, Precinct>  tempP = new HashMap<>();
         for(int i = 0; i < clusters.size(); i++){
-            tempP.put(precincts.get(i).getPrecinctID(), precincts.get(i));
             tempC.put(clusters.get(i).getClusterID(), clusters.get(i));
         }
         for(int i = 0; i < precincts.size(); i++){
             for(int ID : precincts.get(i).getTempNs()){
-                precincts.get(i).getNeighbours().add(tempP.get(ID));
                 clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
             }
         }

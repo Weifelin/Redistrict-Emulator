@@ -33,6 +33,8 @@ public class Precinct {
     private String name;
     @OneToOne
     private Demographics demogrpahics;
+    @Transient
+    private Cluster cluster;
 
 
     public Precinct() {
@@ -176,5 +178,13 @@ public class Precinct {
         stringBuffer.append("majority: "+majority.toString()+"\n");
         stringBuffer.append("partyPreference: "+partyPreference.toString()+"\n");
         return stringBuffer.toString();
+    }
+
+    public Cluster getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(Cluster cluster) {
+        this.cluster = cluster;
     }
 }
