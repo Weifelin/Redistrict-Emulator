@@ -160,6 +160,8 @@ function LoginController(AccountActionService, $scope, $mdDialog, $location, use
             $mdDialog.hide(response);
         }, function(errResponse) {
             console.log(errResponse);
+            $scope.username="";
+            $scope.password="";
         });
     };
 

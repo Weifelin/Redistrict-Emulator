@@ -43,7 +43,10 @@ public class HomeController {
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private AuthenticationProvider authenticationProvider;
-
+    @Autowired
+    private PreProcess preProcess;
+    @Autowired
+    private GeoJsonService geoJsonService;
 
 
     private BatchService batchService;
@@ -58,7 +61,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView index(){
-
+        
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;

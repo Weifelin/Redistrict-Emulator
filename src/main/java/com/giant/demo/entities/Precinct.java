@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
+import javax.servlet.http.Part;
 import java.util.Set;
 
 @Entity
@@ -48,6 +49,25 @@ public class Precinct {
         this.demogrpahics = demographics;
         this.state = state;
         this.tempNs = tempNs;
+        //Find Party Preference
+        PartyPreference primary = (numDemo > numRep) ? PartyPreference.BLUE : PartyPreference.RED;
+        int best = (primary == PartyPreference.BLUE) ? numDemo : numRep;
+        this.partyPreference = (best >= (votes - numRep - numDemo)) ? primary : PartyPreference.GREEN;
+        //Find Majority Race
+        Race maj = Race.White;
+        double race = demographics.getWhite();
+        if (demographics.getAsian() >= race) {
+            maj = Race.Asian;
+            race = demographics.getAsian();
+        }
+        else if (demographics.getAfricanAmerican() >= race) {
+            maj = Race.African_American;
+            race = demographics.getAfricanAmerican();
+        }
+        else if (demographics.getLatinAmerican() >= race) {
+            maj = Race.Latin_American;
+        }
+        this.majority = maj;
 
     }
 
@@ -146,5 +166,15 @@ public class Precinct {
 
     public int[] getTempNs() {
         return tempNs;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("state: "+state.toString()+"\n");
+        stringBuffer.append("population: "+population+"\n");
+        stringBuffer.append("majority: "+majority.toString()+"\n");
+        stringBuffer.append("partyPreference: "+partyPreference.toString()+"\n");
+        return stringBuffer.toString();
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class Algorithm {
@@ -23,18 +25,21 @@ public class Algorithm {
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
 
+    private static ConcurrentLinkedQueue<Move> moveQueue;
+
     @Autowired
     private PrecinctRepository precinctRepository;
 
     public Algorithm(){
         this.candidatePairs = null;
+        moveQueue = new ConcurrentLinkedQueue<>();
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
         int level = 0;
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
-        int end = (int) (Math.log(this.realState.getNumOfDistricts()));
+        int end = (int) (Math.log(job.getNumDistricts()));
         for(int i =  start; i > end; i--){
             for(Cluster c : clusters){
                 if(c.level < level){
@@ -51,11 +56,33 @@ public class Algorithm {
             }
             level++;
         }
+        System.out.println("cluster #: " +clusters.size());
+        realState = new State();
+        realState.setNumOfDistricts(job.getNumDistricts());
         realState.setDistricts(clusters);
         realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
+
+
+    public void generateMoves(){
+        boolean foundMove = true;
+        int move_count = 0;
+        int max_attempts = 10000;
+        while (foundMove && move_count < max_attempts){
+            foundMove = false;
+            Cluster worst_district = getWorstDistrict(realState);
+            List<Precinct> borderPrecincts = getBorderingPrecincts(worst_district);
+            Iterator<Precinct> iterator = borderPrecincts.listIterator();
+            while (iterator.hasNext()){
+                Precinct precinct = iterator.next();
+                List<Precinct> neighbours;
+            }
+        }
+    }
+
+
 
     public int getGerrymanderingIndex() {
         return gerrymanderingIndex;
@@ -92,6 +119,8 @@ public class Algorithm {
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
         List<Precinct> allPrecinct =  precinctRepository.findAll();
+        System.out.println("allPrecincts: " + allPrecinct.size());
+        System.out.println(allPrecinct.get(1).toString());
         List<Cluster> clusters = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
             ArrayList<Precinct> precinctsList = new ArrayList<>();
@@ -149,13 +178,18 @@ public class Algorithm {
     }
 
 
-    public Set<Precinct> getBorderingPrecincts(Cluster c){
-        Set<Precinct> precincts = new HashSet<>();
+
+    public List<Precinct> getBorderingPrecincts(Cluster c){
+        List<Precinct> precincts = new LinkedList<>();
         for(Precinct p : c.getContainedPrecincts()){
             if(p.getBoundaries().touches(c.getBoundary().getBoundary()))
                 precincts.add(p);
         }
         return precincts;
+    }
+
+    private Cluster getWorstDistrict(State realState) {
+        return null;
     }
 
 
