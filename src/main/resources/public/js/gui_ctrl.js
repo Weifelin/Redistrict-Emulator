@@ -11,8 +11,9 @@ angular.module('DistrictApp').component('guiGroup', {
   }
 });
 
-function TextBtnController($scope, $element, $attrs) {
+function TextBtnController(AlgorithmService, $scope, $element, $attrs) {
 	var ctrl = this;
+	$scope.AlgorithmService = AlgorithmService;
 }
 
 angular.module('DistrictApp').component('textButton', {

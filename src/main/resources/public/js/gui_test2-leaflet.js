@@ -15,6 +15,8 @@ function Map(info) {
 	maplet.colorQueue = [];
 	maplet.disStyleMap = {};
 	this.leaf_states = {};
+	this.leaf_precincts = {};
+	this.leaf_clusters = {};
 	this.uiInfo = info;
 
 	this.mapSetup = function() {
@@ -29,6 +31,12 @@ function Map(info) {
 
 	maplet.getState = function(stateId) {
 		return maplet.leaf_states[stateId];
+	};
+	maplet.getPrecinct = function(precinctId) {
+		return maplet.leaf_precincts[precinctId];
+	};
+	maplet.getCluster = function(clusterId) {
+		return maplet.leaf_clusters[clusterId];
 	};
 
 	maplet.initDistricts = function(districtGeoJSON) {
@@ -49,10 +57,28 @@ function Map(info) {
 		maplet.layerCtrl.addOverlay(maplet.precinctLayer, 'Precincts');
 		maplet.layers.addLayer(maplet.precinctLayer);
 		maplet.removeStateLayer();
+		maplet.precinctLayer.eachLayer(function(layer) {
+			if (layer.feature) {
+				maplet.leaf_precincts[layer.feature.properties.precinctID] = layer._leaflet_id;
+			}
+		});
 	};
 
 	maplet.initClusters = function() {
-
+		var decimalPrecision = 6;
+		var initialGeoJSON = maplet.precinctLayer.toGeoJSON(decimalPrecision);
+		maplet.clusterLayer = new L.geoJSON(initialGeoJSON, {
+			style: precinctStyle,
+			onEachFeature: onEachPrecinct
+		});
+		hidePrecinctPanel();
+		maplet.layerCtrl.addOverlay(maplet.clusterLayer, 'Clusters');
+		maplet.layers.addLayer(maplet.clusterLayer);
+		maplet.clusterLayer.eachLayer(function(layer) {
+			if (layer.feature) {
+				maplet.leaf_clusters[layer.feature.properties.precinctID] = layer._leaflet_id;
+			}
+		});
 	};
 
 	/**
@@ -164,7 +190,7 @@ function Map(info) {
 	// Zooms map to fit state
 	maplet.zoomToState = function(e) {
 		var layer = e.target;
-	    maplet.uiInfo.selectedState = layer.feature.properties.NAME;
+	    maplet.uiInfo.$rootScope.globalData.selectedState = layer.feature.properties.id;
 		var bounds = e.target.getBounds();
 		var SHIFT = 0.5;
 		bounds = bounds.toBBoxString(); // 'southwest_lng,southwest_lat,northeast_lng,northeast_lat'
@@ -175,6 +201,8 @@ function Map(info) {
 		bounds = [[bounds[1],bounds[0]+SHIFT],[bounds[3],bounds[2]+SHIFT]];
 	    maplet.map.fitBounds(bounds);
 	    if (maplet.stateCallback) {
+	    	hidePrecinctPanel();
+	    	hideDistrictPanel();
 			maplet.stateCallback(layer.feature.properties.id, maplet);
 		}
 	};
@@ -398,5 +426,51 @@ function Map(info) {
 		var endIndex = (numStr.length > 4) ? 4 : numStr.length;
 		var result = numStr.substring(0, endIndex) + '%';
 		return result;
+	}
+
+	/**
+	 * Spatial Methods
+	 */
+	function updateClusterProps(prop1, prop2, remove) {
+		var propLabels = ['population', 'votes', 'numDemo', 'numRep', 'white',
+						  'africanAmerican', 'asian', 'latinAmerican', 'other'];
+		var coeff = (remove) ? -1 : 1;
+		for (var i = 0; i < propLabels.length; i++) {
+			var label = propLabels[i];
+			prop1[label] += coeff * prop2[label];
+		}
+		return prop1;
+	}
+
+	maplet.moveCluster = function(precinctId, oldClusterId, newClusterId) {
+		var precinct = maplet.precinctLayer.getLayer(maplet.leaf_precincts[precinctId]);
+		var precGeo = precinct.toGeoJSON();
+		var oldCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[oldClusterId]);
+		var oldClusGeo = oldCluster.toGeoJSON();
+		maplet.clusterLayer.removeLayer(oldCluster);
+		var oldFeature = turf.difference(oldClusGeo, precGeo);
+		if (oldFeature) {
+			oldFeature.properties = updateClusterProps(oldFeature.properties,
+													   precGeo.properties, true);
+			oldClusGeo = oldFeature;
+			// Convert to layer
+			oldCluster = L.GeoJSON(oldClusGeo, {
+				style: precinctStyle,
+				onEachFeature: onEachPrecinct
+			});
+			maplet.clusterLayer.addLayer(oldCluster);
+		}
+
+		var newCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[newClusterId]);
+		var newClusGeo = newCluster.toGeoJSON();
+		maplet.clusterLayer.removeLayer(newCluster);
+		newClusGeo = turf.union(newClusGeo, precGeo);
+		newClusGeo.properties = updateClusterProps(newClusGeo.properties,
+														   precGeo.properties, false);
+		newCluster = L.GeoJSON(newClusGeo, {
+			style: precinctStyle,
+			onEachFeature: onEachPrecinct
+		});
+		maplet.clusterLayer.addLayer(newCluster);
 	}
 }

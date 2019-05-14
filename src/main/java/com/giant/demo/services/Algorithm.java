@@ -166,14 +166,11 @@ public class Algorithm {
 
     public void initializeEdges(List<Cluster> clusters, List<Precinct> precincts){
         Map<Integer, Cluster>  tempC = new HashMap<>();
-        Map<Integer, Precinct>  tempP = new HashMap<>();
         for(int i = 0; i < clusters.size(); i++){
-            tempP.put(precincts.get(i).getPrecinctID(), precincts.get(i));
             tempC.put(clusters.get(i).getClusterID(), clusters.get(i));
         }
         for(int i = 0; i < precincts.size(); i++){
             for(int ID : precincts.get(i).getTempNs()){
-                precincts.get(i).getNeighbours().add(tempP.get(ID));
                 clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
             }
         }

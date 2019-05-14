@@ -27,7 +27,7 @@
 						"id": "singleRunBtn", 
 						"label": "singleRunBtn", 
 						"text": "Generate", 
-						"clickEvent": "startSingleRun",
+						"clickEvent": "AlgorithmService.startSingleRun();",
 						"tooltip": "",
 						"tooltipDir": ""
 					}
