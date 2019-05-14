@@ -69,7 +69,7 @@ function Map(info) {
 		var initialGeoJSON = maplet.precinctLayer.toGeoJSON(decimalPrecision);
 		maplet.clusterLayer = new L.geoJSON(initialGeoJSON, {
 			style: precinctStyle,
-			onEachFeature: onEachPrecinct
+			onEachFeature: onEachCluster
 		});
 		hidePrecinctPanel();
 		maplet.layerCtrl.addOverlay(maplet.clusterLayer, 'Clusters');
@@ -172,6 +172,11 @@ function Map(info) {
 		//  Update Info control with highlighted precincts's property
 		maplet.precInfoCtrl.update(e.target.feature.properties);
 	}
+	function highlightCluster(e) {
+		highlightFeature(e);
+		//  Update Info control with highlighted precincts's property
+		maplet.clusInfoCtrl.update(e.target.feature.properties);
+	}
 
 	// Resets state to original style
 	function resetState(e) {
@@ -185,6 +190,10 @@ function Map(info) {
 	function resetPrecinct(e) {
 		maplet.precinctLayer.resetStyle(e.target);
 		maplet.precInfoCtrl.update();
+	}
+	function resetCluster(e) {
+		maplet.clusterLayer.resetStyle(e.target);
+		maplet.clusInfoCtrl.update();
 	}
 
 	// Zooms map to fit state
@@ -227,6 +236,13 @@ function Map(info) {
 		layer.on({
 			mouseover: highlightPrecinct,
 			mouseout: resetPrecinct
+		});
+	}
+
+	function onEachCluster(feature, layer) {
+		layer.on({
+			mouseover: highlightCluster,
+			mouseout: resetCluster
 		});
 	}
 
@@ -289,6 +305,9 @@ function Map(info) {
 			case "Precincts":
 				showPrecinctPanel();
 				break;
+			case "Clusters":
+				showClusterPanel();
+				break;
 		}
 	}
 	function onOverlayRemove(e) {
@@ -302,6 +321,9 @@ function Map(info) {
 			case "Precincts":
 				hidePrecinctPanel();
 				break;
+			case "Clusters":
+				hideClusterPanel();
+				break;
 		}
 	}
 
@@ -312,6 +334,7 @@ function Map(info) {
 		statePanelSetup();
 		districtPanelSetup();
 		precinctPanelSetup();
+		clusterPanelSetup();
 	}
 
 	function statePanelSetup() {
@@ -403,6 +426,40 @@ function Map(info) {
 		maplet.map.removeControl(maplet.precInfoCtrl);
 	}
 
+	function clusterPanelSetup() {
+		maplet.clusInfoCtrl = L.control();
+		maplet.clusInfoCtrl.setPosition('bottomleft');
+
+		maplet.clusInfoCtrl.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+
+		// Update info control based on feature properties
+		maplet.clusInfoCtrl.update = function (props) {
+			this._div.innerHTML = '<h4>Cluster Metrics</h4>' +  (props ?
+				'Cluster ID: <i>' + props.precinctID + '</i><br />' +
+				'Population: ' + formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'<h6>Demographic Distribution</h6>' +
+				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />'
+				: 'Hover over a cluster');
+		};
+
+		//maplet.precInfoCtrl.addTo(maplet.map);
+	}
+	function showClusterPanel() {
+		maplet.map.addControl(maplet.clusInfoCtrl);
+	}
+	function hideClusterPanel() {
+		maplet.map.removeControl(maplet.clusInfoCtrl);
+	}
+
 	// Info Panel Helper functions
 	function formatNumber(num) {
 		var numRepr = (num).toString();
@@ -448,29 +505,34 @@ function Map(info) {
 		var oldCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[oldClusterId]);
 		var oldClusGeo = oldCluster.toGeoJSON();
 		maplet.clusterLayer.removeLayer(oldCluster);
-		var oldFeature = turf.difference(oldClusGeo, precGeo);
-		if (oldFeature) {
-			oldFeature.properties = updateClusterProps(oldFeature.properties,
+		var oldCoord = martinez.diff(oldClusGeo.geometry.coordinates, precGeo.geometry.coordinates);
+		if (oldCoord.length > 0) {
+			oldClusGeo.properties = updateClusterProps(oldClusGeo.properties,
 													   precGeo.properties, true);
-			oldClusGeo = oldFeature;
+			oldClusGeo.geometry.coordinates = oldCoord[0];
 			// Convert to layer
-			oldCluster = L.GeoJSON(oldClusGeo, {
+			oldCluster = new L.GeoJSON(oldClusGeo, {
 				style: precinctStyle,
-				onEachFeature: onEachPrecinct
+				onEachFeature: onEachCluster
 			});
+			oldCluster = oldCluster.getLayers()[0];
+			maplet.leaf_clusters[oldClusterId] = oldCluster._leaflet_id;
 			maplet.clusterLayer.addLayer(oldCluster);
 		}
 
 		var newCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[newClusterId]);
 		var newClusGeo = newCluster.toGeoJSON();
 		maplet.clusterLayer.removeLayer(newCluster);
-		newClusGeo = turf.union(newClusGeo, precGeo);
+		newClusGeo.geometry.coordinates = martinez.union(newClusGeo.geometry.coordinates,
+												         precGeo.geometry.coordinates)[0];
 		newClusGeo.properties = updateClusterProps(newClusGeo.properties,
 														   precGeo.properties, false);
-		newCluster = L.GeoJSON(newClusGeo, {
+		newCluster = new L.GeoJSON(newClusGeo, {
 			style: precinctStyle,
-			onEachFeature: onEachPrecinct
+			onEachFeature: onEachCluster
 		});
+		newCluster = newCluster.getLayers()[0];
+		maplet.leaf_clusters[newClusterId] = newCluster._leaflet_id;
 		maplet.clusterLayer.addLayer(newCluster);
 	}
 }
