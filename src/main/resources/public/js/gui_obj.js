@@ -63,8 +63,7 @@ class NumberInput extends GuiObj {
 	}
 
 	packData() {
-		var result = {};
-		result[this.id] = this.value;
+		var result = this.value;
 		return result;
 	}
 }
@@ -95,8 +94,7 @@ class SliderMeasure extends GuiObj {
 	}
 
 	packData() {
-		var result = {};
-		result[this.id] = this.value;
+		var result = this.value;
 		return result;
 	}
 }
@@ -113,10 +111,9 @@ class RangeMeasure extends SliderMeasure {
 	}
 
 	packData() {
-		var low = this.lowSlider.packData()[this.lowID];
-		var high = this.highSlider.packData()[this.highID];
-		var result = {};
-		result[this.id] = {"low": low, "high": high};
+		var low = this.lowSlider.packData();
+		var high = this.highSlider.packData();
+		var result = {"low": low, "high": high};
 		return result;
 	}
 }
@@ -134,19 +131,12 @@ class GuiGroup extends GuiObj {
 		for (const [sectionID, section] of Object.entries(this.sections)) {
 			var subPack = section.packData();
 			if (subPack != null) {
-				var data;
-				if (subPack.hasOwnProperty(sectionID)) {
-					data = subPack[sectionID];
-				}
-				else {
-					data = subPack;
-				}
+				var data = subPack;
 				packageData[sectionID] = data;
 			}
 		}
 
-		var result = {};
-		result[this.id] = packageData;
+		var result = packageData;
 		return result;
 	}
 }
@@ -173,8 +163,7 @@ class SelectDisplay extends GuiObj {
 			selectedVals = selectedVals.concat(this.selected);
 		}
 
-		var result = {};
-		result[this.id] = selectedVals;
+		var result = selectedVals;
 		return result;
 	}
 }
@@ -192,10 +181,9 @@ class AccordionTab extends GuiObj {
 	}
 
 	packData() {
-		var data = this.content.packData()[this.content.id];
+		var data = this.content.packData();
 		if (Object.keys(data).length > 0) {
-			var result = {};
-			result[this.id] = data;
+			var result = data;
 			return result;
 		}
 		else {

@@ -186,7 +186,7 @@
 									"label": "Number of Districts",
 									"tooltip": "",
 									"tooltipDir": "",
-									"min": 1,
+									"min": 0,
 									"max": 100,
 									"step": "1",
 									"value": "",
@@ -204,14 +204,54 @@
 									],
 									"selected": [],
 									"multiSelect": true,
-									"onChange": "GeneralUtilService.updateMajMinSliders($ctrl.select.selected, 'singleMinMajPercent', 'majMinRange')",
+									"onChange": "",
 									"type": "select"
 								},
 								"minSettingsGroup": {
 									"type": "guiGroup",
 									"properties": "guiGroup",
 									"id": "singleMinMajPercent",
-									"sections": []
+									"sections": {
+										"africanAmericanRange": {
+											"properties": "majMinRange",
+											"id": "africanAmericanRange",
+											"label": "African American Percentage",
+											"tooltip": "",
+											"tooltipDir": "",
+											"min": 1,
+											"max": 100,
+											"step": 1,
+											"value": 50,
+											"type": "rangeMeasure",
+											"childProperties": "slideMeasure"
+										},
+										"asianRange": {
+											"properties": "majMinRange",
+											"id": "asianRange",
+											"label": "Asian/Pacific Islander Percentage",
+											"tooltip": "",
+											"tooltipDir": "",
+											"min": 1,
+											"max": 100,
+											"step": 1,
+											"value": 50,
+											"type": "rangeMeasure",
+											"childProperties": "slideMeasure"
+										},
+										"hispanicRange": {
+											"properties": "majMinRange",
+											"id": "hispanicRange",
+											"label": "Hispanic/Latino Percentage",
+											"tooltip": "",
+											"tooltipDir": "",
+											"min": 1,
+											"max": 100,
+											"step": 1,
+											"value": 50,
+											"type": "rangeMeasure",
+											"childProperties": "slideMeasure"
+										}
+									}
 								}
 							}
 						},
