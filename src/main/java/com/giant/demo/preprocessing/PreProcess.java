@@ -102,28 +102,30 @@ public class PreProcess {
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Geometry polygon = geometryFactory.createPolygon(coordinateSequence);
 
-            StateE stateE = StateE.VA;
+            StateE stateE = StateE.NJ;
 
             if (stateE == StateE.VA){
                 polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
-                        }
+            }
 
 
-                        Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
-                        precinctMap.put(precinctID, precinct);
-                        allPrecincts.add(precinct);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
+            precinctMap.put(precinctID, precinct);
+            allPrecincts.add(precinct);
+            preprocessService.savePrecinct(precinct);
 
-
-
-                        }
-                        for(Precinct precinct : allPrecincts) {
-                        Set<Precinct> neighbors = new HashSet<>();
-        for (int i : precinct.getTempNs())
-        neighbors.add(precinctMap.get(i));
-        precinct.setNeighbours(neighbors);
-        preprocessService.savePrecinct(precinct);
-        System.out.println((counter++ * 100) / allPrecincts.size() + "%");
-        }
-        }
 
         }
+        for(Precinct precinct : allPrecincts) {
+            Set<Precinct> neighbors = new HashSet<>();
+            int[] tempNs = precinct.getTempNs();
+            for (int i=0; i<tempNs.length; i++) {
+                neighbors.add(precinctMap.get(tempNs[i]));
+            }
+            precinct.setNeighbours(neighbors);
+            preprocessService.savePrecinct(precinct);
+            System.out.println(counter++ + " out of " + allPrecincts.size());
+            }
+        System.out.println("Preprocessing has finished...");
+        }
+}
