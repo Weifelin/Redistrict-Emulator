@@ -65,18 +65,11 @@
 		"flex": "",
 		"layout": []
 	},
-	"majMinRange": {	
-		"properties": "rangeMeasure",
-		"id": "",
-		"label": "",
-		"tooltip": "",
-		"tooltipDir": "",
-		"min": 1,
-		"max": 100,
-		"step": 1,
-		"value": 50,
-		"type": "rangeMeasure",
-		"childProperties": "slideMeasure"
+	"majMinRange": {
+		"classes": ["layout-row", "layout-align-center-center"],
+		"ifClause": "GeneralUtilService.isSelected('singleMinSelect', $ctrl.range.id)",
+		"flex": "",
+		"layout": []
 	},
 	"menu": {
 		"classes": ["md-fab-top-right", "md-scale"],

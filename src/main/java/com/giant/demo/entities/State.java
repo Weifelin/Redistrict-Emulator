@@ -56,9 +56,9 @@ public class State {
 
     //finds adjacent cluster with smalles population
     public Cluster eligibleCluster(Cluster c){
-        Cluster min = null;
+        Cluster min = c.getEdges().get(0).getCluster2();
         for(ClusterEdge e : c.getEdges()){
-            if(min == null || min.getPopulation() < e.getCluster2().getPopulation()){
+            if(min.getPopulation() < e.getCluster2().getPopulation()){
                 min = e.getCluster2();
             }
         }

@@ -25,35 +25,15 @@ angular.module('GuiUtil')
 					}
 				},
 
-				updateMajMinSliders: function(selectedGroups, sliderGroupId, rangeProp) {
-					// Select element that holds Min and Max representation sliders (for each selected group)
-					var sliderGroup = angular.element('#'+sliderGroupId).scope().$parent.$ctrl.group;
-					var genProp = angular.element("#appShell").scope().componentProp;
-					var sliderStruct = genProp[rangeProp];
-					var labelSuffix = "Slider";
-
-					// Compute difference between current sliders and selected ones
-					var currLabels = Object.keys(sliderGroup.sections);
-					var removeList= currLabels.filter(currLabel =>
-						!selectedGroups.includes(currLabel.substring(0, currLabel.length - labelSuffix.length)));
-
-					// Removing nonexistant group sliders
-					angular.forEach(removeList, function(group, index) {
-						delete this.sections[group+labelSuffix];
-					}, sliderGroup);
-
-					// Adding new group sliders
-					angular.forEach(selectedGroups, function(group, index) {
-						var label = group+labelSuffix;
-						if (!currLabels.includes(label)) {
-							sliderStruct["id"] = "percent" + group;
-							sliderStruct["label"] = group + "Percentage Range";
-							var url = sliderGroup.url.slice();
-							url.push("sections");
-							var groupPercent = parseGui(sliderStruct, genProp, url);
-							this.sections[label] = groupPercent;
-						}
-					}, sliderGroup);
+				isSelected: function(selectId, element) {
+					var select = angular.element("#" + selectId).scope();
+					var selected = select.selected;
+					var selectType = typeof selected;
+					if (selectType == "string") {
+						return (selected === element);
+					} else {
+						return selected.includes(element);
+					}
 				},
 
 				selectState: function(stateId) {

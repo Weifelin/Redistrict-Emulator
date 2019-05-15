@@ -6,6 +6,10 @@ angular.module('AlgoUtil')
         service.startSingleRun = function() {
             if ($rootScope.globalData.selectedState !== "") {
                 $rootScope.globalData.programState = $rootScope.programStates.RUNNING;
+                var url = "single-run";
+                var data = angular.element("#appShell").scope().content["singleRun"].packData();
+                console.log(data);
+                // $http.post(url);
             } else {
                 $mdToast.showSimple("State not selected.");
             }

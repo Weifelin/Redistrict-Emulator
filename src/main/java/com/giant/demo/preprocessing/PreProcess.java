@@ -7,8 +7,10 @@ import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.services.PreprocessService;
 import org.json.simple.parser.ParseException;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.simplify.TopologyPreservingSimplifier;
 import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.springframework.beans.factory.annotation.Autowired;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -36,7 +38,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/vaprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/newprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -49,17 +51,18 @@ public class PreProcess {
         for (Iterator iterator = jo.keySet().iterator(); iterator.hasNext(); ) {
             String key = (String) iterator.next();
             Map p = (Map) jo.get(key);
-            Integer precinctID = (int) (long) p.get("precinctID");
+            Integer precinctID = Long.valueOf((long) p.get("precinctID")).intValue();
+            Integer countyID = Long.valueOf((long) p.get("county")).intValue();
             String name = (String) p.get("name");
-            Integer pop = (int) (long) p.get("pop");
-            Integer votes = (int) (long) p.get("votes");
-            Double demo = Long.valueOf((long)p.get("demo")).doubleValue() ;
-            Double rep = Long.valueOf((long) p.get("rep")).doubleValue();
-            double africanAmerican = (long)p.get("africanAmerican") / (double)pop;
-            double asian = (long) p.get("asian") / (double)pop;
-            double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
-            double white = (long) p.get("white") / (double)pop;
-            double other = (long) p.get("other") / (double)pop;
+            Integer pop = Long.valueOf((long) p.get("pop")).intValue();
+            Integer votes = (int) (double) p.get("votes");
+            Double demo = (double)p.get("demo") ;
+            Double rep = (double) p.get("rep");
+            double africanAmerican = (double)p.get("africanAmerican") / (double)pop;
+            double asian = (double) p.get("asian") / (double)pop;
+            double latinAmerican = (double) p.get("latinAmerican") / (double)pop;
+            double white = (double) p.get("white") / (double)pop;
+            double other = (double) p.get("other") / (double)pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
@@ -99,25 +102,34 @@ public class PreProcess {
 
             }
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
-            Polygon polygon = geometryFactory.createPolygon(coordinateSequence);
-            StateE stateE = StateE.VA;
+            Geometry polygon = geometryFactory.createPolygon(coordinateSequence);
 
+            StateE stateE = StateE.NJ;
 
+            if (stateE == StateE.VA){
+                polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
+            }
+
+            //add county tp precint construvto
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
             precinctMap.put(precinctID, precinct);
+            allPrecincts.add(precinct);
+            preprocessService.savePrecinct(precinct);
 
-            System.out.println(counter++);
 
         }
         for(Precinct precinct : allPrecincts) {
             Set<Precinct> neighbors = new HashSet<>();
-            for (int i : precinct.getTempNs()) {
-                neighbors.add(precinctMap.get(i));
+
+            int[] tempNs = precinct.getTempNs();
+            for (int i=0; i<tempNs.length; i++) {
+                neighbors.add(precinctMap.get(tempNs[i]));
             }
 
             precinct.setNeighbours(neighbors);
             preprocessService.savePrecinct(precinct);
+            System.out.println(counter++ + " out of " + allPrecincts.size());
+            }
+        System.out.println("Preprocessing has finished...");
         }
-    }
-
 }
