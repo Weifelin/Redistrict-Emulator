@@ -51,6 +51,7 @@ public class PreProcess {
             String key = (String) iterator.next();
             Map p = (Map) jo.get(key);
             Integer precinctID = Long.valueOf((long) p.get("precinctID")).intValue();
+            Integer countyID = Long.valueOf((long) p.get("county")).intValue();
             String name = (String) p.get("name");
             Integer pop = Long.valueOf((long) p.get("pop")).intValue();
             Integer votes = (int) (double) p.get("votes");
@@ -108,7 +109,7 @@ public class PreProcess {
                 polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
             }
 
-
+            //add county tp precint construvto
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
             precinctMap.put(precinctID, precinct);
             allPrecincts.add(precinct);
