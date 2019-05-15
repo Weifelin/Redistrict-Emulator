@@ -1,116 +1,107 @@
 package com.giant.demo.entities;
 
+import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
+import com.giant.demo.jobObjects.AfricanAmerican;
+import com.giant.demo.jobObjects.Asian;
+import com.giant.demo.jobObjects.Compactness;
+import com.giant.demo.jobObjects.LatinAmerican;
 import javafx.util.Pair;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
-@Entity
 public class Job {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int jobID;
-    private double demographicsWeight;
-    private double compactnessWeight;
-    private double contiguityWeight;
-    private double populationWeight;
-    private double partisanWeight;
-    private int numDistricts;
-    @Transient
-    private Pair<Double, Double> AArange;
-    @Transient
-    private Pair<Double, Double> Arange;
-    @Transient
-    private Pair<Double, Double> Wrange;
-    @Transient
-    private Pair<Double, Double> LArange;
 
+    private Compactness compactnessWeight;
+    private int numDistricts;
+    private double partyFairSlier;
+    private double efficiencyGapSlider;
+    private double PopulationEquality;
+    private int numMajorityMinorityDistricts;
+    private AfricanAmerican africanAmerican;
+    private LatinAmerican latinAmerican;
+    private Asian asian;
 
     public Job() {
     }
 
-    public Job(double demo, double comp, double cont, double pop, double party, int numDistricts){
-        this.demographicsWeight = demo;
-        this.compactnessWeight = comp;
-        this.contiguityWeight = cont;
-        this.populationWeight = pop;
-        this.partisanWeight = party;
+    public Job(Compactness compactnessWeight, int numDistricts, double partyFairSlier, double efficiencyGapSlider, double populationEquality, int numMajorityMinorityDistricts, AfricanAmerican africanAmerican, LatinAmerican latinAmerican, Asian asian) {
+        this.compactnessWeight = compactnessWeight;
         this.numDistricts = numDistricts;
+        this.partyFairSlier = partyFairSlier;
+        this.efficiencyGapSlider = efficiencyGapSlider;
+        PopulationEquality = populationEquality;
+        this.numMajorityMinorityDistricts = numMajorityMinorityDistricts;
+        this.africanAmerican = africanAmerican;
+        this.latinAmerican = latinAmerican;
+        this.asian = asian;
     }
 
-    public double getDemographicsWeight() {
-        return demographicsWeight;
-    }
-
-    public void setDemographicsWeight(double demographicsWeight) {
-        this.demographicsWeight = demographicsWeight;
-    }
-
-    public double getCompactnessWeight() {
+    public Compactness getCompactnessWeight() {
         return compactnessWeight;
     }
 
-    public void setCompactnessWeight(double compactnessWeight) {
+    public void setCompactnessWeight(Compactness compactnessWeight) {
         this.compactnessWeight = compactnessWeight;
     }
 
-    public double getContiguityWeight() {
-        return contiguityWeight;
+    public double getPartyFairSlier() {
+        return partyFairSlier;
     }
 
-    public void setContiguityWeight(double contiguityWeight) {
-        this.contiguityWeight = contiguityWeight;
+    public void setPartyFairSlier(double partyFairSlier) {
+        this.partyFairSlier = partyFairSlier;
     }
 
-    public double getPopulationWeight() {
-        return populationWeight;
+    public double getEfficiencyGapSlider() {
+        return efficiencyGapSlider;
     }
 
-    public void setPopulationWeight(double populationWeight) {
-        this.populationWeight = populationWeight;
+    public void setEfficiencyGapSlider(double efficiencyGapSlider) {
+        this.efficiencyGapSlider = efficiencyGapSlider;
     }
 
-
-
-    public double getPartisanWeight() {
-        return partisanWeight;
+    public double getPopulationEquality() {
+        return PopulationEquality;
     }
 
-    public void setPartisanWeight(double partisanWeight) {
-        this.partisanWeight = partisanWeight;
+    public void setPopulationEquality(double populationEquality) {
+        PopulationEquality = populationEquality;
     }
 
-    public Pair<Double, Double> getAArange() {
-        return AArange;
+    public int getNumMajorityMinorityDistricts() {
+        return numMajorityMinorityDistricts;
     }
 
-    public void setAArange(Pair<Double, Double> AArange) {
-        this.AArange = AArange;
+    public void setNumMajorityMinorityDistricts(int numMajorityMinorityDistricts) {
+        this.numMajorityMinorityDistricts = numMajorityMinorityDistricts;
     }
 
-    public Pair<Double, Double> getArange() {
-        return Arange;
+    public AfricanAmerican getAfricanAmerican() {
+        return africanAmerican;
     }
 
-    public void setArange(Pair<Double, Double> arange) {
-        Arange = arange;
+    public void setAfricanAmerican(AfricanAmerican africanAmerican) {
+        this.africanAmerican = africanAmerican;
     }
 
-    public Pair<Double, Double> getWrange() {
-        return Wrange;
+    public LatinAmerican getLatinAmerican() {
+        return latinAmerican;
     }
 
-    public void setWrange(Pair<Double, Double> wrange) {
-        Wrange = wrange;
+    public void setLatinAmerican(LatinAmerican latinAmerican) {
+        this.latinAmerican = latinAmerican;
     }
 
-    public Pair<Double, Double> getLArange() {
-        return LArange;
+    public Asian getAsian() {
+        return asian;
     }
 
-    public void setLArange(Pair<Double, Double> LArange) {
-        this.LArange = LArange;
+    public void setAsian(Asian asian) {
+        this.asian = asian;
     }
 
     public int getNumDistricts() {

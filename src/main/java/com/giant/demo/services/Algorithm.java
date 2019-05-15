@@ -3,6 +3,7 @@ package com.giant.demo.services;
 import com.giant.demo.entities.*;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
+import com.giant.demo.entities.Job;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.SingleClusterGroup;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
@@ -106,12 +106,7 @@ public class Algorithm {
         }
     }
 
-    private void excuteMove(Move move1) {
-    }
 
-    private boolean testMove(Move move1) {
-        return false;
-    }
 
 
     public int getGerrymanderingIndex() {
@@ -247,4 +242,11 @@ public class Algorithm {
         }
         return null;
     }*/
+
+    private void excuteMove(Move move1) {
+    }
+
+    private boolean testMove(Move move1) {
+        return false;
+    }
 }

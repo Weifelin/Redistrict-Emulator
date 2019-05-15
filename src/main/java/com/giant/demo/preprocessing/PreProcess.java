@@ -45,6 +45,7 @@ public class PreProcess {
         JSONObject jo = (JSONObject) obj;
         Map<Integer, Precinct> precinctMap = new HashMap<>();
         Set<Precinct> allPrecincts = new HashSet<>();
+
         for (Iterator iterator = jo.keySet().iterator(); iterator.hasNext(); ) {
             String key = (String) iterator.next();
             Map p = (Map) jo.get(key);
@@ -110,8 +111,10 @@ public class PreProcess {
         }
         for(Precinct precinct : allPrecincts) {
             Set<Precinct> neighbors = new HashSet<>();
-            for (int i : precinct.getTempNs())
+            for (int i : precinct.getTempNs()) {
                 neighbors.add(precinctMap.get(i));
+            }
+
             precinct.setNeighbours(neighbors);
             preprocessService.savePrecinct(precinct);
         }
