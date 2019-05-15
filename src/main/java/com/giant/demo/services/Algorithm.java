@@ -40,18 +40,22 @@ public class Algorithm {
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
         int end = (int) (Math.log(job.getNumDistricts()));
+        int totalPop = 0;
+        for(Cluster c : clusters)
+            totalPop += c.getPopulation();
         for(int i =  start; i > end; i--){
             for(Cluster c : clusters){
                 if(c.level < level){
-                    ClusterEdge candidate = c.findClusterPair(clusters.size(), realState.getPopulation());
+                    ClusterEdge candidate = c.findClusterPair(clusters.size(), totalPop);
                     if(candidate != null){
                         candidatePairs.add(candidate);
                     }
                 }
             }
             for(ClusterEdge edge : candidatePairs){
-                edge.getCluster1().combineCluster(edge.getCluster2());
+                Cluster temp = edge.getCluster2();
                 clusters.remove(edge.getCluster2());
+                edge.getCluster1().combineCluster(temp);
                 edge.getCluster1().level = level;
             }
             level++;
@@ -153,10 +157,10 @@ public class Algorithm {
         System.out.println(allPrecinct.get(1).toString());
         List<Cluster> clusterList = new ArrayList<>();
         for (int i=0; i<allPrecinct.size(); i++){
-            ArrayList<Precinct> precinctsList = new ArrayList<>();
+            List<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
             Cluster cluster = new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList);
-            cluster.getContainedPrecincts().get(i).setCluster(cluster);
+            cluster.getContainedPrecincts().get(0).setCluster(cluster);
             clusterList.add(cluster);
         }
         initializeEdges(clusterList, allPrecinct);
@@ -170,7 +174,8 @@ public class Algorithm {
             tempC.put(clusters.get(i).getClusterID(), clusters.get(i));
         }
         for(int i = 0; i < precincts.size(); i++){
-            for(int ID : precincts.get(i).getTempNs()){
+            for(Precinct p : precincts.get(i).getNeighbours()){
+                int ID = p.getPrecinctID();
                 clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
             }
         }

@@ -33,10 +33,11 @@ public class Cluster {
         this.clusterID = clusterID;
     }
 
-    public Cluster(int clusterID, ArrayList<Precinct> containedPrecincts) {
+    public Cluster(int clusterID, List<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
         this.edges = new ArrayList<>();
+        this.population = containedPrecincts.get(0).getPopulation();
     }
 
     public boolean mergeInto(Cluster c){
@@ -133,8 +134,8 @@ public class Cluster {
     public ClusterEdge findClusterPair(int numClusters, int totalPop){
         double max = 0.0;
         ClusterEdge bestEdge = null;
-        int popUpperBound = totalPop / (numClusters / 2);
-        for(ClusterEdge e : edges){
+        double popUpperBound = totalPop / ((double)numClusters / 2.0);
+        for(ClusterEdge e : this.edges){
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
             if(combinePop <= popUpperBound && e.getJoinability() > max){
                 max = e.getJoinability();
