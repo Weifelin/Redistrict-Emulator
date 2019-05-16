@@ -149,14 +149,14 @@ public class Cluster {
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }
 
-    public ClusterEdge findClusterPair(int numClusters, int totalPop){
+    public ClusterEdge findClusterPair(int numClusters, int totalPop, Job j){
         double max = 0.0;
         ClusterEdge bestEdge = null;
-        double popUpperBound = totalPop / ((double)numClusters / 2.0);
+        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
         for(ClusterEdge e : this.edges){
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
-            if(combinePop <= popUpperBound && e.getJoinability() > max){
-                max = e.getJoinability();
+            if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
+                max = e.getJoinability(j);
                 bestEdge = e;
             }
         }

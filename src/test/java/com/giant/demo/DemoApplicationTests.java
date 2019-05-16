@@ -1,11 +1,11 @@
 package com.giant.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.giant.demo.entities.Cluster;
-import com.giant.demo.entities.ClusterEdge;
-import com.giant.demo.entities.Demographics;
-import com.giant.demo.entities.Precinct;
+import com.giant.demo.entities.*;
 import com.giant.demo.enums.StateE;
+import com.giant.demo.jobObjects.AfricanAmerican;
+import com.giant.demo.jobObjects.Asian;
+import com.giant.demo.jobObjects.LatinAmerican;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.services.Algorithm;
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.util.AssertionErrors.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -66,6 +67,8 @@ public class DemoApplicationTests {
 
 		//Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
 		//algorithm.setJob(job); /*Store job in algorithm until phase II. */
+		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60));
+		algorithm.setJob(job);
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
 		ObjectMapper mapper = new ObjectMapper();
@@ -127,13 +130,18 @@ public class DemoApplicationTests {
 
 	@Test
 	public void findClusterPairsTest(){
-
-	}
-
-
-	@Test
-	public void JoinabilityTest(){
-
+		Set<Cluster> clusterSet = algorithm.getClusters();
+		int total  = 0;
+		for(Cluster c : clusterSet){
+			total += c.getPopulation();
+		}
+		Iterator<Cluster> iter = clusterSet.iterator();
+		Cluster c1 = iter.next();
+		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(2, 6), new LatinAmerican(3, 6), null);
+		ClusterEdge edge = c1.findClusterPair(clusterSet.size(), total, job);
+		assertNotEquals("Cluster is Null", null, edge);
+		System.out.println(c1.toString());
+		System.out.println(edge.getCluster2().toString());
 
 	}
 
