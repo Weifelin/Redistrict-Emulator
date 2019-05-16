@@ -238,9 +238,9 @@
 											"type": "rangeMeasure",
 											"childProperties": "slideMeasure"
 										},
-										"hispanicRange": {
+										"latinAmericanRange": {
 											"properties": "majMinRange",
-											"id": "hispanicRange",
+											"id": "latinAmericanRange",
 											"label": "Hispanic/Latino Percentage",
 											"tooltip": "",
 											"tooltipDir": "",

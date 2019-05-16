@@ -36,7 +36,7 @@ angular.module('GuiUtil')
 						case "asianRange":
 							element = $rootScope.demographics.ASIAN;
 							break;
-						case "hispanicRange":
+						case "latinAmericanRange":
 							element = $rootScope.demographics.HISPANIC;
 							break;
 					}
