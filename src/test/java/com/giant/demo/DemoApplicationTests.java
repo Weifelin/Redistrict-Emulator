@@ -67,7 +67,7 @@ public class DemoApplicationTests {
 
 		//Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
 		//algorithm.setJob(job); /*Store job in algorithm until phase II. */
-		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60));
+		/*Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60));
 		algorithm.setJob(job);
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
@@ -76,7 +76,7 @@ public class DemoApplicationTests {
 			mapper.writeValue(new File("testJson.json"), simpleClusterGroups);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	@Test
@@ -125,7 +125,21 @@ public class DemoApplicationTests {
 
 	@Test
 	public void eligibleCluster(){
-
+		State state = new State();
+		state.setDistricts(algorithm.getClusters());
+		Iterator<Cluster> iter = state.getDistricts().iterator();
+		Cluster c1 = iter.next();
+		Cluster c2 = state.eligibleCluster(c1);
+		assertNotEquals("Null Cluster", null, c2);
+		System.out.println("Min pop: " + c2.getPopulation());
+		int min = 100000000;
+		for(ClusterEdge e : c1.getEdges()){
+			int pop = e.getCluster2().getPopulation();
+			System.out.println("Pop: " + pop);
+			if(min > pop)
+				min = pop;
+		}
+		assertEquals("Incorrect Population: ", min, c2.getPopulation());
 	}
 
 	@Test
@@ -143,6 +157,16 @@ public class DemoApplicationTests {
 		System.out.println(c1.toString());
 		System.out.println(edge.getCluster2().toString());
 
+	}
+
+	@Test
+	public void minPopulationTest(){
+		State state = new State();
+		state.setDistricts(algorithm.getClusters());
+		Cluster c1 = state.minPopulation();
+		assertNotEquals("Null Cluster", null, c1);
+		System.out.println("Min Population: " + c1.getPopulation());
+		System.out.println("Precincts: " + c1.getContainedPrecincts());
 	}
 
 }
