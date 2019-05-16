@@ -66,8 +66,8 @@ public class HomeController {
     public ModelAndView index(){
 
 
-        //preProcess.loadPrecincts();
-//        geoJsonService.createGeoJson();
+        preProcess.loadPrecincts();
+        geoJsonService.createGeoJson();
 
         //generateJobJson();
         ModelAndView modelAndView = new ModelAndView();

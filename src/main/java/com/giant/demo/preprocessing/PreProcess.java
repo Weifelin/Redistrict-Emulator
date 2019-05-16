@@ -38,7 +38,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/newprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/njprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -48,11 +48,12 @@ public class PreProcess {
         Map<Integer, Precinct> precinctMap = new HashMap<>();
         Set<Precinct> allPrecincts = new HashSet<>();
 
+        int loadCounter= 0;
         for (Iterator iterator = jo.keySet().iterator(); iterator.hasNext(); ) {
             String key = (String) iterator.next();
             Map p = (Map) jo.get(key);
             Integer precinctID = Long.valueOf((long) p.get("precinctID")).intValue();
-            Integer countyID = Long.valueOf((long) p.get("county")).intValue();
+            String countyID = (String) p.get("county");
             String name = (String) p.get("name");
             Integer pop = Long.valueOf((long) p.get("pop")).intValue();
             Integer votes = (int) (double) p.get("votes");
@@ -111,10 +112,11 @@ public class PreProcess {
             }
 
             //add county tp precint construvto
-            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers);
+            Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers, countyID);
             precinctMap.put(precinctID, precinct);
             allPrecincts.add(precinct);
             preprocessService.savePrecinct(precinct);
+            System.out.println("Saving: "+ loadCounter++);
 
 
         }

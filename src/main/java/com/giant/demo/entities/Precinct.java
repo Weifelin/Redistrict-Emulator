@@ -18,6 +18,7 @@ public class Precinct {
     private StateE state;
     private int population;
     private Race majority;
+    private String countyID;
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private Geometry boundaries;
@@ -40,7 +41,7 @@ public class Precinct {
     public Precinct() {
     }
 
-    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon, Demographics demographics, StateE state, int[] tempNs){
+    public Precinct(int precinctID, String name, int pop, int votes, double demo, double rep, Geometry polygon, Demographics demographics, StateE state, int[] tempNs, String countyID){
         this.precinctID = precinctID;
         this.name = name;
         this.population = pop;
@@ -51,6 +52,7 @@ public class Precinct {
         this.demogrpahics = demographics;
         this.state = state;
         this.tempNs = tempNs;
+        this.countyID = countyID;
         //Find Party Preference
         PartyPreference primary = (numDemo > numRep) ? PartyPreference.BLUE : PartyPreference.RED;
         int best = (primary == PartyPreference.BLUE) ? numDemo : numRep;
