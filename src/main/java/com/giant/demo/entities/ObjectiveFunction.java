@@ -83,15 +83,15 @@ public class ObjectiveFunction {
             double demoScore = 0;
             int count = 0;
             if(this.state.getDemographics().getRaces().contains(Race.African_American)) {
-                demoScore = 1 / distance(demo.getAfricanAmerican(), this.state.getWeights().getAArange());
+                //demoScore = 1 / distance(demo.getAfricanAmerican(), this.state.getWeights().getAArange());
                 count++;
             }
             else if(this.state.getDemographics().getRaces().contains(Race.Asian)) {
-                demoScore = 1 / distance(demo.getAsian(), this.state.getWeights().getArange());
+                //demoScore = 1 / distance(demo.getAsian(), this.state.getWeights().getArange());
                 count++;
             }
             else if(this.state.getDemographics().getRaces().contains(Race.Latin_American)){
-                demoScore = 1 / distance(demo.getLatinAmerican(), this.state.getWeights().getLArange());
+                //demoScore = 1 / distance(demo.getLatinAmerican(), this.state.getWeights().getLArange());
                 count++;
             }
             demoScore /= count;
@@ -269,11 +269,11 @@ public class ObjectiveFunction {
 
     public double getScore(Job j) {
         int score = 0;
-        score += calculateCompactnessScore() * j.getCompactnessWeight();
-        score += calculateDemographicScore() * j.getDemographicsWeight();
-        score += calculateParisanScore() * j.getPartisanWeight();
-        score += calculatePopulationScore() * j.getPopulationWeight();
-        score += calculateContiguity() * j.getContiguityWeight();
+//        score += calculateCompactnessScore() * j.getCompactnessWeight();
+//        score += calculateDemographicScore() * j.getDemographicsWeight();
+//        score += calculateParisanScore() * j.getPartisanWeight();
+//        score += calculatePopulationScore() * j.getPopulationWeight();
+//        score += calculateContiguity() * j.getContiguityWeight();
         return score;
     }
 

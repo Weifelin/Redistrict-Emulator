@@ -2,14 +2,13 @@ package com.giant.demo.entities;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Queue;
 
 @Entity
 public class BatchRun {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int batchRunID;
-    @OneToMany
+    @Transient
     private List<Job> jobList;
     @Transient
     private int count;

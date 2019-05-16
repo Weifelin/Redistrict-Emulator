@@ -1,7 +1,9 @@
 package com.giant.demo.controllers;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.giant.demo.entities.Job;
+import com.giant.demo.jobObjects.*;
 import com.giant.demo.entities.Salt;
 import com.giant.demo.entities.User;
 import com.giant.demo.preprocessing.PreProcess;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -66,9 +69,24 @@ public class HomeController {
         //preProcess.loadPrecincts();
 //        geoJsonService.createGeoJson();
 
+        //generateJobJson();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
         return modelAndView;
+    }
+
+    private void generateJobJson() {
+        Compactness compactness = new Compactness(0.5, 0.1,0.2,0.3);
+        AfricanAmerican africanAmerican = new AfricanAmerican(34, 45);
+        Asian asian = new Asian(33, 37);
+        LatinAmerican latinAmerican = new LatinAmerican(33, 77);
+        Job job = new Job(compactness, 10, 0.5,0.6,0.7,4,africanAmerican,latinAmerican,asian);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File("testJson.json"), job);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    @GetMapping("/batch")
