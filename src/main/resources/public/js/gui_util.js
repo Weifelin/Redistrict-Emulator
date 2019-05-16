@@ -26,10 +26,22 @@ angular.module('GuiUtil')
 				},
 
 				isSelected: function(selectId, element) {
-					var select = angular.element("#" + selectId).scope();
+					var select = angular.element("#" + selectId).scope().$ctrl.select;
 					var selected = select.selected;
 					var selectType = typeof selected;
-					if (selectType == "string") {
+					switch(element) {
+						case "africanAmericanRange":
+							element = $rootScope.demographics.AFRICAN_AMERICAN;
+							break;
+						case "asianRange":
+							element = $rootScope.demographics.ASIAN;
+							break;
+						case "hispanicRange":
+							element = $rootScope.demographics.HISPANIC;
+							break;
+					}
+
+					if (selectType === "string") {
 						return (selected === element);
 					} else {
 						return selected.includes(element);
@@ -98,7 +110,6 @@ function parseGui(guiStructure, componentProp, url) {
 				for(var i = 0; i < guiStructure.actions.length; i++) {
 					var actionUrl = url.slice();
 					actionUrl.push(i);
-					console.log(guiStructure.actions[i]);
 					actions.push(parseGui(guiStructure.actions[i], componentProp, actionUrl));
 				}
 				

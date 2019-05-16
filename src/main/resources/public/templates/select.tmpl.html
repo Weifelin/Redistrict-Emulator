@@ -1,6 +1,6 @@
-<md-select ng-class="$ctrl.select.classes" ng-if="$eval($ctrl.select.ifClause) && $ctrl.select.multiSelect" layout="{{$ctrl.select.layout}}" layout-align="{{$ctrl.select.layoutAlign}}" placeholder="{{$ctrl.select.label}}" ng-model="$ctrl.select.selected" ng-change="$eval($ctrl.select.onChange)" multiple>
+<md-select id="{{$ctrl.select.id}}" ng-class="$ctrl.select.classes" ng-if="$eval($ctrl.select.ifClause) && $ctrl.select.multiSelect" layout="{{$ctrl.select.layout}}" layout-align="{{$ctrl.select.layoutAlign}}" placeholder="{{$ctrl.select.label}}" ng-model="$ctrl.select.selected" ng-change="$eval($ctrl.select.onChange)" multiple>
     <md-option ng-repeat="option in $ctrl.select.options | orderBy" ng-value="$index">{{option}}</md-option>
 </md-select>
-<md-select ng-class="$ctrl.select.classes" ng-if="$eval($ctrl.select.ifClause) && !$ctrl.select.multiSelect" layout="{{$ctrl.select.layout}}" layout-align="{{$ctrl.select.layoutAlign}}" placeholder="{{$ctrl.select.label}}" ng-model="$ctrl.select.selected" ng-change="$eval($ctrl.select.onChange)">
+<md-select id="{{$ctrl.select.id}}" ng-class="$ctrl.select.classes" ng-if="$eval($ctrl.select.ifClause) && !$ctrl.select.multiSelect" layout="{{$ctrl.select.layout}}" layout-align="{{$ctrl.select.layoutAlign}}" placeholder="{{$ctrl.select.label}}" ng-model="$ctrl.select.selected" ng-change="$eval($ctrl.select.onChange)">
     <md-option ng-repeat="option in $ctrl.select.options | orderBy" ng-value="$index">{{option}}</md-option>
 </md-select>
