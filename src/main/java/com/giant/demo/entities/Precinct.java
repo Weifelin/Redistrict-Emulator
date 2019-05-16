@@ -18,7 +18,7 @@ public class Precinct {
     private StateE state;
     private int population;
     private Race majority;
-    private String countyID;
+    private String countyID = "";
     @Lob
     @Column(columnDefinition = "LONGTEXT")
     private Geometry boundaries;
@@ -72,6 +72,7 @@ public class Precinct {
             maj = Race.Latin_American;
         }
         this.majority = maj;
+        this.countyID = countyID;
 
     }
 
@@ -188,5 +189,13 @@ public class Precinct {
 
     public void setCluster(Cluster cluster) {
         this.cluster = cluster;
+    }
+
+    public String getCountyID() {
+        return countyID;
+    }
+
+    public void setCountyID(String countyID) {
+        this.countyID = countyID;
     }
 }

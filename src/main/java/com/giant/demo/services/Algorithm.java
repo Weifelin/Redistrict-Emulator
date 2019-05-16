@@ -39,14 +39,16 @@ public class Algorithm {
         int level = 0;
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
-        int end = (int) (Math.log(job.getNumDistricts()));
+        int end = (int) (Math.log(12));//return back to normal - job.getNumDistricts()));
         int totalPop = 0;
         for(Cluster c : clusters)
             totalPop += c.getPopulation();
         for(int i =  start; i > end; i--){
+            int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
-                    ClusterEdge candidate = c.findClusterPair(clusters.size(), totalPop);
+                    ClusterEdge candidate = c.findClusterPair(numClusters, totalPop, job);
+
                     if(candidate != null){
                         candidatePairs.add(candidate);
                     }
@@ -59,10 +61,11 @@ public class Algorithm {
                 edge.getCluster1().level = level;
             }
             level++;
+            System.out.println("Number of Clusters: " + clusters.size());
         }
-        System.out.println("cluster #: " +clusters.size());
+        System.out.println("cluster #: " + clusters.size());
         realState = new State();
-        realState.setNumOfDistricts(job.getNumDistricts());
+        realState.setNumOfDistricts(12);//job.getNumDistricts());
         realState.setDistricts(clusters);
         realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
@@ -172,6 +175,7 @@ public class Algorithm {
             for(Precinct p : precincts.get(i).getNeighbours()){
                 int ID = p.getPrecinctID();
                 clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
+
             }
         }
     }

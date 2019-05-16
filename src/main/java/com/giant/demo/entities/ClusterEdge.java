@@ -1,5 +1,7 @@
 package com.giant.demo.entities;
 
+import com.giant.demo.enums.Race;
+
 public class ClusterEdge {
 
 
@@ -32,18 +34,24 @@ public class ClusterEdge {
     }
 
     //calculate joinability based of percentages from demographics
-    public double calculateJoinability(Demographics d){
+    public double calculateJoinability(Job j){
         //calculated the percentage of representation for each race.
         double score = 0.0;
         //African American
-        double aa = cluster1.getDemographics().getAfricanAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getAfricanAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
-        score += 1 / (aa - d.getAfricanAmerican());
+        if(j.getAfricanAmerican() != null) {
+            double aa = cluster1.getDemographics().getAfricanAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getAfricanAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+            score += aa;
+        }
         //Asian
-        double a = cluster1.getDemographics().getAsian() * cluster1.getPopulation() + cluster2.getDemographics().getAsian() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
-        score += 1 / (a - d.getAsian());
+        if(j.getAsian() != null) {
+            double a = cluster1.getDemographics().getAsian() * cluster1.getPopulation() + cluster2.getDemographics().getAsian() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+            score += a;
+        }
         //Latin American
-        double la = cluster1.getDemographics().getLatinAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getLatinAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
-        score += 1 / (la - d.getLatinAmerican());
+        if(j.getLatinAmerican() != null) {
+            double la = cluster1.getDemographics().getLatinAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getLatinAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
+            score += la;
+        }
         return score;
     }
 
@@ -69,6 +77,11 @@ public class ClusterEdge {
         this.cluster2 = cluster2;
     }
 
+    public double getJoinability(Job job) {
+        this.setJoinability(calculateJoinability(job));
+        return joinability;
+    }
+
     public double getJoinability() {
         return joinability;
     }
@@ -83,5 +96,9 @@ public class ClusterEdge {
 
     public void setEdgeID(int edgeID) {
         this.edgeID = edgeID;
+    }
+
+    public String toString(){
+        return "Edge: " + this.joinability;
     }
 }

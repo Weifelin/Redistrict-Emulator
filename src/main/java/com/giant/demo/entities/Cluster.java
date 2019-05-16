@@ -4,10 +4,7 @@ import com.giant.demo.enums.PartyPreference;
 import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Cluster {
@@ -25,7 +22,12 @@ public class Cluster {
     @OneToOne
     private Demographics demographics;
     private PartyPreference partyPreference;
+    @Transient
+    private Set<String> counties = new HashSet<>();
     private boolean isMajorityMinority;
+    private int numDemo;
+    private int numRep;
+    private int votes;
 
 
 
@@ -37,7 +39,14 @@ public class Cluster {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
         this.edges = new ArrayList<>();
-        this.population = containedPrecincts.get(0).getPopulation();
+        Precinct p = containedPrecincts.get(0);
+        this.population = p.getPopulation();
+        this.demographics = p.getDemogrpahics();
+        this.counties.add(p.getCountyID());
+        this.numDemo = p.getNumDemo();
+        this.numRep = p.getNumRep();
+        this.votes = p.getVotes();
+        this.boundary = p.getBoundaries();
     }
 
     public boolean mergeInto(Cluster c){
@@ -93,6 +102,8 @@ public class Cluster {
     public int getPopulation(){
         return this.population;
     }
+    public void setPopulation(int pop){ this.population = pop;}
+
 
     public List<ClusterEdge> getEdges() {
         return edges;
@@ -102,20 +113,22 @@ public class Cluster {
         this.edges.add(edge);
     }
 
-    public void setEdges(ArrayList<ClusterEdge> edges) {
+    public void setEdges(List<ClusterEdge> edges) {
         this.edges = edges;
     }
 
-    public List<ClusterEdge> combineEdges(List<ClusterEdge> edges){
-        for(ClusterEdge edge1 : this.edges){
-            for(ClusterEdge edge2 : edges){
+    public List<ClusterEdge> combineEdges(List<ClusterEdge> edges1, List<ClusterEdge> edges2){//return back to normal
+        List<ClusterEdge> temp = new ArrayList<>();
+        for(ClusterEdge edge1 : edges1){
+            for(ClusterEdge edge2 : edges2){
                 if(edge1.equals(edge2))
                     edge1.setJoinability((edge1.getJoinability() + edge2.getJoinability()) / 2);
                 else
-                    this.addEdge(edge2);
+                    temp.add(edge2);
             }
         }
-        return this.edges;
+        edges1.addAll(temp);
+        return edges1;
     }
 
     public void addPopulation(int pop){
@@ -124,21 +137,26 @@ public class Cluster {
 
     public void addPrecinct(Precinct p){
         this.addPopulation(p.getPopulation());
+        this.counties.add(p.getCountyID());
         this.containedPrecincts.add(p);
+        this.numDemo += p.getNumDemo();
+        this.numRep += p.getNumRep();
+        this.votes += p.getVotes();
+        this.boundary.union(p.getBoundaries());
     }
 
     public void sortEdges(){
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }
 
-    public ClusterEdge findClusterPair(int numClusters, int totalPop){
+    public ClusterEdge findClusterPair(int numClusters, int totalPop, Job j){
         double max = 0.0;
         ClusterEdge bestEdge = null;
-        double popUpperBound = totalPop / ((double)numClusters / 2.0);
+        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
         for(ClusterEdge e : this.edges){
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
-            if(combinePop <= popUpperBound && e.getJoinability() > max){
-                max = e.getJoinability();
+            if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
+                max = e.getJoinability(j);
                 bestEdge = e;
             }
         }
@@ -149,7 +167,9 @@ public class Cluster {
     public void combineCluster(Cluster c2){
         this.addPopulation(c2.getPopulation());
         this.containedPrecincts.addAll(c2.getContainedPrecincts());
-        this.combineEdges(c2.getEdges());
+        this.demographics.combine(c2.getDemographics());
+        List<ClusterEdge> edges = this.getEdges();
+        this.setEdges(combineEdges(edges, c2.getEdges()));
     }
 
     public int compareTo(Cluster c2){
@@ -184,5 +204,13 @@ public class Cluster {
                 return p;
         }
         return null;
+    }
+
+    public String toString(){
+        String ret = "ClusterID: " + clusterID +
+                "\nPopulation:  " + population +
+                "\nEdges: " + edges +
+                "\nPrecincts: " + containedPrecincts;
+        return ret;
     }
 }
