@@ -33,6 +33,7 @@ app.run(['$rootScope', '$cookies', '$http',
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
         $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.demographics = { AFRICAN_AMERICAN: 0, ASIAN: 1, HISPANIC: 2, WHITE: 3 };
+        $rootScope.loading = false;
         $rootScope.globalData = $cookies.get('globalData');
         if (!$rootScope.globalData || $rootScope.globalData == "[object Object]") {
             $rootScope.globalData = {
@@ -78,20 +79,24 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
                 $scope.usMap.$mdToast = $mdToast;
                 $scope.usMap.stateCallback = function(stateId, map) {
                     // Load precincts and districts, ensuring both load properly
+                    $rootScope.loading = true;
                     var precinctFetch = map.GeoDataService.loadStatePrecincts(stateId).query().$promise;
                     map.GeoDataService.loadStateDistricts(stateId).query().$promise
                         .then(function(districtGeoJSON) {
                             precinctFetch.then(function(precinctGeoJSON) {
                                 map.initDistricts(districtGeoJSON);
                                 map.initPrecincts(precinctGeoJSON);
+                                $rootScope.loading = false;
                             }, function() {
                                 map.$mdToast.showSimple("Could not load Precincts for " +
                                     map.uiInfo.selectedState + ".");
+                                $rootScope.loading = false;
                                 // Insert deselect state
                             });
                         }, function() {
                             map.$mdToast.showSimple("Could not load Districts for " +
                                                 map.uiInfo.selectedState + ".");
+                            $rootScope.loading = false;
                             // Insert deselect state
                         });
                 };

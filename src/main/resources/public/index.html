@@ -59,16 +59,22 @@
 	</head>
 	<body class="mapTest" ng-app="DistrictApp" ng-cloak>
 		<div ng-controller="AppCtrl as maplet" id="appShell" ng-cloak>
-      <app-menu content="content" component-prop="componentProp"></app-menu>
+            <app-menu content="content" component-prop="componentProp"></app-menu>
 
-      <!-- US Map -->
-      <div leaflet (leafletMapReady)="onMapReady($event)" layout="column" flex="100%" id="map"></div>
+            <!-- US Map -->
+            <div leaflet (leafletMapReady)="onMapReady($event)" layout="column" flex="100%" id="map"></div>
 
-      <span class="usernameSlot" ng-if="$rootScope.globalData.user.username != ''">
-          {{$rootScope.globalData.user.username}}
-      </span>
+            <span class="usernameSlot" ng-if="$rootScope.globalData.user.username != ''">
+                {{$rootScope.globalData.user.username}}
+            </span>
 
-      <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
-		</div>
+            <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
+
+            <!-- Loading wheel -->
+            <div ng-if="$rootScope.loading" class="loading" layout="row"
+                 layout-sm="column" layout-align="space-around">
+                <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="100%"></md-progress-circular>
+            </div>
+        </div>
 	</body>
 </html>
