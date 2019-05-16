@@ -104,9 +104,9 @@ class RangeMeasure extends SliderMeasure {
 		super(properties, id, label, tooltip, tooltipDir, min, max, step, value);
 
 		this.lowID = this.id + "Low";
-		this.lowSlider = new SliderMeasure(childProperties, this.lowID, "low", "", this.min, this.max, this.step, this.value);
+		this.lowSlider = new SliderMeasure(childProperties, this.lowID, "Min", "", "", this.min, this.max, this.step, this.value);
 		this.highID = this.id + "High";
-		this.highSlider = new SliderMeasure(childProperties, this.highID, "high", "", this.min, this.max, this.step, this.value);
+		this.highSlider = new SliderMeasure(childProperties, this.highID, "Max", "", "", this.min, this.max, this.step, this.value);
 		this.type="rangeMeasure";
 	}
 

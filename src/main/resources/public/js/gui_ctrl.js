@@ -82,8 +82,9 @@ angular.module('DistrictApp').component('slideMeasure', {
   }
 });
 
-function RangeMeasureController($scope, $element, $attrs) {
+function RangeMeasureController(GeneralUtilService, $scope, $element, $attrs) {
 	var ctrl = this;
+	$scope.GeneralUtilService = GeneralUtilService;
 }
 
 angular.module('DistrictApp').component('rangeMeasure', {
