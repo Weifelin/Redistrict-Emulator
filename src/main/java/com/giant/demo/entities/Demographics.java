@@ -31,6 +31,15 @@ public class Demographics{
         this.population = pop;
     }
 
+    public void combine(Demographics d){
+        int pop = this.population + d.getPopulation();
+        this.african_american = Math.round((this.african_american * this.population + d.getAfricanAmerican() * d.getPopulation()) / (double) pop * 100) / 100.0;
+        this.asian = Math.round((this.asian * this.population + d.getAsian() * d.getPopulation()) / (double) pop * 100) / 100.0;
+        this.latin_american = Math.round((this.latin_american * this.population + d.getLatinAmerican() * d.getPopulation()) / (double) pop * 100) / 100.0;
+        this.white = Math.round((this.white * this.population + d.getWhite() * d.getPopulation()) / (double) pop * 100) / 100.0;
+        this.other = Math.round((this.other * this.population + d.getOther() * d.getPopulation()) / (double) pop * 100) / 100.0;
+    }
+
     public double getAfricanAmerican(){
         return african_american;
     }
@@ -71,5 +80,14 @@ public class Demographics{
 
     public void setOther(double other) {
         this.other = other;
+    }
+
+    public String toString(){
+        return african_american + "\n" +
+                asian + "\n" +
+                latin_american + "\n" +
+                white + "\n" +
+                other + "\n";
+
     }
 }
