@@ -58,7 +58,7 @@ public class State {
     public Cluster eligibleCluster(Cluster c){
         Cluster min = c.getEdges().get(0).getCluster2();
         for(ClusterEdge e : c.getEdges()){
-            if(min.getPopulation() < e.getCluster2().getPopulation()){
+            if(min.getPopulation() > e.getCluster2().getPopulation()){
                 min = e.getCluster2();
             }
         }
@@ -67,13 +67,12 @@ public class State {
 
     //returns cluster with min population
     public Cluster minPopulation(){
-        System.out.println("num of dis: "+ this.districts.size());
         int min = 0;
         Cluster ret = null;
         for(Cluster c : this.districts){
             if(min == 0 || min > c.getPopulation()){
                 ret = c;
-                min = ret.getPopulation();
+                min = c.getPopulation();
             }
         }
         return ret;
