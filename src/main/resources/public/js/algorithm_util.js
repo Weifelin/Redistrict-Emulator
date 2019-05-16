@@ -4,6 +4,7 @@ angular.module('AlgoUtil')
         var service = this;
         service.formatData = function(data) {
             var result = {};
+            result["stateId"] = $rootScope.globalData.selectedState;
             result["numDistricts"] = data.mainControls.numDistrictInput;
             result["compactnessWeight"] = {
                 "polsPopSlider": data.measureTabs.compactnessTab.polsPopSlider,
