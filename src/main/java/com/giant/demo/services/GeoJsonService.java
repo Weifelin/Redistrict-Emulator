@@ -69,7 +69,7 @@ public class GeoJsonService {
         stringBuffer.append(tail);
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/NJGeoPrecincts.json")));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(new File("/Users/Red/Documents/GitHub/Giant/demo/src/main/resources/public/VAGeoPrecincts.json")));
             writer.write(stringBuffer.toString());
             writer.flush();
             writer.close();
