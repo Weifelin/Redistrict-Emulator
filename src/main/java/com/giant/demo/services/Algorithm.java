@@ -24,6 +24,7 @@ public class Algorithm {
     private Set<Cluster> clusters;
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
+    private Map<String, ClusterEdge> clusterEdgeMap;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
 
@@ -33,34 +34,38 @@ public class Algorithm {
     public Algorithm(){
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
+        this.clusterEdgeMap = new HashMap<>();
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
-        int level = 0;
-        candidatePairs = new ArrayList<ClusterEdge>();
-        int start = (int) (Math.log(clusters.size()) / Math.log(2));
-        int end = (int) (Math.log(12));//return back to normal - job.getNumDistricts()));
+        int level = 1;
+        candidatePairs = new ArrayList<>();
+        int start = (int) (Math.log(clusters.size()) / Math.log(2)) ;
+        int end = (int) (Math.log(12)) + 1;//return back to normal - job.getNumDistricts()));
         int totalPop = 0;
-        for(Cluster c : clusters)
+        for(Cluster c : clusters) {
             totalPop += c.getPopulation();
-        for(int i =  start; i > end; i--){
+            c.level = 0;
+        }
+        while((int) (Math.log(clusters.size()) / Math.log(2)) > end){
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
                     ClusterEdge candidate = c.findClusterPair(numClusters, totalPop, job);
 
-                    if(candidate != null){
+                    if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
+                        candidate.getCluster1().level = level + 1;
+                        candidate.getCluster2().level = level + 1;
                     }
                 }
             }
+            System.out.println("Number of Candidate pairs: " + candidatePairs.size());
             for(ClusterEdge edge : candidatePairs){
-                Cluster temp = edge.getCluster2();
+                edge.getCluster1().combineCluster(edge.getCluster2());
                 clusters.remove(edge.getCluster2());
-                edge.getCluster1().combineCluster(temp);
-                edge.getCluster1().level = level;
             }
-            candidatePairs = new ArrayList<ClusterEdge>();
+            candidatePairs = new ArrayList<>();
             level++;
             System.out.println("Number of Clusters: " + clusters.size());
         }
@@ -71,6 +76,10 @@ public class Algorithm {
         realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
+    }
+
+    public String createKey(int id1, int id2){
+        return id1 + "," + id2;
     }
 
 
@@ -175,8 +184,10 @@ public class Algorithm {
         for(int i = 0; i < precincts.size(); i++){
             for(Precinct p : precincts.get(i).getNeighbours()){
                 int ID = p.getPrecinctID();
-                clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
-
+                //clusters.get(i).getEdges().add();
+                //clusters.get(i).getClusterEdgeMap().put(ID, new ClusterEdge(clusters.get(i), tempC.get(ID)));
+                String key = createKey(clusters.get(i).getClusterID(), ID);
+                clusterEdgeMap.put(key, new ClusterEdge(clusters.get(i), tempC.get(ID)));
             }
         }
     }
@@ -315,4 +326,5 @@ public class Algorithm {
 
         return true;
     }
+
 }
