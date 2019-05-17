@@ -58,16 +58,6 @@ public class ObjectiveFunction {
         return (x - min) / (max - min);
     }
 
-    /*Normalize each measure but accessing the stored min and max that is observed during the duration of the algorithm*/
-    public void normalizedObjectiveFunction() {
-        setDemographicScore(normalize(getDemographicScore(), minScores.get(Measures.Demographics), maxScores.get(Measures.Demographics)));
-        setCompactnessScore(normalize(getCompactnessScore(), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness)));
-        setContiguity(normalize(getContiguity(), minScores.get(Measures.Contiguity), maxScores.get(Measures.Contiguity)));
-        setPopulationScore(normalize(getPopulationScore(), minScores.get(Measures.Population), maxScores.get(Measures.Population)));
-        setPartisanScore(normalize(getPartisanScore(), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)));
-    }
-
-
     //calculate the distance of x from the min and mx values
     public double distance(double x, Pair<Double, Double> pair) {
         double min = pair.getKey();
@@ -80,7 +70,7 @@ public class ObjectiveFunction {
     }
 
     //For each of the selected demographics the avg score per clusters is calculated
-    public double calculateDemographicScore() {
+    public double calculateDemographicScore() {/*
         double min = Double.POSITIVE_INFINITY, max = 0;
         double score = 0;
         int mmDistricts = 0;
@@ -112,8 +102,14 @@ public class ObjectiveFunction {
             if (white < demo.getLatinAmerican() || white < demo.getAsian() || white < demo.getAfricanAmerican())
                 mmDistricts++;
         }
+
         score = Math.pow(score, Math.abs(mmDistricts - this.state.getNumMinorityDistricts()));
         return score;
+
+        score = Math.pow(score, Math.abs(mmDistricts - this.state.getNumMinorityDistricts())));
+        return score;*/
+        return 0.0;
+
     }
 
     public double calculateCompactnessScore(Cluster c) {
@@ -220,7 +216,14 @@ public class ObjectiveFunction {
         }
         rWaste = numRExcess + numRLoss;
         dWaste = numDExcess + numDLoss;
-        return (numDemo > numRep) ? dWaste / numDemo : rWaste / numRep;
+        double score = (numDemo > numRep) ? dWaste / numDemo : rWaste / numRep;
+        if (score > maxScores.get(Measures.EfficiencyGap)) {
+            maxScores.put(Measures.EfficiencyGap, score);
+        }
+        if (score < minScores.get(Measures.EfficiencyGap)) {
+            minScores.put(Measures.EfficiencyGap, score);
+        }
+        return score;
     }
 
     //measure how close the population of each cluster is so being #people / # districts
@@ -236,14 +239,12 @@ public class ObjectiveFunction {
         return score;
     }
 
-    public double getScore() {
+    public double getScore(Cluster c) {
         double score = 0.0;
-        score += normalize(calculateCompactnessScore(), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
-//        score += calculateCompactnessScore() * j.getCompactnessWeight();
-//        score += calculateDemographicScore() * j.getDemographicsWeight();
-//        score += calculateParisanScore() * j.getPartisanWeight();
-//        score += calculatePopulationScore() * j.getPopulationWeight();
-//        score += calculateContiguity() * j.getContiguityWeight();
+        score += normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
+        score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
+        score += normalize(calculateParisanScore(), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
+        score += normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
         return score;
     }
 }

@@ -28,6 +28,7 @@ public class Algorithm {
     private SimpleClusterGroups simpleClusterGroups;
     private Map<String, ClusterEdge> clusterEdgeMap;
     private AlgorithmStatus status;
+    private ObjectiveFunction objectiveFunction;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
 
@@ -39,6 +40,7 @@ public class Algorithm {
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
         status = AlgorithmStatus.Free;
+        objectiveFunction = new ObjectiveFunction(job, realState);
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
