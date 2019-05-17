@@ -38,14 +38,10 @@ angular.module('AlgoUtil')
                 var url = "single-run";
                 var data = angular.element("#appShell").scope().content["singleRun"].packData();
                 data = service.formatData(data);
-                $http.post(url, data)
-                    .then(function(successResponse) {
-                        console.log(successResponse);
-                    }, function(errorResponse) {
-
-                    });
+                return $http.post(url, data);
             } else {
                 $mdToast.showSimple("State not selected.");
+                return false;
             }
         };
 
