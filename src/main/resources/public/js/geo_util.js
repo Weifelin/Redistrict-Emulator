@@ -1,6 +1,6 @@
 'use strict';
 angular.module('GeoUtil')
-    .factory('GeoDataService', function($resource) {
+    .factory('GeoDataService', function($rootScope, $resource) {
         var service = this;
         service.loadStates = function() {
             //var url = "/states";
@@ -21,7 +21,7 @@ angular.module('GeoUtil')
             });
         };
         service.loadStateDistricts = function(stateId) {
-            var url = "originalCongressionalDistricts.json";
+            var url = $rootScope.stateCode[stateId] + "CongressionalDistricts.json";
             return $resource(url, {}, {
                 query: {
                     method: "GET",
@@ -38,7 +38,8 @@ angular.module('GeoUtil')
             });
         };
         service.loadStatePrecincts = function(stateId) {
-            var url = "NJGeoPrecincts.json";
+            var url = $rootScope.stateCode[stateId] + "GeoPrecincts.json";
+
             return $resource(url, {}, {
                 query: {
                     method: "GET",
