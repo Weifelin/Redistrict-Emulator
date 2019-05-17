@@ -358,7 +358,7 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            double score = cluster.getObjectiveFunction().getScore(job); /*getScore needs to be fixed.*/
+            double score = cluster.getObjectiveFunction().getScore(); /*getScore needs to be fixed.*/
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
@@ -429,7 +429,7 @@ public class Algorithm {
         /*Normalize here*/
         from.getObjectiveFunction().normalizedObjectiveFunction();
         to.getObjectiveFunction().normalizedObjectiveFunction();
-        double originalScore = from.getObjectiveFunction().getScore(job)+to.getObjectiveFunction().getScore(job);
+        double originalScore = from.getObjectiveFunction().getScore()+to.getObjectiveFunction().getScore();
         excuteMove(move1);
         /*Update objective function*/
 

@@ -22,8 +22,9 @@ public class Cluster {
     @OneToOne
     private Demographics demographics;
     private PartyPreference partyPreference;
+
     @Transient
-    private Set<String> counties;
+    private Map<String, Integer> counties;
     private boolean isMajorityMinority;
     private int numDemo;
     private int numRep;
@@ -46,8 +47,8 @@ public class Cluster {
         Precinct p = containedPrecincts.get(0);
         this.population = p.getPopulation();
         this.demographics = p.getDemogrpahics();
-        this.counties = new HashSet<>();
-        this.counties.add(p.getCountyID());
+        this.counties = new HashMap<>();
+        this.counties.put(p.getCountyID(), 1);
         this.numDemo = p.getNumDemo();
         this.numRep = p.getNumRep();
         this.votes = p.getVotes();
@@ -65,11 +66,11 @@ public class Cluster {
 
     }
 
-    public Set<String> getCounties() {
+    public Map<String, Integer> getCounties() {
         return counties;
     }
 
-    public void setCounties(Set<String> counties) {
+    public void setCounties(Map<String, Integer> counties) {
         this.counties = counties;
     }
 
@@ -141,7 +142,13 @@ public class Cluster {
 
     public void addPrecinct(Precinct p){
         this.addPopulation(p.getPopulation());
-        this.counties.add(p.getCountyID());
+        if(this.counties.containsKey(p.getCountyID())){
+            int count = this.counties.get(p.getCountyID());
+            this.counties.replace(p.getCountyID(), count + 1);
+        }
+        else{
+            this.counties.put(p.getCountyID(), 1);
+        }
         this.containedPrecincts.add(p);
         this.numDemo += p.getNumDemo();
         this.numRep += p.getNumRep();
