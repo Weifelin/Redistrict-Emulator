@@ -38,7 +38,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/njprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/vaprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -56,14 +56,14 @@ public class PreProcess {
             String countyID = (String) p.get("county");
             String name = (String) p.get("name");
             Integer pop = Long.valueOf((long) p.get("pop")).intValue();
-            Integer votes = (int) (double) p.get("votes");
+            Integer votes = (int) (long) p.get("votes");
             Double demo = (double)p.get("demo") ;
             Double rep = (double) p.get("rep");
-            double africanAmerican = (double)p.get("africanAmerican") / (double)pop;
-            double asian = (double) p.get("asian") / (double)pop;
-            double latinAmerican = (double) p.get("latinAmerican") / (double)pop;
-            double white = (double) p.get("white") / (double)pop;
-            double other = (double) p.get("other") / (double)pop;
+            double africanAmerican = (long)p.get("africanAmerican") / (double)pop;
+            double asian = (long) p.get("asian") / (double)pop;
+            double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
+            double white = (long) p.get("white") / (double)pop;
+            double other = (long) p.get("other") / (double)pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
@@ -105,11 +105,11 @@ public class PreProcess {
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Geometry polygon = geometryFactory.createPolygon(coordinateSequence);
 
-            StateE stateE = StateE.NJ;
+            StateE stateE = StateE.VA;
 
-            if (stateE == StateE.VA){
-                polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
-            }
+//            if (stateE == StateE.VA){
+//                polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
+//            }
 
             //add county tp precint construvto
             Precinct precinct = new Precinct(precinctID, name, pop, votes, demo, rep, polygon, demographics, stateE, numbers, countyID);
@@ -127,7 +127,6 @@ public class PreProcess {
             for (int i=0; i<tempNs.length; i++) {
                 neighbors.add(precinctMap.get(tempNs[i]));
             }
-
             precinct.setNeighbours(neighbors);
             preprocessService.savePrecinct(precinct);
             System.out.println(counter++ + " out of " + allPrecincts.size());
