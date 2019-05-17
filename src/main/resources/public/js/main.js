@@ -108,8 +108,10 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
                 oldVal == $rootScope.programStates.FREE) {
                 $scope.usMap.initClusters();
                 var response = AlgorithmService.startSingleRun();
-                if (response !== false) {
+                console.log(response);
+                if (response) {
                     response.then(function(successResponse) {
+                        console.log(successResponse);
                         if(successResponse.data !== "") {
                             angular.forEach(response.data.simpleClusterGroups, function(cluster) {
                                var clusterID = cluster.clusterID;
