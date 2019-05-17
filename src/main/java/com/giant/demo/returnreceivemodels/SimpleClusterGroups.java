@@ -39,4 +39,11 @@ public class SimpleClusterGroups {
         this.state = state;
     }
 
+    public StateE getState() {
+        return state;
+    }
+
+    public void setSimpleClusterGourps(List<SingleClusterGroup> simpleClusterGourps) {
+        this.simpleClusterGourps = simpleClusterGourps;
+    }
 }
