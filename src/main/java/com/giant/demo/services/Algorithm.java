@@ -25,6 +25,7 @@ public class Algorithm {
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
 
+
     private static ConcurrentLinkedQueue<Move> moveQueue;
 
     @Autowired
@@ -36,29 +37,32 @@ public class Algorithm {
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
-        int level = 0;
+        int level = 1;
         candidatePairs = new ArrayList<ClusterEdge>();
         int start = (int) (Math.log(clusters.size()) / Math.log(2));
         int end = (int) (Math.log(12));//return back to normal - job.getNumDistricts()));
         int totalPop = 0;
-        for(Cluster c : clusters)
+        for(Cluster c : clusters) {
             totalPop += c.getPopulation();
+            c.level = 0;
+        }
         for(int i =  start; i > end; i--){
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
                     ClusterEdge candidate = c.findClusterPair(numClusters, totalPop, job);
 
-                    if(candidate != null){
+                    if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
+                        candidate.getCluster1().level = level + 1;
+                        candidate.getCluster2().level = level + 1;
                     }
                 }
             }
+            System.out.println("Number of Candidate pairs: " + candidatePairs.size());
             for(ClusterEdge edge : candidatePairs){
-                Cluster temp = edge.getCluster2();
+                edge.getCluster1().combineCluster(edge.getCluster2());
                 clusters.remove(edge.getCluster2());
-                edge.getCluster1().combineCluster(temp);
-                edge.getCluster1().level = level;
             }
             candidatePairs = new ArrayList<ClusterEdge>();
             level++;
@@ -176,7 +180,7 @@ public class Algorithm {
             for(Precinct p : precincts.get(i).getNeighbours()){
                 int ID = p.getPrecinctID();
                 clusters.get(i).getEdges().add(new ClusterEdge(clusters.get(i), tempC.get(ID)));
-
+                clusters.get(i).getClusterEdgeMap().put(ID, new ClusterEdge(clusters.get(i), tempC.get(ID)));
             }
         }
     }
@@ -259,4 +263,5 @@ public class Algorithm {
     private boolean testMove(Move move1) {
         return false;
     }
+
 }

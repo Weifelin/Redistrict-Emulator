@@ -10,7 +10,7 @@ import java.util.*;
 public class Cluster {
     @Id
     private int clusterID;
-    public int level = 0;
+    public int level;
     @OneToMany
     private List<Precinct> containedPrecincts;
     private Geometry boundary;
@@ -28,6 +28,8 @@ public class Cluster {
     private int numDemo;
     private int numRep;
     private int votes;
+    @Transient
+    private Map<Integer, ClusterEdge> clusterEdgeMap;
 
 
 
@@ -47,6 +49,7 @@ public class Cluster {
         this.numRep = p.getNumRep();
         this.votes = p.getVotes();
         this.boundary = p.getBoundaries();
+        this.level = 0;
     }
 
     public boolean mergeInto(Cluster c){
@@ -117,20 +120,12 @@ public class Cluster {
         this.edges = edges;
     }
 
-    public List<ClusterEdge> combineEdges(List<ClusterEdge> edges1, List<ClusterEdge> edges2){//return back to normal
-        List<ClusterEdge> temp = new ArrayList<>();
-        for(ClusterEdge edge1 : edges1){
-            for(ClusterEdge edge2 : edges2){
-                if(edge1.equals(edge2))
-                    edge1.setJoinability((edge1.getJoinability() + edge2.getJoinability()) / 2);
-                else {
-                    edge2.setCluster1(edge1.getCluster1());
-                    temp.add(edge2);
-                }
-            }
+    public void combineEdges(Cluster c2){//return back to normal
+        Set<Integer> keys = c2.getClusterEdgeMap().keySet();
+        for(int key : keys){
+
+            if()
         }
-        edges1.addAll(temp);
-        return edges1;
     }
 
     public void addPopulation(int pop){
@@ -170,8 +165,7 @@ public class Cluster {
         this.addPopulation(c2.getPopulation());
         this.containedPrecincts.addAll(c2.getContainedPrecincts());
         this.demographics.combine(c2.getDemographics());
-        List<ClusterEdge> edges = this.getEdges();
-        this.setEdges(combineEdges(edges, c2.getEdges()));
+        this.combineEdges(c2);
     }
 
     public int compareTo(Cluster c2){
@@ -214,5 +208,13 @@ public class Cluster {
                 "\nEdges: " + edges +
                 "\nPrecincts: " + containedPrecincts;
         return ret;
+    }
+
+    public Map<Integer, ClusterEdge> getClusterEdgeMap() {
+        return clusterEdgeMap;
+    }
+
+    public void setClusterEdgeMap(Map<Integer, ClusterEdge> clusterEdgeMap) {
+        this.clusterEdgeMap = clusterEdgeMap;
     }
 }
