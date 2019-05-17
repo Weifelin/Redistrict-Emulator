@@ -3,6 +3,7 @@ package com.giant.demo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.giant.demo.entities.Job;
+import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.entities.Salt;
@@ -155,6 +156,11 @@ public class HomeController {
 
     @PostMapping("/single-run")
     public SimpleClusterGroups singleRun(@RequestBody Job job){
+        if (algorithm.getStatus() == AlgorithmStatus.Running){
+            return null;
+        }
+
+        algorithm.lockAlgorithm();
         algorithm.setJob(job); /*Store job in algorithm until phase II. */
         algorithm.initializeClusters();
         return algorithm.graphPartition(algorithm.getClusters());
