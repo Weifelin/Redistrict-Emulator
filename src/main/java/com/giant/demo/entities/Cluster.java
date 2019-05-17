@@ -215,4 +215,8 @@ public class Cluster {
                 "\nPrecincts: " + containedPrecincts;
         return ret;
     }
+
+    public double rateDistrict() {
+        return -1;
+    }
 }
