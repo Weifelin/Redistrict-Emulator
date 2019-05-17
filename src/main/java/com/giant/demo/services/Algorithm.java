@@ -8,6 +8,7 @@ import com.giant.demo.entities.Job;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.SingleClusterGroup;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class Algorithm {
     private SimpleClusterGroups simpleClusterGroups;
     private Map<String, ClusterEdge> clusterEdgeMap;
     private AlgorithmStatus status;
+    private ObjectiveFunction objectiveFunction;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
 
@@ -39,6 +41,7 @@ public class Algorithm {
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
         status = AlgorithmStatus.Free;
+        //objectiveFunction = new ObjectiveFunction(job, realState);
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
@@ -363,7 +366,7 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            double score = cluster.getObjectiveFunction().getScore(); /*getScore needs to be fixed.*/
+            double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
@@ -432,9 +435,9 @@ public class Algorithm {
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
         /*Normalize here*/
-        from.getObjectiveFunction().normalizedObjectiveFunction();
-        to.getObjectiveFunction().normalizedObjectiveFunction();
-        double originalScore = from.getObjectiveFunction().getScore()+to.getObjectiveFunction().getScore();
+//        from.getObjectiveFunction().normalizedObjectiveFunction();
+//        to.getObjectiveFunction().normalizedObjectiveFunction();
+        double originalScore = objectiveFunction.getScore(from)+objectiveFunction.getScore(to);
         excuteMove(move1);
         /*Update objective function*/
 

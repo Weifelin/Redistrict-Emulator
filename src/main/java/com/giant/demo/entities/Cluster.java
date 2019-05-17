@@ -159,7 +159,20 @@ public class Cluster {
     public void removePrecinct(Precinct precinct){
         if (containedPrecincts.contains(precinct)){
             this.population -= precinct.getPopulation();
-            
+            /*county operation*/
+            if(counties.get(precinct.getCountyID()) > 1){
+                counties.replace(precinct.getCountyID(), counties.get(precinct.getCountyID()) - 1);
+            }
+            else{
+                counties.remove(precinct.getCountyID());
+            }
+            containedPrecincts.remove(precinct);
+            numDemo -= precinct.getNumDemo();
+            numRep -= precinct.getNumRep();
+            votes -= precinct.getVotes();
+            /*boundary operation*/
+            boundary = boundary.difference(precinct.getBoundaries());
+
         }
     }
 
@@ -172,6 +185,9 @@ public class Cluster {
     public void combineCluster(Cluster c2){
         this.addPopulation(c2.getPopulation());
         this.containedPrecincts.addAll(c2.getContainedPrecincts());
+        for(Precinct precinct : c2.getContainedPrecincts()){
+            this.addPrecinct(precinct);
+        }
         this.demographics.combine(c2.getDemographics());
     }
 
