@@ -54,7 +54,7 @@ app.run(['$rootScope', '$cookies', '$http',
         }
 }]);
 
-app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, $mdToast) {
+app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $scope, $rootScope, $mdToast) {
     	var ctrl = this;
     	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
@@ -107,6 +107,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
                 $scope.usMap.initClusters();
+                AlgorithmService.startSingleRun();
             }
         });
 });
