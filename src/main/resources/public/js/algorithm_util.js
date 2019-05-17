@@ -41,7 +41,7 @@ angular.module('AlgoUtil')
                 return $http.post(url, data);
             } else {
                 $mdToast.showSimple("State not selected.");
-                return false;
+                return null;
             }
         };
 
