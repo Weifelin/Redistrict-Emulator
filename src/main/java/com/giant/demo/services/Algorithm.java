@@ -10,6 +10,7 @@ import com.giant.demo.returnreceivemodels.SingleClusterGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Transient;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -24,6 +25,7 @@ public class Algorithm {
     private Set<Cluster> clusters;
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
+    @Transient
     private Map<String, ClusterEdge> clusterEdgeMap;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
@@ -32,26 +34,27 @@ public class Algorithm {
     private PrecinctRepository precinctRepository;
 
     public Algorithm(){
+        this.clusterEdgeMap = new HashMap<>();
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
-        this.clusterEdgeMap = new HashMap<>();
+
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
         int level = 1;
         candidatePairs = new ArrayList<>();
-        int start = (int) (Math.log(clusters.size()) / Math.log(2)) ;
-        int end = (int) (Math.log(12)) + 1;//return back to normal - job.getNumDistricts()));
+        //int start = (int) (Math.log(clusters.size()) / Math.log(2)) ;
+        int end = (int) (Math.log(job.getNumDistricts())) + 1;//return back to normal - job.getNumDistricts()));
         int totalPop = 0;
         for(Cluster c : clusters) {
             totalPop += c.getPopulation();
             c.level = 0;
         }
-        while((int) (Math.log(clusters.size()) / Math.log(2)) > end){
+        while((int) (Math.log(clusters.size()) / Math.log(2)) > end+1){
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
-                    ClusterEdge candidate = c.findClusterPair(numClusters, totalPop, job);
+                    ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
 
                     if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
@@ -60,26 +63,141 @@ public class Algorithm {
                     }
                 }
             }
-            System.out.println("Number of Candidate pairs: " + candidatePairs.size());
+            if(candidatePairs.size() == 0)
+                break;
             for(ClusterEdge edge : candidatePairs){
                 edge.getCluster1().combineCluster(edge.getCluster2());
+                combineEdges(edge);
                 clusters.remove(edge.getCluster2());
             }
             candidatePairs = new ArrayList<>();
             level++;
-            System.out.println("Number of Clusters: " + clusters.size());
         }
-        System.out.println("cluster #: " + clusters.size());
+        Set<String> keys  = clusterEdgeMap.keySet();
+        clusters = toDistrict(clusters, job.getNumDistricts());
         realState = new State();
-        realState.setNumOfDistricts(12);//job.getNumDistricts());
+        realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);
-        realState.toDistrict();
+        //realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
 
+    public ClusterEdge findClusterPair(Cluster c, int numClusters, int totalPop, Job j){
+        double max = 0.0;
+        ClusterEdge bestEdge = null;
+        Set<String> badKeys = new HashSet<>();
+        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
+        for(String key : c.getEdgeIDs()){
+            ClusterEdge e = clusterEdgeMap.get(key);
+            int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
+            if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
+                max = e.getJoinability(j);
+                bestEdge = e;
+            }
+        }
+        return bestEdge;
+    }
+
+    public void combineEdges(ClusterEdge edge){//return back to normal
+        Cluster c1 = edge.getCluster1();
+        Cluster c2 = edge.getCluster2();
+        String ey = createKey(c1.getClusterID(), c2.getClusterID());
+        c2.removeEdgeID(ey);
+        clusterEdgeMap.remove(ey);
+        c1.removeEdgeID(ey);
+        for(String key : c2.getEdgeIDs()){
+            ClusterEdge e2 = clusterEdgeMap.get(key);
+            if(e2 != null) {
+                if (c2.equalsC(e2.getCluster1())) {
+                    String k = createKey(c1.getClusterID(), e2.getCluster2().getClusterID());
+                    clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster2()));
+                    e2.getCluster2().removeEdgeID(key);
+                    e2.getCluster2().addEdgeID(k);
+                    c1.addEdgeID(k);
+                } else {
+                    String k = createKey(c1.getClusterID(), e2.getCluster1().getClusterID());
+                    clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster1()));
+                    e2.getCluster1().removeEdgeID(key);
+                    e2.getCluster1().addEdgeID(k);
+                    c1.addEdgeID(k);
+                }
+            }
+            clusterEdgeMap.remove(key);
+        }
+    }
+
+
+    //makes sure the number of districts equals the number specified
+    public Set<Cluster> toDistrict(Set<Cluster> clusters, int numOfDistricts){
+        while(clusters.size() != numOfDistricts){
+            Cluster breakdown = minPopulation(clusters);  /* <---- this returns null*/
+            System.out.println(breakdown.getEdgeIDs());
+            breakCluster(breakdown);
+            for(String key : breakdown.getEdgeIDs()){
+                clusterEdgeMap.remove(key);
+            }
+            clusters.remove(breakdown);
+        }
+        int i = 0;
+        for(Cluster c : clusters){
+            c.setClusterID(i++);/*Normalizing data.*/
+        }
+        return clusters;
+    }
+
+    //send each precinct to neighbor with lowest population
+    public void breakCluster(Cluster c){
+        System.out.println(c.getEdgeIDs());
+        for(Precinct p : c.getContainedPrecincts()){
+            Cluster neighbor = eligibleCluster(c);
+            neighbor.addPrecinct(p);
+        }
+    }
+
+    //finds adjacent cluster with smallest population
+    public Cluster eligibleCluster(Cluster c){
+        Cluster min = null;//terEdgeMap.get(c.getEdgeIDs());
+        int pop = 0;
+        for(String key : c.getEdgeIDs()){
+            ClusterEdge e = clusterEdgeMap.get(key);
+
+            Cluster c2 = e.getCluster1();
+            if(c.equals(c2))
+                c2 = e.getCluster2();
+            if(min == null || pop > c2.getPopulation()){
+                pop = c2.getPopulation();
+                min = c2;
+            }
+        }
+        return min;
+    }
+
+    //returns cluster with min population
+    public Cluster minPopulation(Set<Cluster> clusters){
+        int min = 0;
+        Cluster ret = null;
+        for(Cluster c : clusters){
+            if(min == 0 || min > c.getPopulation()){
+                ret = c;
+                min = c.getPopulation();
+            }
+        }
+        return ret;
+    }
+
+
     public String createKey(int id1, int id2){
-        return id1 + "," + id2;
+        int min, max;
+        if(id1 <= id2){
+            min = id1;
+            max = id2;
+        }
+        else{
+            min = id2;
+            max= id1;
+        }
+        return min + "," + max;
     }
 
 
@@ -188,6 +306,7 @@ public class Algorithm {
                 //clusters.get(i).getClusterEdgeMap().put(ID, new ClusterEdge(clusters.get(i), tempC.get(ID)));
                 String key = createKey(clusters.get(i).getClusterID(), ID);
                 clusterEdgeMap.put(key, new ClusterEdge(clusters.get(i), tempC.get(ID)));
+                clusters.get(i).addEdgeID((key));
             }
         }
     }
