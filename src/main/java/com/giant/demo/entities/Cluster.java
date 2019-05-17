@@ -123,8 +123,10 @@ public class Cluster {
             for(ClusterEdge edge2 : edges2){
                 if(edge1.equals(edge2))
                     edge1.setJoinability((edge1.getJoinability() + edge2.getJoinability()) / 2);
-                else
+                else {
+                    edge2.setCluster1(edge1.getCluster1());
                     temp.add(edge2);
+                }
             }
         }
         edges1.addAll(temp);

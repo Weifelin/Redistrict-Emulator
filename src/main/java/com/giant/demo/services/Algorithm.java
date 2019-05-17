@@ -60,6 +60,7 @@ public class Algorithm {
                 edge.getCluster1().combineCluster(temp);
                 edge.getCluster1().level = level;
             }
+            candidatePairs = new ArrayList<ClusterEdge>();
             level++;
             System.out.println("Number of Clusters: " + clusters.size());
         }
