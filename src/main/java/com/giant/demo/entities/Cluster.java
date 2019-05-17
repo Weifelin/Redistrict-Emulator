@@ -50,6 +50,7 @@ public class Cluster {
         this.votes = p.getVotes();
         this.boundary = p.getBoundaries();
         this.level = 0;
+        this.clusterEdgeMap = new HashMap<>();
     }
 
     public boolean mergeInto(Cluster c){
@@ -121,10 +122,16 @@ public class Cluster {
     }
 
     public void combineEdges(Cluster c2){//return back to normal
+
         Set<Integer> keys = c2.getClusterEdgeMap().keySet();
         for(int key : keys){
-
-            if()
+            c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().remove(c2.getClusterID());
+            //if(!this.getClusterEdgeMap().containsKey(c2.getClusterEdgeMap().get(key).getCluster2().getClusterID())){
+                //ClusterEdge edge = new ClusterEdge(c2.getClusterEdgeMap().get(key).getCluster2(), this);
+                //c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().put(c2.getClusterEdgeMap().get(key).getCluster1().getClusterID(), edge);
+                //this.getClusterEdgeMap().put(c2.getClusterEdgeMap().get(key).getCluster2().getClusterID(), new ClusterEdge(this, c2.getClusterEdgeMap().get(key).getCluster2()));
+           // }
+            c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().remove(c2.getClusterID());
         }
     }
 
