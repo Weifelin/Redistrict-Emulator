@@ -350,10 +350,11 @@ function Map(info) {
 		// Update info control based on feature properties
 		maplet.stateInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>State Metrics</h4>' +  (props ?
-				'<i>' + props.NAME + '</i><br />' + props.CENSUSAREA + ' people / mi<sup>2</sup>' +
-				'<br />' + props.STATE + ' districts'
+				'<i>' + props.NAME + '</i><br />' +
+				'Population: ' + formatNumber(props.population) + '<br />' +
+				'Number of Districts: ' + formatNumber(props.numDistricts) + '<br />' +
+				'Number of Precincts: ' + formatNumber(props.numPrecincts)
 				: 'Hover over a state');
-			this._div.innerHTML += '<br>Zoom: ' + maplet.map.getZoom();
 		};
 
 		//maplet.stateInfoCtrl.addTo(maplet.map);
@@ -379,7 +380,17 @@ function Map(info) {
 		// Update info control based on feature properties
 		maplet.disInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>District Metrics</h4>' +  (props ?
-				'District Number: ' + props.DISTRICT
+				'<i>District ' + props.DISTRICT + "</i><br />" +
+				'Population: ' + formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'<h6>Demographic Distribution</h6>' +
+				'White: ' + formatPercent(props.white) + '<br />' +
+				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + formatPercent(props.other) + '<br />'
 				: 'Hover over a district');
 		};
 
@@ -411,9 +422,11 @@ function Map(info) {
 				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
 				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
 				'<h6>Demographic Distribution</h6>' +
+				'White: ' + formatPercent(props.white) + '<br />' +
 				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
 				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
-				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />'
+				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + formatPercent(props.other) + '<br />'
 				: 'Hover over a precinct');
 		};
 
@@ -445,9 +458,11 @@ function Map(info) {
 				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
 				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
 				'<h6>Demographic Distribution</h6>' +
+				'White: ' + formatPercent(props.white) + '<br />' +
 				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
 				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
-				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />'
+				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + formatPercent(props.other) + '<br />'
 				: 'Hover over a cluster');
 		};
 
