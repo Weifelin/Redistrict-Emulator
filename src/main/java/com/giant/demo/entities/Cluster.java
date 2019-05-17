@@ -152,7 +152,13 @@ public class Cluster {
     public void removePrecinct(Precinct precinct){
         if (containedPrecincts.contains(precinct)){
             this.population -= precinct.getPopulation();
-            
+            /*county operation*/
+            containedPrecincts.remove(precinct);
+            numDemo -= precinct.getNumDemo();
+            numRep -= precinct.getNumRep();
+            votes -= precinct.getVotes();
+            /*boundary operation*/
+
         }
     }
 
