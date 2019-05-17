@@ -23,7 +23,7 @@ public class Cluster {
     private Demographics demographics;
     private PartyPreference partyPreference;
     @Transient
-    private Set<String> counties = new HashSet<>();
+    private Set<String> counties;
     private boolean isMajorityMinority;
     private int numDemo;
     private int numRep;
@@ -46,6 +46,7 @@ public class Cluster {
         Precinct p = containedPrecincts.get(0);
         this.population = p.getPopulation();
         this.demographics = p.getDemogrpahics();
+        this.counties = new HashSet<>();
         this.counties.add(p.getCountyID());
         this.numDemo = p.getNumDemo();
         this.numRep = p.getNumRep();
@@ -62,6 +63,14 @@ public class Cluster {
 
     public void destory(){
 
+    }
+
+    public Set<String> getCounties() {
+        return counties;
+    }
+
+    public void setCounties(Set<String> counties) {
+        this.counties = counties;
     }
 
     public boolean updateBoundary(){
