@@ -194,6 +194,11 @@ public class Cluster {
         return ret;
     }
 
+
+    public double rateDistrict() {
+        return -1;
+    }
+
     public Map<Integer, ClusterEdge> getClusterEdgeMap() {
         return clusterEdgeMap;
     }

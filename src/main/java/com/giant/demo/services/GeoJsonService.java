@@ -1,6 +1,7 @@
 package com.giant.demo.services;
 
 import com.giant.demo.entities.Precinct;
+import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class GeoJsonService {
     public void createGeoJson(){
 
         StringBuffer stringBuffer = new StringBuffer();
-        List<Precinct> precinctList = precinctRepository.findAll();
+        List<Precinct> precinctList = precinctRepository.findAllByState(StateE.VA);
         ListIterator<Precinct> iterator = precinctList.listIterator();
 
         String head = "{" + "\n" + "\"type:\": \"FeatureCollection\",\n"+"\"features\": [";

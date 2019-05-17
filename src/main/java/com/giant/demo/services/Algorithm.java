@@ -219,14 +219,14 @@ public class Algorithm {
                     if (precinct.getCluster().getClusterID() != neighour.getCluster().getClusterID()){
                         Move move1 = new Move(precinct, precinct.getCluster(), neighour.getCluster());
                         if (testMove(move1)){ /* */
-                            excuteMove(move1); /**/
+                            //excuteMove(move1); /* executed in testMove*/
                             foundMove = true;
                             moveQueue.add(move1);
                             break;
                         }else {
                             Move move2 = new Move(neighour, neighour.getCluster(), precinct.getCluster());
                             if (testMove(move2)){
-                                excuteMove(move2);
+                                //excuteMove(move2);
                                 foundMove = true;
                                 moveQueue.add(move2);
                             }
@@ -394,17 +394,56 @@ public class Algorithm {
     }*/
 
     private void excuteMove(Move move1) {
+        Cluster from = move1.getFrom();
+        Cluster to = move1.getTo();
+        Precinct precinct = move1.getPrecinct();
+
+        from.getContainedPrecincts().remove(precinct); /*Make method inside Cluster.*/
+        /*
+         * geometry operation
+         * population operation
+         * demographics operation
+         * party preferences.
+         *
+         */
+
+        to.getContainedPrecincts().add(precinct);
+
+        /*
+         * geometry operation
+         * population operation
+         * demographics operation
+         * party preferences.
+         *
+         */
+
+        /*change reflected inside the realState. So the state */
     }
 
     private boolean testMove(Move move1) {
         Cluster from = move1.getFrom();
         Cluster to = move1.getTo();
-
+        Precinct precinct = move1.getPrecinct();
+        /*Normalize here*/
+        from.getObjectiveFunction().normalizedObjectiveFunction();
+        to.getObjectiveFunction().normalizedObjectiveFunction();
         double originalScore = from.getObjectiveFunction().getScore(job)+to.getObjectiveFunction().getScore(job);
+        excuteMove(move1);
+        /*Update objective function*/
 
+        double fromScore = from.rateDistrict(); /*need to be implemented*/
+        double toScore = to.rateDistrict();
 
+        double finalScore = fromScore + toScore;
+        double change = finalScore - originalScore;
+        if (change <= 0){
+            /*undo*/
+            Move undo = new Move(precinct, to, from);
+            excuteMove(undo);
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
 }

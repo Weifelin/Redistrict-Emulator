@@ -484,7 +484,7 @@ function Map(info) {
 		for (var i = numRepr.length - 1; i >= 0; i--) {
 			if (gapCount == 0) {
 				result = numRepr[i] + ',' + result;
-				gapCount = commaGap;
+				gapCount = commaGap - 1;
 			} else {
 				result = numRepr[i] + result;
 				gapCount--;

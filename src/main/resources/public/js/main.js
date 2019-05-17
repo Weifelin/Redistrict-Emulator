@@ -33,6 +33,7 @@ app.run(['$rootScope', '$cookies', '$http',
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
         $rootScope.programStates = { FREE: 0, RUNNING: 1 };
         $rootScope.demographics = { AFRICAN_AMERICAN: 0, ASIAN: 1, HISPANIC: 2, WHITE: 3 };
+        $rootScope.stateCode = { 0: "NJ", 1: "VA", 2: "WI" };
         $rootScope.loading = false;
         $rootScope.globalData = $cookies.get('globalData');
         if (!$rootScope.globalData || $rootScope.globalData == "[object Object]") {
