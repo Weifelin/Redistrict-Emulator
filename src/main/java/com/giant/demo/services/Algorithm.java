@@ -1,6 +1,7 @@
 package com.giant.demo.services;
 
 import com.giant.demo.entities.*;
+import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.entities.Job;
@@ -25,8 +26,8 @@ public class Algorithm {
     private Set<Cluster> clusters;
     private Job job;
     private SimpleClusterGroups simpleClusterGroups;
-    @Transient
     private Map<String, ClusterEdge> clusterEdgeMap;
+    private AlgorithmStatus status;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
 
@@ -37,13 +38,14 @@ public class Algorithm {
         this.clusterEdgeMap = new HashMap<>();
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
-
+        status = AlgorithmStatus.Free;
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
         int level = 1;
         candidatePairs = new ArrayList<>();
         int end = (int) (Math.log(job.getNumDistricts())) + 1;
+        System.out.println("end: "+end);
         int totalPop = 0;
         for(Cluster c : clusters) {
             totalPop += c.getPopulation();
@@ -53,6 +55,7 @@ public class Algorithm {
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
+                    System.out.println("c is : \n "+c.toString());
                     ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
                     if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
@@ -86,6 +89,7 @@ public class Algorithm {
         ClusterEdge bestEdge = null;
         double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
         for(String key : c.getEdgeIDs()){
+
             ClusterEdge e = clusterEdgeMap.get(key);
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
             if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
@@ -449,4 +453,16 @@ public class Algorithm {
         return true;
     }
 
+
+    public void freeAlgorithm(){
+        this.status = AlgorithmStatus.Free;
+    }
+
+    public void lockAlgorithm(){
+        this.status = AlgorithmStatus.Running;
+    }
+
+    public AlgorithmStatus getStatus() {
+        return status;
+    }
 }

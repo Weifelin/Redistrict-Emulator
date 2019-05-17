@@ -21,18 +21,18 @@ public class SimpleClusterGroups {
 
     private StateE state;
 
-    private List<SingleClusterGroup> simpleClusterGourps;
+    private List<SingleClusterGroup> simpleClusterGroups;
 
     public SimpleClusterGroups() {
-        simpleClusterGourps = new ArrayList<>();
+        simpleClusterGroups = new ArrayList<>();
     }
 
     public List<SingleClusterGroup> getSimpleClusterGourps() {
-        return simpleClusterGourps;
+        return simpleClusterGroups;
     }
 
     public void addClusterGroup(SingleClusterGroup singleClusterGroup){
-        simpleClusterGourps.add(singleClusterGroup);
+        simpleClusterGroups.add(singleClusterGroup);
     }
 
     public void setState(StateE state) {
@@ -43,7 +43,7 @@ public class SimpleClusterGroups {
         return state;
     }
 
-    public void setSimpleClusterGourps(List<SingleClusterGroup> simpleClusterGourps) {
-        this.simpleClusterGourps = simpleClusterGourps;
+    public void setSimpleClusterGourps(List<SingleClusterGroup> simpleClusterGroups) {
+        this.simpleClusterGroups = simpleClusterGroups;
     }
 }
