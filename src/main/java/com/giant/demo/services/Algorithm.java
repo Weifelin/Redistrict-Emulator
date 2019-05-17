@@ -58,7 +58,7 @@ public class Algorithm {
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
-                    System.out.println("c is : \n "+c.toString());
+                    //System.out.println("c is : \n "+c.toString());
                     ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
                     if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
@@ -83,6 +83,7 @@ public class Algorithm {
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);
         realState.setState(job.getStateE());
+        System.out.println("Graph Partition has been finished.");
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
@@ -337,6 +338,7 @@ public class Algorithm {
             groups.addClusterGroup(districtToSingleClusterGroup(district));
         }
         groups.setState(realState.getState());
+        System.out.println("Returning clusters.");
         return groups;
     }
 
