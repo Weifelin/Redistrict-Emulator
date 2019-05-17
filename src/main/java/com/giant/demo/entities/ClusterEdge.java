@@ -62,7 +62,9 @@ public class ClusterEdge {
         counties2.remove(null);
         Set<String> counties3 = counties1;
         counties3.retainAll(counties2);
-        counties1.addAll(counties2);
+        for(String str : counties2){
+            counties1.add(str);
+        }
         score += 3 * (counties3.size() / (counties1.size() + 1));
         return score;
     }
