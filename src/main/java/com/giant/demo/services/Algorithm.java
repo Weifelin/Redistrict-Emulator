@@ -160,7 +160,7 @@ public class Algorithm {
 
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
-        List<Precinct> allPrecinct =  precinctRepository.findAll();
+        List<Precinct> allPrecinct =  precinctRepository.findAllByState(job.getStateE());
         System.out.println("allPrecincts: " + allPrecinct.size());
         System.out.println(allPrecinct.get(1).toString());
         List<Cluster> clusterList = new ArrayList<>();

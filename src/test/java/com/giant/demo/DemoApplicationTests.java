@@ -67,7 +67,7 @@ public class DemoApplicationTests {
 
 		//Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
 		//algorithm.setJob(job); /*Store job in algorithm until phase II. */
-		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60));
+		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
 		algorithm.setJob(job);
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
