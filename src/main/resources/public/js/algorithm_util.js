@@ -1,6 +1,6 @@
 'use strict';
 angular.module('AlgoUtil')
-    .factory('AlgorithmService', function($rootScope, $mdToast) {
+    .factory('AlgorithmService', function($rootScope, $mdToast, $http) {
         var service = this;
         service.formatData = function(data) {
             var result = {};
