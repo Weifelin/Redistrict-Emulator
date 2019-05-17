@@ -73,7 +73,7 @@ public class DemoApplicationTests {
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			mapper.writeValue(new File("testJson.json"), simpleClusterGroups);
+			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -84,7 +84,7 @@ public class HomeController {
         Job job = new Job(compactness, 10, 0.5,0.6,0.7,4,africanAmerican,latinAmerican,asian, StateE.NJ);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(new File("testJson.json"), job);
+            mapper.writeValue(new File("job.json"), job);
         } catch (IOException e) {
             e.printStackTrace();
         }
