@@ -76,6 +76,7 @@ public class Algorithm {
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);
+        realState.setState(job.getStateE());
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
@@ -129,10 +130,17 @@ public class Algorithm {
         while(clusters.size() != numOfDistricts){
             Cluster breakdown = minPopulation(clusters);  /* <---- this returns null*/
             breakCluster(breakdown);
+            clusters.remove(breakdown);
             for(String key : breakdown.getEdgeIDs()){
                 clusterEdgeMap.remove(key);
+                for(Cluster c : clusters){
+                    if(c.getEdgeIDs().contains(key)){
+                        c.removeEdgeID(key);
+                        break;
+                    }
+                }
             }
-            clusters.remove(breakdown);
+
         }
         int i = 0;
         for(Cluster c : clusters){
@@ -320,6 +328,7 @@ public class Algorithm {
             Cluster district = iterator.next();
             groups.addClusterGroup(districtToSingleClusterGroup(district));
         }
+        groups.setState(realState.getState());
         return groups;
     }
 
