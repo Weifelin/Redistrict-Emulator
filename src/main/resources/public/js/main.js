@@ -107,8 +107,6 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
                 $scope.usMap.initClusters();
-                $scope.usMap.moveCluster(4807, 4807, 747);
-                $scope.usMap.moveCluster(4729, 4729, 747);
             }
         });
 });
