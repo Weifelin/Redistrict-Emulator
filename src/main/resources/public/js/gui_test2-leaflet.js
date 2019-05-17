@@ -40,6 +40,10 @@ function Map(info) {
 	};
 
 	maplet.initDistricts = function(districtGeoJSON) {
+		if (maplet.districtLayer) {
+			maplet.layers.removeLayer(maplet.districtLayer);
+			maplet.layerCtrl.removeLayer(maplet.districtLayer);
+		}
 		maplet.genColorList(districtGeoJSON.features.length);
 		maplet.districtLayer = new L.geoJSON(districtGeoJSON, {
 			style: districtStyle,
@@ -50,6 +54,10 @@ function Map(info) {
 	};
 
 	maplet.initPrecincts = function(precinctGeoJSON) {
+		if (maplet.precinctLayer) {
+			maplet.layers.removeLayer(maplet.precinctLayer);
+			maplet.layerCtrl.removeLayer(maplet.precinctLayer);
+		}
 		maplet.precinctLayer = new L.geoJSON(precinctGeoJSON, {
 			style: precinctStyle,
 			onEachFeature: onEachPrecinct
@@ -65,6 +73,10 @@ function Map(info) {
 	};
 
 	maplet.initClusters = function() {
+		if (maplet.clusterLayer) {
+			maplet.layers.removeLayer(maplet.clusterLayer);
+			maplet.layerCtrl.removeLayer(maplet.clusterLayer);
+		}
 		var decimalPrecision = 6;
 		var initialGeoJSON = maplet.precinctLayer.toGeoJSON(decimalPrecision);
 		maplet.clusterLayer = new L.geoJSON(initialGeoJSON, {
