@@ -336,7 +336,7 @@ public class Algorithm {
             groups.addClusterGroup(districtToSingleClusterGroup(district));
         }
         groups.setState(realState.getState());
-        System.out.println("Returning clusters.");
+        System.out.println("Returning clusters: " + realState.getState().toString());
         return groups;
     }
 
