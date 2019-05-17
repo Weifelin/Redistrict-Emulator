@@ -160,6 +160,12 @@ public class Cluster {
         if (containedPrecincts.contains(precinct)){
             this.population -= precinct.getPopulation();
             /*county operation*/
+            if(counties.get(precinct.getCountyID()) > 1){
+                counties.replace(precinct.getCountyID(), counties.get(precinct.getCountyID()) - 1);
+            }
+            else{
+                counties.remove(precinct.getCountyID());
+            }
             containedPrecincts.remove(precinct);
             numDemo -= precinct.getNumDemo();
             numRep -= precinct.getNumRep();
