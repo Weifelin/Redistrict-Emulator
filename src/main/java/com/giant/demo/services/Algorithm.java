@@ -43,8 +43,7 @@ public class Algorithm {
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
         int level = 1;
         candidatePairs = new ArrayList<>();
-        //int start = (int) (Math.log(clusters.size()) / Math.log(2)) ;
-        int end = (int) (Math.log(job.getNumDistricts())) + 1;//return back to normal - job.getNumDistricts()));
+        int end = (int) (Math.log(job.getNumDistricts())) + 1;
         int totalPop = 0;
         for(Cluster c : clusters) {
             totalPop += c.getPopulation();
@@ -55,7 +54,6 @@ public class Algorithm {
             for(Cluster c : clusters){
                 if(c.level < level){
                     ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
-
                     if(candidate != null && candidate.getCluster2().level < level){
                         candidatePairs.add(candidate);
                         candidate.getCluster1().level = level + 1;
@@ -78,7 +76,6 @@ public class Algorithm {
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);
-        //realState.toDistrict();
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
@@ -86,7 +83,6 @@ public class Algorithm {
     public ClusterEdge findClusterPair(Cluster c, int numClusters, int totalPop, Job j){
         double max = 0.0;
         ClusterEdge bestEdge = null;
-        Set<String> badKeys = new HashSet<>();
         double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
         for(String key : c.getEdgeIDs()){
             ClusterEdge e = clusterEdgeMap.get(key);
@@ -148,7 +144,6 @@ public class Algorithm {
 
     //send each precinct to neighbor with lowest population
     public void breakCluster(Cluster c){
-        System.out.println(c.getEdgeIDs());
         for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
             neighbor.addPrecinct(p);
