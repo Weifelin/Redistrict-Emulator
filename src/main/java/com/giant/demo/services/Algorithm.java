@@ -35,12 +35,14 @@ public class Algorithm {
     @Autowired
     private PrecinctRepository precinctRepository;
 
+
+
     public Algorithm(){
         this.clusterEdgeMap = new HashMap<>();
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
         status = AlgorithmStatus.Free;
-        objectiveFunction = new ObjectiveFunction(job, realState);
+        //objectiveFunction = new ObjectiveFunction(job, realState);
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
@@ -365,7 +367,7 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            double score = cluster.getObjectiveFunction().getScore(); /*getScore needs to be fixed.*/
+            double score = cluster.getObjectiveFunction().getScore(cluster); /*getScore needs to be fixed.*/
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
@@ -430,27 +432,27 @@ public class Algorithm {
     }
 
     private boolean testMove(Move move1) {
-        Cluster from = move1.getFrom();
-        Cluster to = move1.getTo();
-        Precinct precinct = move1.getPrecinct();
-        /*Normalize here*/
-        from.getObjectiveFunction().normalizedObjectiveFunction();
-        to.getObjectiveFunction().normalizedObjectiveFunction();
-        double originalScore = from.getObjectiveFunction().getScore()+to.getObjectiveFunction().getScore();
-        excuteMove(move1);
-        /*Update objective function*/
-
-        double fromScore = from.rateDistrict(); /*need to be implemented*/
-        double toScore = to.rateDistrict();
-
-        double finalScore = fromScore + toScore;
-        double change = finalScore - originalScore;
-        if (change <= 0){
-            /*undo*/
-            Move undo = new Move(precinct, to, from);
-            excuteMove(undo);
-            return false;
-        }
+//        Cluster from = move1.getFrom();
+//        Cluster to = move1.getTo();
+//        Precinct precinct = move1.getPrecinct();
+//        /*Normalize here*/
+//        from.getObjectiveFunction().normalizedObjectiveFunction();
+//        to.getObjectiveFunction().normalizedObjectiveFunction();
+//        double originalScore = from.getObjectiveFunction().getScore()+to.getObjectiveFunction().getScore();
+//        excuteMove(move1);
+//        /*Update objective function*/
+//
+//        double fromScore = from.rateDistrict(); /*need to be implemented*/
+//        double toScore = to.rateDistrict();
+//
+//        double finalScore = fromScore + toScore;
+//        double change = finalScore - originalScore;
+//        if (change <= 0){
+//            /*undo*/
+//            Move undo = new Move(precinct, to, from);
+//            excuteMove(undo);
+//            return false;
+//        }
 
         return true;
     }

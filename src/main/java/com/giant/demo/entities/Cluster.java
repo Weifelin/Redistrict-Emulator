@@ -165,6 +165,7 @@ public class Cluster {
             numRep -= precinct.getNumRep();
             votes -= precinct.getVotes();
             /*boundary operation*/
+            boundary = boundary.difference(precinct.getBoundaries());
 
         }
     }

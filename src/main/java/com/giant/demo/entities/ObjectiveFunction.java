@@ -26,8 +26,11 @@ public class ObjectiveFunction {
     private double efficiencyGapWeight;
     private double populationEqualityWeight;
     private int numMinorityDistricts;
+    @Transient
     private AfricanAmerican africanAmerican;
+    @Transient
     private Asian asian;
+    @Transient
     private LatinAmerican latinAmerican;
     @OneToOne
     @JoinColumn(name = "stateID")
