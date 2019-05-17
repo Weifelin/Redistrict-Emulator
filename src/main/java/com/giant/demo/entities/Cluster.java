@@ -30,6 +30,8 @@ public class Cluster {
     private int votes;
     @Transient
     private Map<Integer, ClusterEdge> clusterEdgeMap;
+    @Transient
+    private Set<String> edgeIDs;
 
 
 
@@ -51,6 +53,7 @@ public class Cluster {
         this.boundary = p.getBoundaries();
         this.level = 0;
         this.clusterEdgeMap = new HashMap<>();
+        this.edgeIDs = new HashSet<>();
     }
 
     public boolean mergeInto(Cluster c){
@@ -121,19 +124,7 @@ public class Cluster {
         this.edges = edges;
     }
 
-    public void combineEdges(Cluster c2){//return back to normal
 
-        Set<Integer> keys = c2.getClusterEdgeMap().keySet();
-        for(int key : keys){
-            c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().remove(c2.getClusterID());
-            //if(!this.getClusterEdgeMap().containsKey(c2.getClusterEdgeMap().get(key).getCluster2().getClusterID())){
-                //ClusterEdge edge = new ClusterEdge(c2.getClusterEdgeMap().get(key).getCluster2(), this);
-                //c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().put(c2.getClusterEdgeMap().get(key).getCluster1().getClusterID(), edge);
-                //this.getClusterEdgeMap().put(c2.getClusterEdgeMap().get(key).getCluster2().getClusterID(), new ClusterEdge(this, c2.getClusterEdgeMap().get(key).getCluster2()));
-           // }
-            c2.getClusterEdgeMap().get(key).getCluster2().getClusterEdgeMap().remove(c2.getClusterID());
-        }
-    }
 
     public void addPopulation(int pop){
         this.population += pop;
@@ -153,26 +144,12 @@ public class Cluster {
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }
 
-    public ClusterEdge findClusterPair(int numClusters, int totalPop, Job j){
-        double max = 0.0;
-        ClusterEdge bestEdge = null;
-        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
-        for(ClusterEdge e : this.edges){
-            int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
-            if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
-                max = e.getJoinability(j);
-                bestEdge = e;
-            }
-        }
-        this.sortEdges();
-        return bestEdge;
-    }
+
 
     public void combineCluster(Cluster c2){
         this.addPopulation(c2.getPopulation());
         this.containedPrecincts.addAll(c2.getContainedPrecincts());
         this.demographics.combine(c2.getDemographics());
-        this.combineEdges(c2);
     }
 
     public int compareTo(Cluster c2){
@@ -212,8 +189,8 @@ public class Cluster {
     public String toString(){
         String ret = "ClusterID: " + clusterID +
                 "\nPopulation:  " + population +
-                "\nEdges: " + edges +
-                "\nPrecincts: " + containedPrecincts;
+                "\nEdges: " + edges;// +
+                //"\nPrecincts: " + containedPrecincts;
         return ret;
     }
 
@@ -223,5 +200,34 @@ public class Cluster {
 
     public void setClusterEdgeMap(Map<Integer, ClusterEdge> clusterEdgeMap) {
         this.clusterEdgeMap = clusterEdgeMap;
+    }
+
+    public Set<String> getEdgeIDs() {
+        return edgeIDs;
+    }
+
+    public void setEdgeIDs(Set<String> edgeIDs) {
+        this.edgeIDs = edgeIDs;
+    }
+
+    public void addEdgeID(String key){
+        this.edgeIDs.add(key);
+    }
+
+    public boolean removeEdgeID(String key) {
+        return this.edgeIDs.remove(key);
+    }
+
+    public boolean removeAllEdgeID(Set<String> keys) {
+        return this.edgeIDs.removeAll(keys);
+    }
+
+    public boolean equalsC(Cluster c2) {
+        return this.getClusterID() == c2.getClusterID();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.equalsC((Cluster) obj);
     }
 }

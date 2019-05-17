@@ -33,50 +33,6 @@ public class State {
         this.districts = districts;
     }
 
-    //makes sure the number of districts equals the number specified
-    public void toDistrict(){
-        while(this.districts.size() != numOfDistricts){
-            Cluster breakdown = minPopulation();  /* <---- this returns null*/
-            this.districts.remove(breakdown);
-            breakCluster(breakdown);
-        }
-        int i = 0;
-        for(Cluster c : this.districts){
-            c.setClusterID(i++);/*Normalizing data.*/
-        }
-    }
-
-    //send each precinct to neighbor with lowest population
-    public void breakCluster(Cluster c){
-        for(Precinct p : c.getContainedPrecincts()){
-            Cluster neighbor = eligibleCluster(c);
-            neighbor.addPrecinct(p);
-        }
-    }
-
-    //finds adjacent cluster with smalles population
-    public Cluster eligibleCluster(Cluster c){
-        Cluster min = c.getEdges().get(0).getCluster2();
-        for(ClusterEdge e : c.getEdges()){
-            if(min.getPopulation() > e.getCluster2().getPopulation()){
-                min = e.getCluster2();
-            }
-        }
-        return min;
-    }
-
-    //returns cluster with min population
-    public Cluster minPopulation(){
-        int min = 0;
-        Cluster ret = null;
-        for(Cluster c : this.districts){
-            if(min == 0 || min > c.getPopulation()){
-                ret = c;
-                min = c.getPopulation();
-            }
-        }
-        return ret;
-    }
 
     public void displayMajorityMinorityDistricts(){
 
