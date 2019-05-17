@@ -55,9 +55,12 @@ public class ClusterEdge {
             double la = cluster1.getDemographics().getLatinAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getLatinAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
             score += la;
         }
-        Set<String> counties1 = cluster1.getEdgeIDs();
-        Set<String> counties2 = cluster2.getEdgeIDs();
-
+        Set<String> counties1 = cluster1.getCounties();
+        Set<String> counties2 = cluster2.getCounties();
+        Set<String> counties3 = counties1;
+        counties3.retainAll(counties2);
+        counties1.addAll(counties2);
+        score += 3 * (counties3.size() / counties1.size());
         return score;
     }
 
