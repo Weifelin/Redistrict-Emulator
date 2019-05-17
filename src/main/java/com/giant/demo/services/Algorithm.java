@@ -7,6 +7,7 @@ import com.giant.demo.enums.StateE;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.SingleClusterGroup;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,6 @@ public class Algorithm {
 
     @Autowired
     private PrecinctRepository precinctRepository;
-
-
 
     public Algorithm(){
         this.clusterEdgeMap = new HashMap<>();
@@ -365,7 +364,7 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            double score = cluster.getObjectiveFunction().getScore(cluster); /*getScore needs to be fixed.*/
+            double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
@@ -433,10 +432,9 @@ public class Algorithm {
         Cluster from = move1.getFrom();
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
-        /*Normalize here*/
-        from.getObjectiveFunction().normalizedObjectiveFunction();
-        to.getObjectiveFunction().normalizedObjectiveFunction();
-        double originalScore = from.getObjectiveFunction().getScore()+to.getObjectiveFunction().getScore();
+
+        double originalScore = objectiveFunction.getScore(from)+objectiveFunction.getScore(to);
+
         excuteMove(move1);
         /*Update objective function*/
 

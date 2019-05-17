@@ -185,6 +185,9 @@ public class Cluster {
     public void combineCluster(Cluster c2){
         this.addPopulation(c2.getPopulation());
         this.containedPrecincts.addAll(c2.getContainedPrecincts());
+        for(Precinct precinct : c2.getContainedPrecincts()){
+            this.addPrecinct(precinct);
+        }
         this.demographics.combine(c2.getDemographics());
     }
 
