@@ -19,4 +19,20 @@ public class SingleClusterGroup {
     public void addPrecinctID(int precintID){
         precinctList.add(precintID);
     }
+
+    public int getClusterID() {
+        return clusterID;
+    }
+
+    public void setClusterID(int clusterID) {
+        this.clusterID = clusterID;
+    }
+
+    public List<Integer> getPrecinctList() {
+        return precinctList;
+    }
+
+    public void setPrecinctList(List<Integer> precinctList) {
+        this.precinctList = precinctList;
+    }
 }

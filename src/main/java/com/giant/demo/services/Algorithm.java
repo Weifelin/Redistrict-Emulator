@@ -76,6 +76,7 @@ public class Algorithm {
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);
+        realState.setState(job.getStateE());
         /*Setting up SimpleClusterGroups*/
         return stateToSimpleClusterGroups(realState);
     }
@@ -128,12 +129,18 @@ public class Algorithm {
     public Set<Cluster> toDistrict(Set<Cluster> clusters, int numOfDistricts){
         while(clusters.size() != numOfDistricts){
             Cluster breakdown = minPopulation(clusters);  /* <---- this returns null*/
-            System.out.println(breakdown.getEdgeIDs());
             breakCluster(breakdown);
+            clusters.remove(breakdown);
             for(String key : breakdown.getEdgeIDs()){
                 clusterEdgeMap.remove(key);
+                for(Cluster c : clusters){
+                    if(c.getEdgeIDs().contains(key)){
+                        c.removeEdgeID(key);
+                        break;
+                    }
+                }
             }
-            clusters.remove(breakdown);
+
         }
         int i = 0;
         for(Cluster c : clusters){
@@ -156,7 +163,6 @@ public class Algorithm {
         int pop = 0;
         for(String key : c.getEdgeIDs()){
             ClusterEdge e = clusterEdgeMap.get(key);
-
             Cluster c2 = e.getCluster1();
             if(c.equals(c2))
                 c2 = e.getCluster2();
@@ -273,7 +279,7 @@ public class Algorithm {
 
     /*Initialize all precinct into clusters*/
     public void initializeClusters(){
-        List<Precinct> allPrecinct =  precinctRepository.findAll();
+        List<Precinct> allPrecinct =  precinctRepository.findAllByState(job.getStateE());
         System.out.println("allPrecincts: " + allPrecinct.size());
         System.out.println(allPrecinct.get(1).toString());
         List<Cluster> clusterList = new ArrayList<>();
@@ -322,6 +328,7 @@ public class Algorithm {
             Cluster district = iterator.next();
             groups.addClusterGroup(districtToSingleClusterGroup(district));
         }
+        groups.setState(realState.getState());
         return groups;
     }
 

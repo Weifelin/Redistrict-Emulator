@@ -24,11 +24,12 @@ public class Job {
     private AfricanAmerican africanAmerican;
     private LatinAmerican latinAmerican;
     private Asian asian;
+    private StateE stateE;
 
     public Job() {
     }
 
-    public Job(Compactness compactnessWeight, int numDistricts, double partyFairSlier, double efficiencyGapSlider, double populationEquality, int numMajorityMinorityDistricts, AfricanAmerican africanAmerican, LatinAmerican latinAmerican, Asian asian) {
+    public Job(Compactness compactnessWeight, int numDistricts, double partyFairSlier, double efficiencyGapSlider, double populationEquality, int numMajorityMinorityDistricts, AfricanAmerican africanAmerican, LatinAmerican latinAmerican, Asian asian, StateE stateE) {
         this.compactnessWeight = compactnessWeight;
         this.numDistricts = numDistricts;
         this.partyFairSlier = partyFairSlier;
@@ -38,6 +39,7 @@ public class Job {
         this.africanAmerican = africanAmerican;
         this.latinAmerican = latinAmerican;
         this.asian = asian;
+        this.stateE = stateE;
     }
 
     public Compactness getCompactnessWeight() {
@@ -110,5 +112,13 @@ public class Job {
 
     public void setNumDistricts(int numDistricts) {
         this.numDistricts = numDistricts;
+    }
+
+    public StateE getStateE() {
+        return stateE;
+    }
+
+    public void setStateE(StateE stateE) {
+        this.stateE = stateE;
     }
 }

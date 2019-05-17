@@ -3,6 +3,7 @@ package com.giant.demo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.giant.demo.entities.Job;
+import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.entities.Salt;
 import com.giant.demo.entities.User;
@@ -80,7 +81,7 @@ public class HomeController {
         AfricanAmerican africanAmerican = new AfricanAmerican(34, 45);
         Asian asian = new Asian(33, 37);
         LatinAmerican latinAmerican = new LatinAmerican(33, 77);
-        Job job = new Job(compactness, 10, 0.5,0.6,0.7,4,africanAmerican,latinAmerican,asian);
+        Job job = new Job(compactness, 10, 0.5,0.6,0.7,4,africanAmerican,latinAmerican,asian, StateE.NJ);
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File("testJson.json"), job);
