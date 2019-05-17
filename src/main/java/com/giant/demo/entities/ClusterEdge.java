@@ -2,6 +2,9 @@ package com.giant.demo.entities;
 
 import com.giant.demo.enums.Race;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ClusterEdge {
 
 
@@ -52,6 +55,9 @@ public class ClusterEdge {
             double la = cluster1.getDemographics().getLatinAmerican() * cluster1.getPopulation() + cluster2.getDemographics().getLatinAmerican() * cluster2.getPopulation() / (cluster1.getPopulation() + cluster2.getPopulation());
             score += la;
         }
+        Set<String> counties1 = cluster1.getEdgeIDs();
+        Set<String> counties2 = cluster2.getEdgeIDs();
+
         return score;
     }
 

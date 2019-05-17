@@ -128,7 +128,6 @@ public class Algorithm {
     public Set<Cluster> toDistrict(Set<Cluster> clusters, int numOfDistricts){
         while(clusters.size() != numOfDistricts){
             Cluster breakdown = minPopulation(clusters);  /* <---- this returns null*/
-            System.out.println(breakdown.getEdgeIDs());
             breakCluster(breakdown);
             for(String key : breakdown.getEdgeIDs()){
                 clusterEdgeMap.remove(key);
@@ -156,7 +155,6 @@ public class Algorithm {
         int pop = 0;
         for(String key : c.getEdgeIDs()){
             ClusterEdge e = clusterEdgeMap.get(key);
-
             Cluster c2 = e.getCluster1();
             if(c.equals(c2))
                 c2 = e.getCluster2();
