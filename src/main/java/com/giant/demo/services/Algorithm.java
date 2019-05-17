@@ -234,7 +234,17 @@ public class Algorithm {
     }
 
     private Cluster getWorstDistrict(State realState) {
-        return null;
+        Cluster worstDistrict = null;
+        double minScore = Double.POSITIVE_INFINITY;
+        for (Cluster cluster : realState.getDistricts()){
+            double score = cluster.getObjectiveFunction().getScore(job); /*getScore needs to be fixed.*/
+            if (score < minScore){
+                worstDistrict = cluster;
+                minScore = score;
+            }
+        }
+
+        return worstDistrict;
     }
 
 
@@ -268,6 +278,13 @@ public class Algorithm {
     }
 
     private boolean testMove(Move move1) {
+        Cluster from = move1.getFrom();
+        Cluster to = move1.getTo();
+
+        double originalScore = from.getObjectiveFunction().getScore(job)+to.getObjectiveFunction().getScore(job);
+
+
+
         return false;
     }
 
