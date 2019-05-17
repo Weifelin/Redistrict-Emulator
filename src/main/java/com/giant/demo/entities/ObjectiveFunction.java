@@ -112,7 +112,7 @@ public class ObjectiveFunction {
             if (white < demo.getLatinAmerican() || white < demo.getAsian() || white < demo.getAfricanAmerican())
                 mmDistricts++;
         }
-        score = Math.pow(score, Math.abs(mmDistricts - this.state.getNumMinorityDistricts())));
+        score = Math.pow(score, Math.abs(mmDistricts - this.state.getNumMinorityDistricts()));
         return score;
     }
 
