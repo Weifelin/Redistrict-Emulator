@@ -156,6 +156,13 @@ public class Cluster {
         this.boundary.union(p.getBoundaries());
     }
 
+    public void removePrecinct(Precinct precinct){
+        if (containedPrecincts.contains(precinct)){
+            this.population -= precinct.getPopulation();
+            
+        }
+    }
+
     public void sortEdges(){
         Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
     }

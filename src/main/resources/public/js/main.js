@@ -54,7 +54,7 @@ app.run(['$rootScope', '$cookies', '$http',
         }
 }]);
 
-app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, $mdToast) {
+app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $scope, $rootScope, $mdToast) {
     	var ctrl = this;
     	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
@@ -107,6 +107,24 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, $scope, $rootScope, 
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
                 $scope.usMap.initClusters();
+                var response = AlgorithmService.startSingleRun();
+                if (response !== false) {
+                    response.then(function(successResponse) {
+                        if(successResponse.data !== "") {
+                            angular.forEach(response.data.simpleClusterGroups, function(cluster) {
+                               var clusterID = cluster.clusterID;
+                               var seedPrecinct = cluster.precinctList[0];
+                               var newPrecinctList = cluster.precinctList.slice(1);
+                               $scope.usMap.addPrecinctSeed(clusterID, seedPrecinct);
+                               angular.forEach(newPrecinctList, function(precinctID) {
+                                   $scope.usMap.moveCluster(precinctID, precinctID, clusterID);
+                               });
+                            });
+                        }
+                    }, function(errorResponse) {
+                        $mdToast.showSimple("Request to start algorithm failed.")
+                    });
+                }
             }
         });
 });

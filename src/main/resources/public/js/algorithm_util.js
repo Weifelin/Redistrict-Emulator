@@ -1,10 +1,10 @@
 'use strict';
 angular.module('AlgoUtil')
-    .factory('AlgorithmService', function($rootScope, $mdToast) {
+    .factory('AlgorithmService', function($rootScope, $mdToast, $http) {
         var service = this;
         service.formatData = function(data) {
             var result = {};
-            result["stateId"] = $rootScope.globalData.selectedState;
+            result["stateE"] = $rootScope.globalData.selectedState;
             result["numDistricts"] = data.mainControls.numDistrictInput;
             result["compactnessWeight"] = {
                 "polsPopSlider": data.measureTabs.compactnessTab.polsPopSlider,
@@ -38,14 +38,10 @@ angular.module('AlgoUtil')
                 var url = "single-run";
                 var data = angular.element("#appShell").scope().content["singleRun"].packData();
                 data = service.formatData(data);
-                $http.post(url, data)
-                    .then(function(successResponse) {
-                        console.log(successResponse);
-                    }, function(errorResponse) {
-
-                    });
+                return $http.post(url, data);
             } else {
                 $mdToast.showSimple("State not selected.");
+                return false;
             }
         };
 

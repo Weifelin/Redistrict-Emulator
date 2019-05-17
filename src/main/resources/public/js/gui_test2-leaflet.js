@@ -17,11 +17,16 @@ function Map(info) {
 	this.leaf_states = {};
 	this.leaf_precincts = {};
 	this.leaf_clusters = {};
+	this.cluster_seeds = {};
 	this.uiInfo = info;
 
 	this.mapSetup = function() {
 		geoSetup();
 		infoPanelSetup();
+	};
+
+	maplet.addPrecinctSeed = function(clusterID, seedPrecinct) {
+		maplet.cluster_seeds[clusterID] = seedPrecinct;
 	};
 
 	maplet.removeStateLayer = function() {
@@ -527,6 +532,7 @@ function Map(info) {
 	}
 
 	maplet.moveCluster = function(precinctId, oldClusterId, newClusterId) {
+		newClusterId = maplet.cluster_seeds[newClusterId];
 		var precinct = maplet.precinctLayer.getLayer(maplet.leaf_precincts[precinctId]);
 		var precGeo = precinct.toGeoJSON();
 		var oldCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[oldClusterId]);
