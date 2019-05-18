@@ -4,7 +4,6 @@ import com.giant.demo.entities.*;
 import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.Race;
 import com.giant.demo.enums.StateE;
-import com.giant.demo.entities.Job;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.SingleClusterGroup;
@@ -12,7 +11,6 @@ import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Transient;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -338,7 +336,7 @@ public class Algorithm {
             groups.addClusterGroup(districtToSingleClusterGroup(district));
         }
         groups.setState(realState.getState());
-        System.out.println("Returning clusters.");
+        System.out.println("Returning clusters: " + realState.getState().toString());
         return groups;
     }
 
@@ -436,10 +434,9 @@ public class Algorithm {
         Cluster from = move1.getFrom();
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
-        /*Normalize here*/
-//        from.getObjectiveFunction().normalizedObjectiveFunction();
-//        to.getObjectiveFunction().normalizedObjectiveFunction();
+
         double originalScore = objectiveFunction.getScore(from)+objectiveFunction.getScore(to);
+
         excuteMove(move1);
         /*Update objective function*/
 
