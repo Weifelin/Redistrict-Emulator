@@ -1,11 +1,15 @@
 <h4>Single Run Summary</h4><br />
 <h6>Gerrymandering Scores</h6>
-Before: <span>{{$ctrl.gerryBefore}}</span><br />
-After: <span>{{$ctrl.gerryAfter}}</span><br />
+Before: <span>{{$ctrl.scoreBefore}}</span><br />
+After: <span>{{$ctrl.scoreAfter}}</span><br />
 <h6>Amount of Gerrymandering</h6>
-<div layout="row">
-    <h7 flex="20"></h7><h7 flex="40">Number of Voters</h7><h7 flex="40">Likely Seat Percentage</h7>
-    <h7 flex="20"></h7><h7 flex="20">Republican</h7><h7 flex="20">Democrat</h7><h7 flex="20">Republican</h7><h7 flex="20">Democrat</h7>
-    <h7 flex="20">State</h7>
-    <h7 flex="20">Actual</h7>
+<div class="gerryTable" layout="row">
+    <span flex="20"></span><h7 flex="40">Number of Voters</h7><h7 flex="40">Likely Seat Percentage</h7>
+    <span flex="20"></span><h7 flex="20">Republican</h7><h7 flex="20">Democrat</h7><h7 flex="20">Republican</h7><h7 flex="20">Democrat</h7>
+    <h7 flex="20">State</h7><span flex="20">{{$ctrl.stateStat.numRVoters}}</span><span flex="20">{{$ctrl.stateStat.numDVoters}}</span>
+                            <span flex="20">{{$ctrl.stateStat.seatPercentR}}</span><span flex="20">{{$ctrl.stateStat.seatPercentD}}</span>
+    <h7 flex="20">Actual</h7><span flex="20">{{$ctrl.actualStat.numRVoters}}</span><span flex="20">{{$ctrl.actualStat.numDVoters}}</span>
+                             <span flex="20">{{$ctrl.actualStat.seatPercentR}}</span><span flex="20">{{$ctrl.actualStat.seatPercentD}}</span>
+    <h7 ng-repeat-start="(districtID, poliStat) in $ctrl.districtStat" flex="20">District {{districtID}}</h7>
+                             <span></span>
 </div>

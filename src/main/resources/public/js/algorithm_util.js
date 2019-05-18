@@ -32,7 +32,7 @@ angular.module('AlgoUtil')
             return result;
         };
 
-        service.startSingleRun = function() {
+        service.startSingleRun = function(callback) {
             if ($rootScope.globalData.selectedState !== "") {
                 $rootScope.globalData.programState = $rootScope.programStates.RUNNING;
                 var url = "single-run";

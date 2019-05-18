@@ -1,6 +1,7 @@
 package com.giant.demo.entities;
 
 import com.giant.demo.enums.PartyPreference;
+import com.giant.demo.enums.Race;
 import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
@@ -209,12 +210,19 @@ public class Cluster {
         this.demographics = demographics;
     }
 
-    public boolean isMajorityMinority() {
-        int pop = demographics.getPopulation();
-        int white = pop - (int) (demographics.getLatinAmerican()*pop) - (int) (demographics.getAsian()*pop) - (int)(demographics.getAfricanAmerican()*pop);
-        if(white < demographics.getLatinAmerican() || white < demographics.getAsian() || white < demographics.getAfricanAmerican())
-            return true;
-        return false;
+    public boolean isMajorityMinority(Cluster c) {
+        double percent = 0.0;
+        Set<Race> races = c.getDemographics().getRaces();
+        if(races.contains(Race.African_American)){
+            percent += c.getDemographics().getAfricanAmerican();
+        }
+        else if(races.contains(Race.Asian)){
+            percent += c.getDemographics().getAsian();
+        }
+        else if(races.contains(Race.Latin_American)){
+            percent += c.getDemographics().getLatinAmerican();
+        }
+        return percent >= 0.5;
     }
 
     public Precinct getPrecinct(int n){

@@ -56,10 +56,10 @@ public class PreProcess {
             String countyID = (String) p.get("county");
             String name = (String) p.get("name");
             Integer pop = Long.valueOf((long) p.get("pop")).intValue();
-            Integer votes = (int) (long) p.get("votes");
+            Integer votes = (int) (double) p.get("votes");
             Double demo = (double)p.get("demo") ;
             Double rep = (double) p.get("rep");
-            double africanAmerican = (long)p.get("africanAmerican") / (double)pop;
+            double africanAmerican = (double)p.get("africanAmerican") / (double)pop;
             double asian = (long) p.get("asian") / (double)pop;
             double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
             double white = (long) p.get("white") / (double)pop;
