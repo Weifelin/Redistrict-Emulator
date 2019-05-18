@@ -158,13 +158,13 @@ public class HomeController {
     public SimpleClusterGroups singleRun(@RequestBody Job job){
 //        counter ++;
 //        System.out.println("being called: "+ counter);
-        if (algorithm.getStatus() == AlgorithmStatus.Running){
-            return null;
-        }
-
-        if (job == null){
-            return  null;
-        }
+//        if (algorithm.getStatus() == AlgorithmStatus.Running){
+//            return null;
+//        }
+//
+//        if (job == null){
+//            return  null;
+//        }
 
         algorithm.lockAlgorithm();
         algorithm.setJob(job); /*Store job in algorithm until phase II. */

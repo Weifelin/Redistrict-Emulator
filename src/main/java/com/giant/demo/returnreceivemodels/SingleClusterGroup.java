@@ -1,19 +1,21 @@
 package com.giant.demo.returnreceivemodels;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /*A branch of PrecinctCLusterPair*/
 public class SingleClusterGroup {
     private int clusterID;
-    private List<Integer> precinctList;
+    private Set<Integer> precinctList;
 
     public SingleClusterGroup() {
     }
 
     public SingleClusterGroup(int clusterID) {
         this.clusterID = clusterID;
-        precinctList = new ArrayList<>();
+        precinctList = new HashSet<>();
     }
 
     public void addPrecinctID(int precintID){
@@ -28,11 +30,11 @@ public class SingleClusterGroup {
         this.clusterID = clusterID;
     }
 
-    public List<Integer> getPrecinctList() {
+    public Set<Integer> getPrecinctList() {
         return precinctList;
     }
 
-    public void setPrecinctList(List<Integer> precinctList) {
+    public void setPrecinctList(Set<Integer> precinctList) {
         this.precinctList = precinctList;
     }
 }
