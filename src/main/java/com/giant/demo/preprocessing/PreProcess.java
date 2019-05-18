@@ -38,7 +38,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/vaprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/njprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -60,10 +60,10 @@ public class PreProcess {
             Double demo = (double)p.get("demo") ;
             Double rep = (double) p.get("rep");
             double africanAmerican = (double)p.get("africanAmerican") / (double)pop;
-            double asian = (long) p.get("asian") / (double)pop;
-            double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
-            double white = (long) p.get("white") / (double)pop;
-            double other = (long) p.get("other") / (double)pop;
+            double asian = (double) p.get("asian") / (double)pop;
+            double latinAmerican = (double) p.get("latinAmerican") / (double)pop;
+            double white = (double) p.get("white") / (double)pop;
+            double other = (double) p.get("other") / (double)pop;
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
