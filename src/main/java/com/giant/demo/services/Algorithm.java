@@ -43,6 +43,11 @@ public class Algorithm {
     }
 
     public SimpleClusterGroups graphPartition(Set<Cluster> clusters){
+        int tot = 0;
+        for(Cluster c: clusters){
+            tot += c.getContainedPrecincts().size();
+        }
+        System.out.println("Num precicnts: " + tot);
         int level = 1;
         candidatePairs = new ArrayList<>();
         int end = (int) (Math.log(job.getNumDistricts())) + 1;
@@ -58,7 +63,7 @@ public class Algorithm {
                 if(c.level < level){
                     //System.out.println("c is : \n "+c.toString());
                     ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
-                    if(candidate != null && candidate.getCluster2().level < level){
+                    if(candidate != null && candidate.getCluster2().level < level && candidate.getCluster1().level < level){
                         candidatePairs.add(candidate);
                         candidate.getCluster1().level = level + 1;
                         candidate.getCluster2().level = level + 1;
@@ -110,21 +115,28 @@ public class Algorithm {
         clusterEdgeMap.remove(ey);
         c1.removeEdgeID(ey);
         for(String key : c2.getEdgeIDs()){
+            if(!clusterEdgeMap.containsKey(key)) {
+                System.out.println("Key: " + key);
+                System.out.println(c1.level);
+                System.out.println(c2.level);
+            }
             ClusterEdge e2 = clusterEdgeMap.get(key);
-            if(e2 != null) {
-                if (c2.equalsC(e2.getCluster1())) {
-                    String k = createKey(c1.getClusterID(), e2.getCluster2().getClusterID());
-                    clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster2()));
-                    e2.getCluster2().removeEdgeID(key);
-                    e2.getCluster2().addEdgeID(k);
-                    c1.addEdgeID(k);
-                } else {
-                    String k = createKey(c1.getClusterID(), e2.getCluster1().getClusterID());
-                    clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster1()));
-                    e2.getCluster1().removeEdgeID(key);
-                    e2.getCluster1().addEdgeID(k);
-                    c1.addEdgeID(k);
-                }
+            if (c2.equals(e2.getCluster1())) {
+                String k = createKey(c1.getClusterID(), e2.getCluster2().getClusterID());
+                clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster2()));
+                e2.getCluster2().removeEdgeID(key);
+
+                e2.getCluster2().addEdgeID(k);
+                c1.addEdgeID(k);
+            } else if (c2.equals(e2.getCluster2())) {
+                String k = createKey(c1.getClusterID(), e2.getCluster1().getClusterID());
+                clusterEdgeMap.put(k, new ClusterEdge(c1, e2.getCluster1()));
+                e2.getCluster1().removeEdgeID(key);
+
+                e2.getCluster1().addEdgeID(k);
+                c1.addEdgeID(k);
+            } else {
+                System.out.println(e2);
             }
             clusterEdgeMap.remove(key);
         }
@@ -134,7 +146,7 @@ public class Algorithm {
     //makes sure the number of districts equals the number specified
     public Set<Cluster> toDistrict(Set<Cluster> clusters, int numOfDistricts){
         while(clusters.size() != numOfDistricts){
-            Cluster breakdown = minPopulation(clusters);  /* <---- this returns null*/
+            Cluster breakdown = minPopulation(clusters);
             breakCluster(breakdown);
             clusters.remove(breakdown);
             for(String key : breakdown.getEdgeIDs()){
@@ -294,7 +306,7 @@ public class Algorithm {
             List<Precinct> precinctsList = new ArrayList<>();
             precinctsList.add(allPrecinct.get(i));
             Cluster cluster = new Cluster(allPrecinct.get(i).getPrecinctID(), precinctsList);
-            cluster.getContainedPrecincts().get(0).setCluster(cluster);
+            cluster.getContainedPrecincts().get(0).setCluster(cluster);// check
             clusterList.add(cluster);
         }
         initializeEdges(clusterList, allPrecinct);

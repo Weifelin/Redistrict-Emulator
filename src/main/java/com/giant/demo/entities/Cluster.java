@@ -17,8 +17,8 @@ public class Cluster {
     private Geometry boundary;
     @OneToOne
     private ObjectiveFunction objectiveFunction;
-    @Transient
-    private List<ClusterEdge> edges;
+    /*@Transient
+    private List<ClusterEdge> edges;*/
     private int population;
     @OneToOne
     private Demographics demographics;
@@ -30,8 +30,8 @@ public class Cluster {
     private int numDemo;
     private int numRep;
     private int votes;
-    @Transient
-    private Map<Integer, ClusterEdge> clusterEdgeMap;
+    /*@Transient
+    private Map<Integer, ClusterEdge> clusterEdgeMap;*/
     @Transient
     private Set<String> edgeIDs;
 
@@ -44,7 +44,6 @@ public class Cluster {
     public Cluster(int clusterID, List<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
         this.containedPrecincts = containedPrecincts;
-        this.edges = new ArrayList<>();
         Precinct p = containedPrecincts.get(0);
         this.population = p.getPopulation();
         this.demographics = p.getDemogrpahics();
@@ -55,7 +54,6 @@ public class Cluster {
         this.votes = p.getVotes();
         this.boundary = p.getBoundaries();
         this.level = 0;
-        this.clusterEdgeMap = new HashMap<>();
         this.edgeIDs = new HashSet<>();
     }
 
@@ -123,19 +121,6 @@ public class Cluster {
     public void setPopulation(int pop){ this.population = pop;}
 
 
-    public List<ClusterEdge> getEdges() {
-        return edges;
-    }
-
-    public void addEdge(ClusterEdge edge){
-        this.edges.add(edge);
-    }
-
-    public void setEdges(List<ClusterEdge> edges) {
-        this.edges = edges;
-    }
-
-
 
     public void addPopulation(int pop){
         this.population += pop;
@@ -177,14 +162,10 @@ public class Cluster {
         }
     }
 
-    public void sortEdges(){
-        Collections.sort(this.edges, (e1, e2) -> e1.compareTo(e2));
-    }
-
 
 
     public void combineCluster(Cluster c2){
-        this.addPopulation(c2.getPopulation());
+        //this.addPopulation(c2.getPopulation());
         for(Precinct precinct : c2.getContainedPrecincts()){
             this.addPrecinct(precinct);
         }
@@ -234,8 +215,8 @@ public class Cluster {
 
     public String toString(){
         String ret = "ClusterID: " + clusterID +
-                "\nPopulation:  " + population +
-                "\nEdges: " + edges;// +
+                "\nPopulation:  " + population; //+
+                //"\nEdges: " + edges;// +
                 //"\nPrecincts: " + containedPrecincts;
         return ret;
     }
@@ -243,14 +224,6 @@ public class Cluster {
 
     public double rateDistrict() {
         return -1;
-    }
-
-    public Map<Integer, ClusterEdge> getClusterEdgeMap() {
-        return clusterEdgeMap;
-    }
-
-    public void setClusterEdgeMap(Map<Integer, ClusterEdge> clusterEdgeMap) {
-        this.clusterEdgeMap = clusterEdgeMap;
     }
 
     public Set<String> getEdgeIDs() {
