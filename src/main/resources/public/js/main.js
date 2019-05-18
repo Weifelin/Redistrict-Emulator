@@ -113,7 +113,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
                     response.then(function(successResponse) {
                         console.log(successResponse);
                         if(successResponse.data !== "") {
-                            angular.forEach(response.data.simpleClusterGroups, function(cluster) {
+                            angular.forEach(successResponse.data.simpleClusterGroups, function(cluster) {
                                var clusterID = cluster.clusterID;
                                var seedPrecinct = cluster.precinctList[0];
                                var newPrecinctList = cluster.precinctList.slice(1);
