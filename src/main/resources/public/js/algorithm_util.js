@@ -38,7 +38,12 @@ angular.module('AlgoUtil')
                 var url = "single-run";
                 var data = angular.element("#appShell").scope().content["singleRun"].packData();
                 data = service.formatData(data);
-                return $http.post(url, data);
+                return $http.post(url, data).then(function(successResponse) {
+                    console.log(successResponse);
+                    callback(successResponse);
+                }, function(errorResponse) {
+                    $mdToast.showSimple("Request to start algorithm failed.");
+                });
             } else {
                 $mdToast.showSimple("State not selected.");
                 return null;
