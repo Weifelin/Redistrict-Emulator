@@ -43,6 +43,7 @@ public class Cluster {
 
     public Cluster(int clusterID, List<Precinct> containedPrecincts) {
         this.clusterID = clusterID;
+        this.containedPrecincts = new ArrayList<>();
         this.containedPrecincts = containedPrecincts;
         Precinct p = containedPrecincts.get(0);
         this.population = p.getPopulation();
@@ -55,75 +56,6 @@ public class Cluster {
         this.boundary = p.getBoundaries();
         this.level = 0;
         this.edgeIDs = new HashSet<>();
-    }
-
-    public boolean mergeInto(Cluster c){
-        return false;
-    }
-
-    public void destory(){
-
-    }
-
-    public Map<String, Integer> getCounties() {
-        return counties;
-    }
-
-    public void setCounties(Map<String, Integer> counties) {
-        this.counties = counties;
-    }
-
-    public boolean updateBoundary(){
-        return false;
-    }
-
-    public Demographics getDemographics(){ return demographics; }
-
-    public Precinct getNextPrecinct(){
-        return null;
-    }
-
-    public int getClusterID() {
-        return clusterID;
-    }
-
-    public void setClusterID(int clusterID) {
-        this.clusterID = clusterID;
-    }
-
-    public List<Precinct> getContainedPrecincts() {
-        return containedPrecincts;
-    }
-
-    public void setContainedPrecincts(ArrayList<Precinct> containedPrecincts) {
-        this.containedPrecincts = containedPrecincts;
-    }
-
-    public Geometry getBoundary() {
-        return boundary;
-    }
-
-    public void setBoundary(Geometry boundary) {
-        this.boundary = boundary;
-    }
-
-    public ObjectiveFunction getObjectiveFunction() {
-        return objectiveFunction;
-    }
-
-    public void setObjectiveFunction(ObjectiveFunction objectiveFunction) {
-        this.objectiveFunction = objectiveFunction;
-    }
-
-    public int getPopulation(){
-        return this.population;
-    }
-    public void setPopulation(int pop){ this.population = pop;}
-
-
-
-    public void addPopulation(int pop){
-        this.population += pop;
     }
 
     public void addPrecinct(Precinct p){
@@ -164,12 +96,14 @@ public class Cluster {
 
 
 
-    public void combineCluster(Cluster c2){
-        //this.addPopulation(c2.getPopulation());
+
+    public Cluster combineCluster(Cluster c2){
         for(Precinct precinct : c2.getContainedPrecincts()){
             this.addPrecinct(precinct);
         }
+        //c2.setContainedPrecincts(null);
         this.demographics.combine(c2.getDemographics());
+        return c2;
     }
 
     public int compareTo(Cluster c2){
@@ -253,5 +187,73 @@ public class Cluster {
     @Override
     public boolean equals(Object obj) {
         return this.equalsC((Cluster) obj);
+    }
+
+    public boolean mergeInto(Cluster c){
+        return false;
+    }
+
+    public void destory(){
+
+    }
+
+    public Map<String, Integer> getCounties() {
+        return counties;
+    }
+
+    public void setCounties(Map<String, Integer> counties) {
+        this.counties = counties;
+    }
+
+    public boolean updateBoundary(){
+        return false;
+    }
+
+    public Demographics getDemographics(){ return demographics; }
+
+    public Precinct getNextPrecinct(){
+        return null;
+    }
+
+    public int getClusterID() {
+        return clusterID;
+    }
+
+    public void setClusterID(int clusterID) {
+        this.clusterID = clusterID;
+    }
+
+    public List<Precinct> getContainedPrecincts() {
+        return containedPrecincts;
+    }
+
+    public void setContainedPrecincts(ArrayList<Precinct> containedPrecincts) {
+        this.containedPrecincts = containedPrecincts;
+    }
+
+    public Geometry getBoundary() {
+        return boundary;
+    }
+
+    public void setBoundary(Geometry boundary) {
+        this.boundary = boundary;
+    }
+
+    public ObjectiveFunction getObjectiveFunction() {
+        return objectiveFunction;
+    }
+
+    public void setObjectiveFunction(ObjectiveFunction objectiveFunction) {
+        this.objectiveFunction = objectiveFunction;
+    }
+
+    public int getPopulation(){
+        return this.population;
+    }
+    public void setPopulation(int pop){ this.population = pop;}
+
+
+    public void addPopulation(int pop){
+        this.population += pop;
     }
 }

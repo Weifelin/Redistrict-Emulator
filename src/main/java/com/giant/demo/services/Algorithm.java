@@ -63,6 +63,7 @@ public class Algorithm {
                 if(c.level < level){
                     //System.out.println("c is : \n "+c.toString());
                     ClusterEdge candidate = findClusterPair(c, numClusters, totalPop, job);
+
                     if(candidate != null && candidate.getCluster2().level < level && candidate.getCluster1().level < level){
                         candidatePairs.add(candidate);
                         candidate.getCluster1().level = level + 1;
@@ -72,16 +73,27 @@ public class Algorithm {
             }
             if(candidatePairs.size() == 0)
                 break;
+
             for(ClusterEdge edge : candidatePairs){
-                edge.getCluster1().combineCluster(edge.getCluster2());
                 combineEdges(edge);
-                clusters.remove(edge.getCluster2());
+                Cluster c2 = edge.getCluster1().combineCluster(edge.getCluster2());
+                clusters.remove(c2);
             }
             candidatePairs = new ArrayList<>();
             level++;
         }
         Set<String> keys  = clusterEdgeMap.keySet();
+        int total = 0;
+        for(Cluster c : clusters){
+            total += c.getContainedPrecincts().size();
+        }
+        System.out.println("Number of Precincts - before: " + total);
         clusters = toDistrict(clusters, job.getNumDistricts());
+        total = 0;
+        for(Cluster c : clusters){
+            total += c.getContainedPrecincts().size();
+        }
+        System.out.println("Number of Precincts - after: " + total);
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
         realState.setDistricts(clusters);

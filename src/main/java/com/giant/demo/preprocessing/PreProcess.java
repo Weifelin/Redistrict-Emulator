@@ -38,7 +38,7 @@ public class PreProcess {
 
         Object obj = null;
         try {
-            obj = parser.parse(new FileReader("src/main/resources/public/njprecincts.json"));
+            obj = parser.parse(new FileReader("src/main/resources/public/vaprecincts.json"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -105,7 +105,7 @@ public class PreProcess {
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Geometry polygon = geometryFactory.createPolygon(coordinateSequence);
 
-            StateE stateE = StateE.NJ;
+            StateE stateE = StateE.VA;
 
 //            if (stateE == StateE.VA){
 //                polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
