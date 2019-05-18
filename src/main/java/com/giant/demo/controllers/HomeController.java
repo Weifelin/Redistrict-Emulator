@@ -53,7 +53,6 @@ public class HomeController {
     @Autowired
     private GeoJsonService geoJsonService;
 
-
     private BatchService batchService;
 
     /*/login POST controller is provided by Spring Security*/
@@ -111,6 +110,7 @@ public class HomeController {
     //@PostMapping("/login")
     @RequestMapping(value="/login-process", method=RequestMethod.POST)
     public UserModel login(@Valid @RequestBody UserModel userModel, HttpServletRequest request, HttpServletResponse response){
+
         String username = userModel.getUsername();
         String password = userModel.getPassword();
         UserRules userRules = (UserRules) userDetailsService.loadUserByUsername(username);
@@ -156,14 +156,22 @@ public class HomeController {
 
     @PostMapping("/single-run")
     public SimpleClusterGroups singleRun(@RequestBody Job job){
+//        counter ++;
+//        System.out.println("being called: "+ counter);
         if (algorithm.getStatus() == AlgorithmStatus.Running){
             return null;
+        }
+
+        if (job == null){
+            return  null;
         }
 
         algorithm.lockAlgorithm();
         algorithm.setJob(job); /*Store job in algorithm until phase II. */
         algorithm.initializeClusters();
-        return algorithm.graphPartition(algorithm.getClusters());
+        SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
+        System.out.println("simple: "+ simpleClusterGroups.getState().toString());
+        return simpleClusterGroups;
     }
 
     @GetMapping(value = "/{username}/salt")

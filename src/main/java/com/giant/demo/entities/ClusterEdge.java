@@ -58,14 +58,27 @@ public class ClusterEdge {
         }
         Set<String> counties1 = cluster1.getCounties().keySet();
         Set<String> counties2 = cluster2.getCounties().keySet();
-        counties1.remove(null);
-        counties2.remove(null);
-        Set<String> counties3 = counties1;
-        counties3.retainAll(counties2);
-        if(counties2.size() > 0) {
-            counties1.addAll(counties2);
-        }
-        score += 3 * (counties3.size() / (counties1.size() + 1));
+
+//        counties1.remove(null);
+//        counties2.remove(null);
+//        Set<String> counties3 = counties1;
+//        counties3.retainAll(counties2);
+//        if(counties2.size() > 0) {
+//            counties1.addAll(counties2);
+//        }
+
+        Set<String> union = new HashSet<>();
+        union.addAll(counties1);
+        union.addAll(counties2);
+
+        Set<String> c1 = new HashSet<>();
+        Set<String> c2 = new HashSet<>();
+        c1.addAll(counties1);
+        c2.addAll(counties2);
+
+        c1.retainAll(c2);
+        score += 3*(c1.size()/(union.size() +1));
+//        score += 3 * (counties3.size() / (counties1.size() + 1));
         return score;
     }
 
