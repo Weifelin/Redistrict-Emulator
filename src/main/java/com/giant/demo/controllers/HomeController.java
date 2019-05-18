@@ -3,6 +3,7 @@ package com.giant.demo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.giant.demo.entities.Job;
+import com.giant.demo.entities.State;
 import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;

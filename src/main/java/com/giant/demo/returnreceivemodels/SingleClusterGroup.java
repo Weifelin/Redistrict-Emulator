@@ -8,14 +8,14 @@ import java.util.Set;
 /*A branch of PrecinctCLusterPair*/
 public class SingleClusterGroup {
     private int clusterID;
-    private Set<Integer> precinctList;
+    private List<Integer> precinctList;
 
     public SingleClusterGroup() {
     }
 
     public SingleClusterGroup(int clusterID) {
         this.clusterID = clusterID;
-        precinctList = new HashSet<>();
+        precinctList = new ArrayList<>();
     }
 
     public void addPrecinctID(int precintID){
@@ -30,11 +30,11 @@ public class SingleClusterGroup {
         this.clusterID = clusterID;
     }
 
-    public Set<Integer> getPrecinctList() {
+    public List<Integer> getPrecinctList() {
         return precinctList;
     }
 
-    public void setPrecinctList(Set<Integer> precinctList) {
+    public void setPrecinctList(List<Integer> precinctList) {
         this.precinctList = precinctList;
     }
 }
