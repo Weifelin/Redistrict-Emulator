@@ -52,7 +52,7 @@ public class Algorithm {
             totalPop += c.getPopulation();
             c.level = 0;
         }
-        while((int) (Math.log(clusters.size()) / Math.log(2)) > end+1){
+        while(((int) (Math.log(clusters.size()) / Math.log(2)) )> (end+1)){
             int numClusters = clusters.size();
             for(Cluster c : clusters){
                 if(c.level < level){
@@ -76,6 +76,14 @@ public class Algorithm {
             level++;
         }
         Set<String> keys  = clusterEdgeMap.keySet();
+
+        int numOfPrecinct = 0;
+        for (Cluster cluster: clusters){
+            numOfPrecinct += cluster.getContainedPrecincts().size();
+        }
+
+        System.out.println("Total Precincts in Algo: " + numOfPrecinct);
+
         clusters = toDistrict(clusters, job.getNumDistricts());
         realState = new State();
         realState.setNumOfDistricts(job.getNumDistricts());//job.getNumDistricts());
@@ -83,6 +91,12 @@ public class Algorithm {
         realState.setState(job.getStateE());
         System.out.println("Graph Partition has been finished.");
         /*Setting up SimpleClusterGroups*/
+
+        numOfPrecinct = 0;
+        for (Cluster cluster: realState.getDistricts()){
+            numOfPrecinct += cluster.getContainedPrecincts().size();
+        }
+        System.out.println("Total Precincts after toDistrict: " + numOfPrecinct);
         return stateToSimpleClusterGroups(realState);
     }
 
@@ -300,6 +314,13 @@ public class Algorithm {
         initializeEdges(clusterList, allPrecinct);
         Set<Cluster> ret = new HashSet<>(clusterList);
         this.clusters = ret;
+
+        int numOfPrecinct = 0;
+        for (Cluster cluster: clusters){
+            numOfPrecinct += cluster.getContainedPrecincts().size();
+        }
+
+        System.out.println("Total Precincts after initializeClusters: " + numOfPrecinct);
     }
 
     public void initializeEdges(List<Cluster> clusters, List<Precinct> precincts){
@@ -317,6 +338,13 @@ public class Algorithm {
                 clusters.get(i).addEdgeID((key));
             }
         }
+
+        int numOfPrecinct = 0;
+        for (Cluster cluster: clusters){
+            numOfPrecinct += cluster.getContainedPrecincts().size();
+        }
+
+        System.out.println("Total Precincts after initializeEdges: " + numOfPrecinct);
     }
 
     public void setJob(Job job) {
@@ -408,7 +436,7 @@ public class Algorithm {
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
 
-        from.getContainedPrecincts().remove(precinct); /*Make method inside Cluster.*/
+        from.removePrecinct(precinct); /*Make method inside Cluster.*/
         /*
          * geometry operation
          * population operation
@@ -417,7 +445,7 @@ public class Algorithm {
          *
          */
 
-        to.getContainedPrecincts().add(precinct);
+        to.addPrecinct(precinct);
 
         /*
          * geometry operation
@@ -440,8 +468,10 @@ public class Algorithm {
         excuteMove(move1);
         /*Update objective function*/
 
-        double fromScore = from.rateDistrict(); /*need to be implemented*/
-        double toScore = to.rateDistrict();
+        /*double fromScore = from.rateDistrict(); *//*need to be implemented*//*
+        double toScore = to.rateDistrict();*/
+        double fromScore = objectiveFunction.getScore(from);
+        double toScore = objectiveFunction.getScore(to);
 
         double finalScore = fromScore + toScore;
         double change = finalScore - originalScore;
@@ -466,5 +496,9 @@ public class Algorithm {
 
     public AlgorithmStatus getStatus() {
         return status;
+    }
+
+    public State getRealState() {
+        return realState;
     }
 }

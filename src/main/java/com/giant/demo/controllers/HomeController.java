@@ -2,13 +2,10 @@ package com.giant.demo.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.giant.demo.entities.Job;
-import com.giant.demo.entities.State;
+import com.giant.demo.entities.*;
 import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
-import com.giant.demo.entities.Salt;
-import com.giant.demo.entities.User;
 import com.giant.demo.preprocessing.PreProcess;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
@@ -68,7 +65,7 @@ public class HomeController {
     public ModelAndView index(){
 
 
-        preProcess.loadPrecincts();
+//        preProcess.loadPrecincts();
 //        geoJsonService.createGeoJson();
 
         //generateJobJson();
@@ -172,6 +169,14 @@ public class HomeController {
         algorithm.initializeClusters();
         SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
         System.out.println("simple: "+ simpleClusterGroups.getState().toString());
+//        State realState = algorithm.getRealState();
+//        int numOfPrecinct = 0;
+//        for (Cluster cluster: realState.getDistricts()){
+//            numOfPrecinct += cluster.getContainedPrecincts().size();
+//        }
+//
+//        System.out.println("Total Precincts: " + numOfPrecinct);
+
         return simpleClusterGroups;
     }
 

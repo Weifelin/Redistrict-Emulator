@@ -142,7 +142,7 @@ public class Cluster {
     }
 
     public void addPrecinct(Precinct p){
-        this.addPopulation(p.getPopulation());
+        //this.addPopulation(p.getPopulation());
         if(this.counties.containsKey(p.getCountyID())){
             int count = this.counties.get(p.getCountyID());
             this.counties.replace(p.getCountyID(), count + 1);
