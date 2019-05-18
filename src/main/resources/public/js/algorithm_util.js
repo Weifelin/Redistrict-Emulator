@@ -35,14 +35,17 @@ angular.module('AlgoUtil')
         service.startSingleRun = function() {
             if ($rootScope.globalData.selectedState !== "") {
                 $rootScope.globalData.programState = $rootScope.programStates.RUNNING;
-                var url = "single-run";
-                var data = angular.element("#appShell").scope().content["singleRun"].packData();
-                data = service.formatData(data);
-                return $http.post(url, data);
             } else {
                 $mdToast.showSimple("State not selected.");
                 return null;
             }
+        };
+
+        service.makeSingleRunRequest = function() {
+            var url = "single-run";
+            var data = angular.element("#appShell").scope().content["singleRun"].packData();
+            data = service.formatData(data);
+            return $http.post(url, data);
         };
 
         return service;

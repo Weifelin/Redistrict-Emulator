@@ -107,7 +107,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
                 $scope.usMap.initClusters();
-                var response = AlgorithmService.startSingleRun();
+                var response = AlgorithmService.makeSingleRunRequest();
                 console.log(response);
                 if (response) {
                     response.then(function(successResponse) {
