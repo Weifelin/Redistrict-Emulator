@@ -27,7 +27,7 @@ public class SimpleClusterGroups {
         simpleClusterGroups = new ArrayList<>();
     }
 
-    public List<SingleClusterGroup> getSimpleClusterGourps() {
+    public List<SingleClusterGroup> getSimpleClusterGroups() {
         return simpleClusterGroups;
     }
 
@@ -43,7 +43,7 @@ public class SimpleClusterGroups {
         return state;
     }
 
-    public void setSimpleClusterGourps(List<SingleClusterGroup> simpleClusterGroups) {
+    public void setSimpleClusterGroups(List<SingleClusterGroup> simpleClusterGroups) {
         this.simpleClusterGroups = simpleClusterGroups;
     }
 }
