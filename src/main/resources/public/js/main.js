@@ -124,6 +124,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
                             });
                         }
                     }, function(errorResponse) {
+                        console.log(errorResponse);
                         $mdToast.showSimple("Request to start algorithm failed.");
                     });
                 }
