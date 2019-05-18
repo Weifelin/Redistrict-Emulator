@@ -198,4 +198,10 @@ public class Precinct {
     public void setCountyID(String countyID) {
         this.countyID = countyID;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        int id = ((Precinct) obj).getPrecinctID();
+        return this.getPrecinctID() == (id);
+    }
 }

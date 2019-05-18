@@ -105,7 +105,7 @@ public class PreProcess {
             CoordinateSequence coordinateSequence = new CoordinateArraySequence(coordinates);
             Geometry polygon = geometryFactory.createPolygon(coordinateSequence);
 
-            StateE stateE = StateE.VA;
+            StateE stateE = StateE.NJ;
 
 //            if (stateE == StateE.VA){
 //                polygon = new TopologyPreservingSimplifier(polygon).getResultGeometry();
