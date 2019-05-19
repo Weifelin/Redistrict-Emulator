@@ -15,6 +15,7 @@ function Map(info) {
 	maplet.colorIndex;
 	maplet.colorQueue = [];
 	maplet.disStyleMap = {};
+	maplet.clusStyleMap = {};
 	this.leaf_states = {};
 	this.leaf_precincts = {};
 	this.leaf_clusters = {};
@@ -167,6 +168,13 @@ function Map(info) {
 	function districtStyle(feature) {
 		var colorSettings;
 		var style;
+		var objType;
+		if (Object.keys(feature.properties).includes("DISTRICT")) {
+			objType = "district";
+		} else {
+			objType = "cluster";
+		}
+
 		if (maplet.colorQueue.length > 0) {
 			colorSettings= maplet.colorQueue.splice(maplet.colorIndex, 1)[0];
 			var queueLength = maplet.colorQueue.length;
@@ -182,9 +190,19 @@ function Map(info) {
 				color: color,
 				fillOpacity: 0.4
 			};
-			maplet.disStyleMap[feature.properties.DISTRICT] = style;
+
+			if (objType == "district") {
+				maplet.disStyleMap[feature.properties.DISTRICT] = style;
+			} else {
+				maplet.clusStyleMap[feature.properties.clusterID] = style;
+			}
+
 		} else {
-			style = maplet.disStyleMap[feature.properties.DISTRICT];
+			if (objType == "district") {
+				style = maplet.disStyleMap[feature.properties.DISTRICT];
+			} else {
+				style = maplet.clusStyleMap[feature.properties.clusterID];
+			}
 		}
 
 		return style;
