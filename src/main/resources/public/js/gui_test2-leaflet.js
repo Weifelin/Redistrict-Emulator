@@ -10,6 +10,7 @@ function Map(info) {
 	this.layerCtrl;
 	maplet.GeoDataService;
 	maplet.$mdToast;
+	maplet.$http;
 	maplet.stateCallback;
 	maplet.colorIndex;
 	maplet.colorQueue = [];
@@ -77,25 +78,28 @@ function Map(info) {
 		});
 	};
 
-	maplet.initClusters = function() {
+	maplet.initClusters = function(simpleClusterGroups) {
 		if (maplet.clusterLayer) {
 			maplet.layers.removeLayer(maplet.clusterLayer);
 			maplet.layerCtrl.removeLayer(maplet.clusterLayer);
 		}
-		var decimalPrecision = 6;
-		var initialGeoJSON = maplet.precinctLayer.toGeoJSON(decimalPrecision);
-		maplet.clusterLayer = new L.geoJSON(initialGeoJSON, {
-			style: precinctStyle,
-			onEachFeature: onEachCluster
+		angular.forEach(simpleClusterGroups, function(cluster) {
+			var clusterID = cluster.clusterID;
+			maplet.$http.get('getClusters').then(function(clusterResponse) {
+				console.log(clusterResponse);
+			}, function(errorResponse) {
+				console.log(errorResponse);
+			});
 		});
-		hidePrecinctPanel();
+
+		/*hidePrecinctPanel();
 		maplet.layerCtrl.addOverlay(maplet.clusterLayer, 'Clusters');
 		maplet.layers.addLayer(maplet.clusterLayer);
 		maplet.clusterLayer.eachLayer(function(layer) {
 			if (layer.feature) {
 				maplet.leaf_clusters[layer.feature.properties.precinctID] = layer._leaflet_id;
 			}
-		});
+		});*/
 	};
 
 	/**
@@ -104,6 +108,7 @@ function Map(info) {
 	// Style Functions
 	maplet.genColorList = function(numDistricts) {
 		maplet.colorIndex = 0;
+		maplet.colorQueue.clear();
 		var shift = Math.floor(Math.random() * 360);
 		for (var i = shift; i < (360 + shift); i += (360 / numDistricts)) {
 			var color = {};
