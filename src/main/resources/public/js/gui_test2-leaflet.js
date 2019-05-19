@@ -532,7 +532,8 @@ function Map(info) {
 	}
 
 	maplet.moveCluster = function(precinctId, oldClusterId, newClusterId) {
-		newClusterId = maplet.cluster_seeds[newClusterId];
+
+		//newClusterId = maplet.cluster_seeds[newClusterId];
 		var precinct = maplet.precinctLayer.getLayer(maplet.leaf_precincts[precinctId]);
 		var precGeo = precinct.toGeoJSON();
 		var oldCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[oldClusterId]);
@@ -540,8 +541,13 @@ function Map(info) {
 		maplet.clusterLayer.removeLayer(oldCluster);
 		var oldCoord = martinez.diff(oldClusGeo.geometry.coordinates, precGeo.geometry.coordinates);
 		if (oldCoord.length > 0) {
+			if (dimenCount(oldCoord) == 3) {
+				oldClusGeo.geometry.type = "Polygon";
+			} else if (dimenCount(oldCoord) == 4) {
+				oldClusGeo.geometry.type = "MultiPolygon";
+			}
 			oldClusGeo.properties = updateClusterProps(oldClusGeo.properties,
-													   precGeo.properties, true);
+				precGeo.properties, true);
 			oldClusGeo.geometry.coordinates = oldCoord[0];
 			// Convert to layer
 			oldCluster = new L.GeoJSON(oldClusGeo, {
@@ -556,10 +562,17 @@ function Map(info) {
 		var newCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[newClusterId]);
 		var newClusGeo = newCluster.toGeoJSON();
 		maplet.clusterLayer.removeLayer(newCluster);
+		//newClusGeo.geometry = turf.union(newClusGeo.geometry, precGeo.geometry);
 		newClusGeo.geometry.coordinates = martinez.union(newClusGeo.geometry.coordinates,
-												         precGeo.geometry.coordinates)[0];
+			precGeo.geometry.coordinates);
+		var newCoord = newClusGeo.geometry.coordinates;
+		if (dimenCount(newCoord) == 3) {
+			newClusGeo.geometry.type = "Polygon";
+		} else if (dimenCount(newCoord) == 4) {
+			newClusGeo.geometry.type = "MultiPolygon";
+		}
 		newClusGeo.properties = updateClusterProps(newClusGeo.properties,
-														   precGeo.properties, false);
+			precGeo.properties, false);
 		newCluster = new L.GeoJSON(newClusGeo, {
 			style: precinctStyle,
 			onEachFeature: onEachCluster
@@ -567,5 +580,13 @@ function Map(info) {
 		newCluster = newCluster.getLayers()[0];
 		maplet.leaf_clusters[newClusterId] = newCluster._leaflet_id;
 		maplet.clusterLayer.addLayer(newCluster);
+	}
+
+	function dimenCount(arr) {
+		if (arr[0] === undefined) {
+			return 0;
+		} else {
+			return dimenCount(arr[0]) + 1;
+		}
 	}
 }
