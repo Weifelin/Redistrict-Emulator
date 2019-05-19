@@ -56,6 +56,9 @@ public class ObjectiveFunction {
         this.minScores.put(Measures.Compactness, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.Partisan, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.Population, Double.POSITIVE_INFINITY);
+        this.maxScores.put(Measures.Compactness, 0.0);
+        this.maxScores.put(Measures.Partisan, 0.0);
+        this.maxScores.put(Measures.Population, 0.0);
         this.state = state;
     }
 
