@@ -11,5 +11,5 @@ After: <span>{{$ctrl.scoreAfter}}</span><br />
     <h7 flex="20">Actual</h7><span flex="20">{{$ctrl.actualStat.numRVoters}}</span><span flex="20">{{$ctrl.actualStat.numDVoters}}</span>
                              <span flex="20">{{$ctrl.actualStat.seatPercentR}}</span><span flex="20">{{$ctrl.actualStat.seatPercentD}}</span>
     <h7 ng-repeat-start="(districtID, poliStat) in $ctrl.districtStat" flex="20">District {{districtID}}</h7>
-                             <span></span>
+                             <span flex="20">{{poliStat.numRVoters}}</span><span flex="20" ng-repeat-end>{{poliStat.numDVoters}}</span>
 </div>

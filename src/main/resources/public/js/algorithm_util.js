@@ -48,5 +48,12 @@ angular.module('AlgoUtil')
             return $http.post(url, data);
         };
 
+        service.startSimAnneal = function() {
+            var url = "start-simulatedAnnealing";
+            $http.post(url, {}).then(function(success) {
+                // Make interval that requests 'getmoves' until flag is received
+            });
+        };
+
         return service;
     });

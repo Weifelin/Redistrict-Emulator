@@ -108,6 +108,7 @@ function Map(info) {
 	// Style Functions
 	maplet.genColorList = function(numDistricts) {
 		maplet.colorIndex = 0;
+		maplet.colorQueue.clear();
 		var shift = Math.floor(Math.random() * 360);
 		for (var i = shift; i < (360 + shift); i += (360 / numDistricts)) {
 			var color = {};
