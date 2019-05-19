@@ -13,6 +13,7 @@ import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -50,7 +51,8 @@ public class ObjectiveFunction {
         this.africanAmerican = job.getAfricanAmerican();
         this.asian = job.getAsian();
         this.latinAmerican = job.getLatinAmerican();
-        this.minScores.put(Measures.Demographics, Double.POSITIVE_INFINITY);
+        this.minScores = new HashMap<>();
+        this.maxScores = new HashMap<>();
         this.minScores.put(Measures.Compactness, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.Partisan, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.Population, Double.POSITIVE_INFINITY);
