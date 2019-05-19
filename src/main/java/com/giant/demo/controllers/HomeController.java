@@ -223,8 +223,8 @@ public class HomeController {
         ConcurrentLinkedQueue<Cluster> clusters = algorithm.getClustersQueue();
         Cluster cluster = clusters.poll();
         if (cluster!= null){
-            System.out.println("Printing Boundaries");
-            System.out.println(geoJsonService.coordinatesArrayToString(cluster.getBoundary().getCoordinates()));
+//            System.out.println("Printing Boundaries");
+//            System.out.println(geoJsonService.coordinatesArrayToString(cluster.getBoundary().getCoordinates()));
             ClusterModel clusterModel = new ClusterModel(cluster.getClusterID(), cluster.getBoundary(),cluster.getPopulation(), cluster.getDemographics(), cluster.getPartyPreference(), cluster.isMajorityMinority(), cluster.getNumDemo(), cluster.getNumRep(), cluster.getVotes());
             return clusterModel;
         }
@@ -232,6 +232,6 @@ public class HomeController {
         return null;
     }
 
-    
+
 
 }

@@ -141,7 +141,6 @@ public class ObjectiveFunction {
     }
 
     public double calculateCompactnessScore(Cluster c) {
-        System.out.println(c.getBoundary());
         if(c.getBoundary().isEmpty()){
             return 0.0;
         }
@@ -288,12 +287,12 @@ public class ObjectiveFunction {
     public double getScore(Cluster c) {
         double score = 0.0;
         score += normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
-        System.out.println("Compactness: " + score);
-        //score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
+        //System.out.println("Compactness: " + score);
+        score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
         //System.out.println("Pop score: " + score);
-        //score += normalize(calculateParisanScore(c), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
+        score += normalize(calculateParisanScore(c), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
         //System.out.println("Partisan: " + score);
-        //score += calculateEfficiencyGap(c);//normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
+        score += normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
         return score;
     }
 }

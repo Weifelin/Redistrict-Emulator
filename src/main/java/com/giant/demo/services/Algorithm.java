@@ -415,13 +415,13 @@ public class Algorithm {
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
             double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
-            System.out.println("Objective function score: " + score);
+            //System.out.println("Objective function score: " + score);
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
             }
         }
-        System.out.println(worstDistrict);
+        //System.out.println(worstDistrict);
         return worstDistrict;
     }
 

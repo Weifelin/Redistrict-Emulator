@@ -4,6 +4,7 @@ import com.giant.demo.enums.PartyPreference;
 import com.giant.demo.enums.Race;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.operation.union.CascadedPolygonUnion;
 
 import javax.persistence.*;
 import java.util.*;
@@ -72,7 +73,10 @@ public class Cluster {
         this.numDemo += p.getNumDemo();
         this.numRep += p.getNumRep();
         this.votes += p.getVotes();
-        this.boundary = this.boundary.union(p.getBoundaries());
+        Set<Geometry> geo = new HashSet<Geometry>();
+        geo.add(boundary);
+        geo.add(p.getBoundaries());
+        this.boundary = new CascadedPolygonUnion(geo).union();
     }
 
     public void removePrecinct(Precinct precinct){
