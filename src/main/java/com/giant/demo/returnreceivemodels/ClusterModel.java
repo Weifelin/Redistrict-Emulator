@@ -1,15 +1,18 @@
 package com.giant.demo.returnreceivemodels;
 
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
+import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.giant.demo.entities.Demographics;
 import com.giant.demo.enums.PartyPreference;
+//import com.vividsolutions.jts.geom.Geometry;
 import org.locationtech.jts.geom.Geometry;
 
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import java.util.Map;
-
-public class ClutserModel {
+public class ClusterModel {
     private int ClusterID;
+    @JsonSerialize(using = GeometrySerializer.class)
+    @JsonDeserialize(contentUsing = GeometryDeserializer.class)
     private Geometry boundaries;
     private int population;
     private Demographics demographics;
@@ -19,10 +22,10 @@ public class ClutserModel {
     private int numRep;
     private int votes;
 
-    public ClutserModel() {
+    public ClusterModel() {
     }
 
-    public ClutserModel(int clusterID, Geometry boundaries, int population, Demographics demographics, PartyPreference partyPreference, boolean isMajorityMinority, int numDemo, int numRep, int votes) {
+    public ClusterModel(int clusterID, Geometry boundaries, int population, Demographics demographics, PartyPreference partyPreference, boolean isMajorityMinority, int numDemo, int numRep, int votes) {
         ClusterID = clusterID;
         this.boundaries = boundaries;
         this.population = population;
@@ -105,4 +108,6 @@ public class ClutserModel {
     public void setVotes(int votes) {
         this.votes = votes;
     }
+
+
 }

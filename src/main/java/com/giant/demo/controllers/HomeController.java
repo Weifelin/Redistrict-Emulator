@@ -7,14 +7,14 @@ import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.preprocessing.PreProcess;
-import com.giant.demo.returnreceivemodels.ClutserModel;
+import com.giant.demo.returnreceivemodels.ClusterModel;
 import com.giant.demo.returnreceivemodels.MoveModel;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
 import com.giant.demo.services.*;
+import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +33,6 @@ import javax.validation.Valid;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -220,12 +219,12 @@ public class HomeController {
     }
 
     @GetMapping("/getClusters")
-    public ClutserModel getCluster(){
+    public ClusterModel getCluster(){
         ConcurrentLinkedQueue<Cluster> clusters = algorithm.getClustersQueue();
         Cluster cluster = clusters.poll();
         if (cluster!= null){
-            ClutserModel clutserModel= new ClutserModel(cluster.getClusterID(), cluster.getBoundary(),cluster.getPopulation(), cluster.getDemographics(), cluster.getPartyPreference(), cluster.isMajorityMinority(), cluster.getNumDemo(), cluster.getNumRep(), cluster.getVotes());
-            return clutserModel;
+            ClusterModel clusterModel = new ClusterModel(cluster.getClusterID(), cluster.getBoundary(),cluster.getPopulation(), cluster.getDemographics(), cluster.getPartyPreference(), cluster.isMajorityMinority(), cluster.getNumDemo(), cluster.getNumRep(), cluster.getVotes());
+            return clusterModel;
         }
 
         return null;
