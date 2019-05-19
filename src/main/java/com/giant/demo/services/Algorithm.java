@@ -8,6 +8,7 @@ import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.SingleClusterGroup;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.operation.union.CascadedPolygonUnion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,6 +110,13 @@ public class Algorithm {
             numOfPrecinct += cluster.getContainedPrecincts().size();
         }
         System.out.println("Total Precincts after toDistrict: " + numOfPrecinct);
+        for(Cluster c : clusters){
+            Set<Geometry> geo = new HashSet<>();
+            for(Precinct p : c.getContainedPrecincts()){
+                geo.add(p.getBoundaries());
+            }
+            c.setBoundary(new CascadedPolygonUnion(geo).union());
+        }
         return stateToSimpleClusterGroups(realState);
     }
 

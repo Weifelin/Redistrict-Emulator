@@ -179,6 +179,7 @@ public class DemoApplicationTests {
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
 		Set<Cluster> clusters = algorithm.getClusters();
+		/*
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);
@@ -194,7 +195,7 @@ public class DemoApplicationTests {
 			Move move = queue.poll();
 			counter++;
 			System.out.println("Move "+ counter + ": from:" +move.getFrom().getClusterID()+", to: "+move.getTo().getClusterID()+", precinctID: "+move.getPrecinct().getPrecinctID());
-		}
+		}*/
 	}
 
 }
