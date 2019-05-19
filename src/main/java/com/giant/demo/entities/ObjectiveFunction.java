@@ -193,7 +193,7 @@ public class ObjectiveFunction {
         double numVotes = c.getVotes();
         double numDV = c.getNumDemo() / numVotes;
         double numRV = c.getNumRep() / numVotes;
-        double numIV = (c.getVotes() - c.getNumDemo() - c.getNumRep()) / c.getVotes();
+        double numIV = (numVotes - c.getNumDemo() - c.getNumRep()) / numVotes;
         double score = 1 / Math.abs(numDP - numDV) + 1 / Math.abs(numRP - numRV) + 1 / Math.abs(numIP - numIV);
         if (score > maxScores.get(Measures.Partisan)) {
             maxScores.put(Measures.Partisan, score);
