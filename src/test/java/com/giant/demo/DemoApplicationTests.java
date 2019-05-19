@@ -178,6 +178,7 @@ public class DemoApplicationTests {
 		algorithm.setJob(job);
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
+		Set<Cluster> clusters = algorithm.getClusters();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);

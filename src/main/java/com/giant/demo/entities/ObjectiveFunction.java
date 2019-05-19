@@ -11,10 +11,14 @@ import javafx.util.Pair;
 import org.locationtech.jts.algorithm.ConvexHull;
 import org.locationtech.jts.algorithm.MinimumBoundingCircle;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
+import sun.invoke.empty.Empty;
 
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.lang.Float.NaN;
 
 @Entity
 public class ObjectiveFunction {
@@ -57,11 +61,18 @@ public class ObjectiveFunction {
         this.minScores.put(Measures.Partisan, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.Population, Double.POSITIVE_INFINITY);
         this.minScores.put(Measures.EfficiencyGap, Double.POSITIVE_INFINITY);
+        this.minScores.put(Measures.PolsbyPopper, Double.POSITIVE_INFINITY);
+        this.minScores.put(Measures.Reock, Double.POSITIVE_INFINITY);
+        this.minScores.put(Measures.ConvexHull, Double.POSITIVE_INFINITY);
+        this.minScores.put(Measures.Schwartzberg, Double.POSITIVE_INFINITY);
         this.maxScores.put(Measures.Compactness, 0.0);
         this.maxScores.put(Measures.Partisan, 0.0);
         this.maxScores.put(Measures.Population, 0.0);
         this.maxScores.put(Measures.EfficiencyGap,0.0);
-        this.maxScores.put(Measures.EfficiencyGap, 0.0);
+        this.maxScores.put(Measures.PolsbyPopper, 0.0);
+        this.maxScores.put(Measures.Reock, 0.0);
+        this.maxScores.put(Measures.ConvexHull, 0.0);
+        this.maxScores.put(Measures.Schwartzberg, 0.0);
         this.state = state;
     }
 
@@ -69,8 +80,8 @@ public class ObjectiveFunction {
         if(min == Double.POSITIVE_INFINITY || min == max){
             min = x * 0.5;
         }
-        if(max == 0.0){
-            max = x;
+        if(max == 0.0 || max == x){
+            max = x * 1.2;
         }
         return (x - min) / (max - min);
     }
@@ -130,6 +141,7 @@ public class ObjectiveFunction {
     }
 
     public double calculateCompactnessScore(Cluster c) {
+        System.out.println(c.getBoundary());
         double polsbyPopper = 0, reock = 0, convexHull = 0, schwartzberg = 0;
         double maxP = 0, maxR = 0, maxC = 0, maxS = 0;
         double minP = 20, minR = 20, minC = 20, minS = 20;
@@ -137,35 +149,60 @@ public class ObjectiveFunction {
         //Area divided by Perimeter
         double A = Math.PI * Math.pow(c.getBoundary().getLength() / (2 * Math.PI), 2);
         polsbyPopper += 4 * Math.PI * (A / Math.pow(c.getBoundary().getLength(), 2));
-        maxP = (polsbyPopper > maxP) ? polsbyPopper : maxP;
-        minP = (polsbyPopper < minP) ? polsbyPopper : minP;
         //Reock
         //Area of the Distrist divided by the area of the minimum bounding circle
         Geometry circle = new MinimumBoundingCircle(c.getBoundary()).getCircle();
         reock += c.getBoundary().getArea() / circle.getArea();
-        maxR = (reock > maxR) ? reock : maxR;
-        minR = (reock < minR) ? reock : minR;
         //ConvexHull
         //ratio of area of district to area of convex hull
         Geometry polygon = new ConvexHull(c.getBoundary()).getConvexHull();
         convexHull += c.getBoundary().getArea() / polygon.getArea();
-        maxC = (convexHull > maxC) ? convexHull : maxC;
-        minC = (convexHull < maxC) ? convexHull : minC;
         //Schwartzberg
         //ratio of perimeter of the district to circumference of circle whose area is
         //equal to area of district
         double r = Math.sqrt(c.getBoundary().getArea() / Math.PI);
         schwartzberg += 1 / (c.getBoundary().getLength() / (2 * Math.PI * r));
-        maxS = (schwartzberg > maxS) ? schwartzberg : maxS;
-        minS = (schwartzberg < minS) ? schwartzberg : minS;
+
+        //log min and max
+        if (polsbyPopper > maxScores.get(Measures.PolsbyPopper)) {
+            maxScores.put(Measures.PolsbyPopper, polsbyPopper);
+        }
+        if (polsbyPopper < minScores.get(Measures.PolsbyPopper)) {
+            minScores.put(Measures.PolsbyPopper, polsbyPopper);
+        }
         polsbyPopper = normalize(polsbyPopper, minP, maxP);
         polsbyPopper *= compactnessWeights.getPolsPopSlider();
-        reock = normalize(reock, minR, maxR);
+        System.out.println("PolsbyyPopper: " + polsbyPopper);
+
+        //reock = normalize(reock, minR, maxR);
+        if (reock > maxScores.get(Measures.Reock)) {
+            maxScores.put(Measures.Reock, reock);
+        }
+        if (reock < minScores.get(Measures.Reock)) {
+            minScores.put(Measures.Reock, reock);
+        }
         reock *= compactnessWeights.getReockSlider();
-        convexHull = normalize(convexHull, minC, maxC);
+        System.out.println("Reock: " + reock);
+
+        //convexHull = normalize(convexHull, minC, maxC);
+        if (convexHull > maxScores.get(Measures.ConvexHull)) {
+            maxScores.put(Measures.ConvexHull, convexHull);
+        }
+        if (convexHull < minScores.get(Measures.ConvexHull)) {
+            minScores.put(Measures.ConvexHull, convexHull);
+        }
         convexHull *= compactnessWeights.getConvexHullSlider();
-        schwartzberg = normalize(schwartzberg, minS, maxS);
+        System.out.println("ConvexHull: " + convexHull);
+
+        //schwartzberg = normalize(schwartzberg, minS, maxS);
+        if (schwartzberg > maxScores.get(Measures.Schwartzberg)) {
+            maxScores.put(Measures.Schwartzberg, schwartzberg);
+        }
+        if (schwartzberg < minScores.get(Measures.Schwartzberg)) {
+            minScores.put(Measures.Schwartzberg, schwartzberg);
+        }
         schwartzberg *= compactnessWeights.getSchwartzSlider();
+        System.out.println("Schwartsberg: " + schwartzberg);
         double score = polsbyPopper + reock + convexHull + schwartzberg;
         if (score > maxScores.get(Measures.Compactness)) {
             maxScores.put(Measures.Compactness, score);
@@ -247,12 +284,12 @@ public class ObjectiveFunction {
 
     public double getScore(Cluster c) {
         double score = 0.0;
-        //score += calculateCompactnessScore(c);//normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
-        //System.out.println(score);
+        score += normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
+        System.out.println("Compactness: " + score);
         //score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
         //System.out.println("Pop score: " + score);
-        score += normalize(calculateParisanScore(c), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
-        System.out.println("Partisan: " + score);
+        //score += normalize(calculateParisanScore(c), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
+        //System.out.println("Partisan: " + score);
         //score += calculateEfficiencyGap(c);//normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
         return score;
     }
