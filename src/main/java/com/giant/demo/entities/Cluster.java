@@ -256,4 +256,28 @@ public class Cluster {
     public void addPopulation(int pop){
         this.population += pop;
     }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
+    public int getNumRep() {
+        return numRep;
+    }
+
+    public void setNumRep(int numRep) {
+        this.numRep = numRep;
+    }
+
+    public int getNumDemo() {
+        return numDemo;
+    }
+
+    public void setNumDemo(int numDemo) {
+        this.numDemo = numDemo;
+    }
 }
