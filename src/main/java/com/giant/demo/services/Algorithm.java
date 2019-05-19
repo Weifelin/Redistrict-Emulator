@@ -30,6 +30,7 @@ public class Algorithm {
     private ObjectiveFunction objectiveFunction;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
+    private static ConcurrentLinkedQueue<Cluster> clustersQueue;
 
     @Autowired
     private PrecinctRepository precinctRepository;
@@ -527,4 +528,20 @@ public class Algorithm {
     public void initializeObjectiveFunction(){
         this.objectiveFunction = new ObjectiveFunction(job, realState);
     }
+
+    public static ConcurrentLinkedQueue<Cluster> getClustersQueue() {
+        return clustersQueue;
+    }
+
+    public static void setClustersQueue(ConcurrentLinkedQueue<Cluster> clustersQueue) {
+        Algorithm.clustersQueue = clustersQueue;
+    }
+
+    public void initializeClusterQueue(){
+        clustersQueue = new ConcurrentLinkedQueue<>();
+        Set<Cluster> clusterSet = realState.getDistricts();
+        clustersQueue.addAll(clusterSet);
+    }
+
+
 }

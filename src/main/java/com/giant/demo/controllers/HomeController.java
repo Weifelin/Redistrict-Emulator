@@ -7,6 +7,7 @@ import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.preprocessing.PreProcess;
+import com.giant.demo.returnreceivemodels.ClutserModel;
 import com.giant.demo.returnreceivemodels.MoveModel;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
@@ -32,6 +33,7 @@ import javax.validation.Valid;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
@@ -172,6 +174,7 @@ public class HomeController {
         algorithm.initializeClusters();
         SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
         System.out.println("simple: "+ simpleClusterGroups.getState().toString());
+        algorithm.initializeClusterQueue();
 //        State realState = algorithm.getRealState();
 //        int numOfPrecinct = 0;
 //        for (Cluster cluster: realState.getDistricts()){
@@ -211,6 +214,18 @@ public class HomeController {
                                                 move.getTo().getClusterID(),
                                                 move.getPrecinct().getPrecinctID());
             return moveModel;
+        }
+
+        return null;
+    }
+
+    @GetMapping("/getClusters")
+    public ClutserModel getCluster(){
+        ConcurrentLinkedQueue<Cluster> clusters = algorithm.getClustersQueue();
+        Cluster cluster = clusters.poll();
+        if (cluster!= null){
+            ClutserModel clutserModel= new ClutserModel(cluster.getClusterID(), cluster.getBoundary(),cluster.getPopulation(), cluster.getDemographics(), cluster.getPartyPreference(), cluster.isMajorityMinority(), cluster.getNumDemo(), cluster.getNumRep(), cluster.getVotes());
+            return clutserModel;
         }
 
         return null;

@@ -256,4 +256,40 @@ public class Cluster {
     public void addPopulation(int pop){
         this.population += pop;
     }
+
+    public void setContainedPrecincts(List<Precinct> containedPrecincts) {
+        this.containedPrecincts = containedPrecincts;
+    }
+
+    public boolean isMajorityMinority() {
+        return isMajorityMinority;
+    }
+
+    public void setMajorityMinority(boolean majorityMinority) {
+        isMajorityMinority = majorityMinority;
+    }
+
+    public int getNumDemo() {
+        return numDemo;
+    }
+
+    public void setNumDemo(int numDemo) {
+        this.numDemo = numDemo;
+    }
+
+    public int getNumRep() {
+        return numRep;
+    }
+
+    public void setNumRep(int numRep) {
+        this.numRep = numRep;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
 }
