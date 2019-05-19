@@ -59,7 +59,7 @@ public class Cluster {
     }
 
     public void addPrecinct(Precinct p){
-        //this.addPopulation(p.getPopulation());
+        this.addPopulation(p.getPopulation());
         if(this.counties.containsKey(p.getCountyID())){
             int count = this.counties.get(p.getCountyID());
             this.counties.replace(p.getCountyID(), count + 1);
@@ -89,7 +89,7 @@ public class Cluster {
             numRep -= precinct.getNumRep();
             votes -= precinct.getVotes();
             /*boundary operation*/
-            boundary = boundary.difference(precinct.getBoundaries());
+            boundary = boundary.symDifference(precinct.getBoundaries());
 
         }
     }

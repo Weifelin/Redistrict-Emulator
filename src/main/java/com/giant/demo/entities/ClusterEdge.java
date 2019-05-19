@@ -59,13 +59,6 @@ public class ClusterEdge {
         Set<String> counties1 = cluster1.getCounties().keySet();
         Set<String> counties2 = cluster2.getCounties().keySet();
 
-//        counties1.remove(null);
-//        counties2.remove(null);
-//        Set<String> counties3 = counties1;
-//        counties3.retainAll(counties2);
-//        if(counties2.size() > 0) {
-//            counties1.addAll(counties2);
-//        }
 
         Set<String> union = new HashSet<>();
         union.addAll(counties1);
@@ -78,7 +71,6 @@ public class ClusterEdge {
 
         c1.retainAll(c2);
         score += 3*(c1.size()/(union.size() +1));
-//        score += 3 * (counties3.size() / (counties1.size() + 1));
         return score;
     }
 
@@ -104,8 +96,12 @@ public class ClusterEdge {
         this.cluster2 = cluster2;
     }
 
-    public double getJoinability(Job job) {
-        this.setJoinability(calculateJoinability(job));
+    public double getJoinability(Job job, double goal, int pop) {
+        double score = calculateJoinability(job);
+        goal /= job.getNumDistricts();
+        double popScore = (1 / Math.abs(goal - pop));// * 1000000000);
+        //popScore *= 100;
+        this.setJoinability(score + 1/popScore);
         return joinability;
     }
 

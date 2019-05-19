@@ -120,8 +120,9 @@ public class Algorithm {
 
             ClusterEdge e = clusterEdgeMap.get(key);
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
-            if(bestEdge == null || combinePop <= popUpperBound && e.getJoinability(j) > max){
-                max = e.getJoinability(j);
+            double join = e.getJoinability(j, totalPop, combinePop);
+            if(bestEdge == null || combinePop <= popUpperBound && join > max){
+                max = join;
                 bestEdge = e;
             }
         }
@@ -414,7 +415,7 @@ public class Algorithm {
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
             double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
-            System.out.println(score);
+            System.out.println("Objective function score: " + score);
             if (score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
