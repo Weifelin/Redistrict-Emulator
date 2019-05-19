@@ -142,6 +142,9 @@ public class ObjectiveFunction {
 
     public double calculateCompactnessScore(Cluster c) {
         System.out.println(c.getBoundary());
+        if(c.getBoundary().isEmpty()){
+            return 0.0;
+        }
         double polsbyPopper = 0, reock = 0, convexHull = 0, schwartzberg = 0;
         double maxP = 0, maxR = 0, maxC = 0, maxS = 0;
         double minP = 20, minR = 20, minC = 20, minS = 20;
@@ -172,7 +175,7 @@ public class ObjectiveFunction {
         }
         polsbyPopper = normalize(polsbyPopper, minP, maxP);
         polsbyPopper *= compactnessWeights.getPolsPopSlider();
-        System.out.println("PolsbyyPopper: " + polsbyPopper);
+        //System.out.println("PolsbyyPopper: " + polsbyPopper);
 
         //reock = normalize(reock, minR, maxR);
         if (reock > maxScores.get(Measures.Reock)) {
@@ -182,7 +185,7 @@ public class ObjectiveFunction {
             minScores.put(Measures.Reock, reock);
         }
         reock *= compactnessWeights.getReockSlider();
-        System.out.println("Reock: " + reock);
+        //System.out.println("Reock: " + reock);
 
         //convexHull = normalize(convexHull, minC, maxC);
         if (convexHull > maxScores.get(Measures.ConvexHull)) {
@@ -192,7 +195,7 @@ public class ObjectiveFunction {
             minScores.put(Measures.ConvexHull, convexHull);
         }
         convexHull *= compactnessWeights.getConvexHullSlider();
-        System.out.println("ConvexHull: " + convexHull);
+        //System.out.println("ConvexHull: " + convexHull);
 
         //schwartzberg = normalize(schwartzberg, minS, maxS);
         if (schwartzberg > maxScores.get(Measures.Schwartzberg)) {
@@ -202,7 +205,7 @@ public class ObjectiveFunction {
             minScores.put(Measures.Schwartzberg, schwartzberg);
         }
         schwartzberg *= compactnessWeights.getSchwartzSlider();
-        System.out.println("Schwartsberg: " + schwartzberg);
+        //System.out.println("Schwartsberg: " + schwartzberg);
         double score = polsbyPopper + reock + convexHull + schwartzberg;
         if (score > maxScores.get(Measures.Compactness)) {
             maxScores.put(Measures.Compactness, score);
