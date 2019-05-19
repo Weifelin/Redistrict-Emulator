@@ -101,7 +101,7 @@ public class GeoJsonService {
     }
 
     public String coordinateToString(Coordinate coordinate){
-        return "["+coordinate.getX()+","+coordinate.getY()+"]";
+        return "["+coordinate.x +","+coordinate.y+"]";
     }
 
     public StringBuffer coordinatesArrayToString(Coordinate[] coordinates){
