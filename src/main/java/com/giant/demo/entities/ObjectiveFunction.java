@@ -61,10 +61,17 @@ public class ObjectiveFunction {
         this.maxScores.put(Measures.Partisan, 0.0);
         this.maxScores.put(Measures.Population, 0.0);
         this.maxScores.put(Measures.EfficiencyGap,0.0);
+        this.maxScores.put(Measures.EfficiencyGap, 0.0);
         this.state = state;
     }
 
     public double normalize(double x, double min, double max) {
+        if(min == Double.POSITIVE_INFINITY || min == max){
+            min = x * 0.5;
+        }
+        if(max == 0.0){
+            max = x;
+        }
         return (x - min) / (max - min);
     }
 
@@ -170,36 +177,25 @@ public class ObjectiveFunction {
     }
 
 
-    public double calculateParisanScore() {
-        double perDemo = 0, perRep = 0, perInd = 0;
-        int numD = 0, numR = 0, numI = 0;
-        for (Cluster c : this.state.getDistricts()) {
-            int numDemo = 0, numRep = 0, numInd = 0;
-            //percentage representation per cluster
-            for (Precinct p : c.getContainedPrecincts()) {
-                if (p.getPartyPreference() == PartyPreference.BLUE)
-                    numDemo++;
-                else if (p.getPartyPreference() == PartyPreference.RED)
-                    numRep++;
-                else
-                    numInd++;
-            }
-            //percentage party affiliation
-            perDemo += numDemo / c.getContainedPrecincts().size();
-            perRep += numRep / c.getContainedPrecincts().size();
-            perInd += numInd / c.getContainedPrecincts().size();
+    public double calculateParisanScore(Cluster c) {
+        double numDP = 0.0, numRP = 0.0, numIP = 0.0;
+        for(Precinct p : c.getContainedPrecincts()){
             if (c.getPartyPreference() == PartyPreference.BLUE)
-                numD++;
+                numDP++;
             else if (c.getPartyPreference() == PartyPreference.RED)
-                numR++;
+                numRP++;
             else
-                numI++;
+                numIP++;
         }
-        double score = 0.0;
-        //measure distance of overall representation to each cluster
-        score += 1 / Math.abs(perDemo - numD);
-        score += 1 / Math.abs(perRep - numR);
-        score += 1 / Math.abs(perInd - numI);
+        double numPrecincts = c.getContainedPrecincts().size();
+        numDP /= numPrecincts;
+        numRP /= numPrecincts;
+        numIP /= numPrecincts;
+        double numVotes = c.getVotes();
+        double numDV = c.getNumDemo() / numVotes;
+        double numRV = c.getNumRep() / numVotes;
+        double numIV = (c.getVotes() - c.getNumDemo() - c.getNumRep()) / c.getVotes();
+        double score = 1 / Math.abs(numDP - numDV) + 1 / Math.abs(numRP - numRV) + 1 / Math.abs(numIP - numIV);
         if (score > maxScores.get(Measures.Partisan)) {
             maxScores.put(Measures.Partisan, score);
         }
@@ -226,7 +222,7 @@ public class ObjectiveFunction {
         }
         rWaste = numRExcess + numRLoss;
         dWaste = numDExcess + numDLoss;
-        double score = (numDemo > numRep) ? dWaste / numDemo : rWaste / numRep;
+        double score = Math.abs(rWaste - dWaste) / c.getContainedPrecincts().size();
         if (score > maxScores.get(Measures.EfficiencyGap)) {
             maxScores.put(Measures.EfficiencyGap, score);
         }
@@ -239,7 +235,7 @@ public class ObjectiveFunction {
     //measure how close the population of each cluster is so being #people / # districts
     public double calculatePopulationScore(Cluster c) {
         double score, avgPop = this.state.getPopulation() / this.state.getDistricts().size();
-        score = 1 / Math.abs(avgPop - c.getPopulation());
+        score = (avgPop == c.getPopulation()) ? 10 : 1 / Math.abs(avgPop - c.getPopulation());
         if (score > maxScores.get(Measures.Population)) {
             maxScores.put(Measures.Population, score);
         }
@@ -251,10 +247,13 @@ public class ObjectiveFunction {
 
     public double getScore(Cluster c) {
         double score = 0.0;
-        score += normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
-        score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
-        score += normalize(calculateParisanScore(), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
-        score += normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
+        //score += calculateCompactnessScore(c);//normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
+        //System.out.println(score);
+        //score += normalize(calculatePopulationScore(c), minScores.get(Measures.Population), maxScores.get(Measures.Population)) * populationEqualityWeight;
+        //System.out.println("Pop score: " + score);
+        score += normalize(calculateParisanScore(c), minScores.get(Measures.Partisan), maxScores.get(Measures.Partisan)) * partisanFairnessWeight;
+        System.out.println("Partisan: " + score);
+        //score += calculateEfficiencyGap(c);//normalize(calculateEfficiencyGap(c), minScores.get(Measures.EfficiencyGap), maxScores.get(Measures.EfficiencyGap)) * efficiencyGapWeight;
         return score;
     }
 }

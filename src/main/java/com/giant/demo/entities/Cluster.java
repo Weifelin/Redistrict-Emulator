@@ -257,6 +257,7 @@ public class Cluster {
         this.population += pop;
     }
 
+
     public void setContainedPrecincts(List<Precinct> containedPrecincts) {
         this.containedPrecincts = containedPrecincts;
     }
@@ -277,6 +278,14 @@ public class Cluster {
         this.numDemo = numDemo;
     }
 
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
     public int getNumRep() {
         return numRep;
     }
@@ -285,11 +294,6 @@ public class Cluster {
         this.numRep = numRep;
     }
 
-    public int getVotes() {
-        return votes;
-    }
 
-    public void setVotes(int votes) {
-        this.votes = votes;
-    }
+
 }
