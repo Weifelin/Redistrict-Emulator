@@ -3,6 +3,8 @@ package com.giant.demo.entities;
 import com.giant.demo.enums.PartyPreference;
 import com.giant.demo.enums.Race;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import javax.persistence.*;
 import java.util.*;
@@ -71,7 +73,12 @@ public class Cluster {
         this.numDemo += p.getNumDemo();
         this.numRep += p.getNumRep();
         this.votes += p.getVotes();
-        this.boundary.union(p.getBoundaries());
+        Geometry[] geo = new Geometry[2];
+        geo[0] = boundary;
+        geo[1] = p.getBoundaries();
+        GeometryCollection polygon = new GeometryCollection(geo, new GeometryFactory());
+        polygon.union();
+        this.boundary = polygon;
     }
 
     public void removePrecinct(Precinct precinct){
@@ -89,7 +96,7 @@ public class Cluster {
             numRep -= precinct.getNumRep();
             votes -= precinct.getVotes();
             /*boundary operation*/
-            boundary = boundary.symDifference(precinct.getBoundaries());
+            this.boundary = boundary.symDifference(precinct.getBoundaries());
 
         }
     }
