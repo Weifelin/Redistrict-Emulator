@@ -54,7 +54,7 @@ app.run(['$rootScope', '$cookies', '$http',
         }
 }]);
 
-app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $scope, $rootScope, $mdToast) {
+app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $scope, $rootScope, $mdToast, $http) {
     	var ctrl = this;
     	$scope.$rootScope = $rootScope;
     	// Load General Component Properties 
@@ -78,6 +78,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
                 $scope.usMap = new Map($scope.uiInfo);
                 $scope.usMap.GeoDataService = GeoDataService;
                 $scope.usMap.$mdToast = $mdToast;
+                $scope.usMap.$http = $http;
                 $scope.usMap.stateCallback = function(stateId, map) {
                     // Load precincts and districts, ensuring both load properly
                     $rootScope.loading = true;
@@ -106,28 +107,15 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
         $rootScope.$watch('globalData.programState', function(newVal, oldVal) {
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
-                $scope.usMap.initClusters();
-                var response = AlgorithmService.makeSingleRunRequest();
-                console.log(response);
-                if (response) {
-                    response.then(function(successResponse) {
-                        console.log(successResponse);
-                        if(successResponse.data !== "") {
-                            angular.forEach(successResponse.data.simpleClusterGroups, function(cluster) {
-                               var clusterID = cluster.clusterID;
-                               var seedPrecinct = cluster.precinctList[0];
-                               var newPrecinctList = cluster.precinctList.slice(1);
-                               $scope.usMap.addPrecinctSeed(clusterID, seedPrecinct);
-                               angular.forEach(newPrecinctList, function(precinctID) {
-                                   $scope.usMap.moveCluster(precinctID, precinctID, clusterID);
-                               });
-                            });
-                        }
-                    }, function(errorResponse) {
-                        console.log(errorResponse);
-                        $mdToast.showSimple("Request to start algorithm failed.");
-                    });
-                }
+                AlgorithmService.makeSingleRunRequest().then(function(successResponse) {
+                    console.log(successResponse);
+                    if(successResponse.data !== "") {
+                        $scope.usMap.initClusters(successResponse.data.simpleClusterGroups);
+                    }
+                }, function(errorResponse) {
+                    console.log(errorResponse);
+                    $mdToast.showSimple("Request to start algorithm failed.");
+                });
             }
         });
 });
