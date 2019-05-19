@@ -5,6 +5,7 @@ import com.giant.demo.entities.*;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.AfricanAmerican;
 import com.giant.demo.jobObjects.Asian;
+import com.giant.demo.jobObjects.Compactness;
 import com.giant.demo.jobObjects.LatinAmerican;
 import com.giant.demo.repositories.PrecinctRepository;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
@@ -172,7 +173,8 @@ public class DemoApplicationTests {
 
 	@Test
 	public void SimulatedAnnealingTest(){
-		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
+		Compactness compactness = new Compactness(0.2,0.2,0.2,0.2);
+		Job job = new Job(compactness, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
 		algorithm.setJob(job);
 		algorithm.initializeClusters();
 		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());

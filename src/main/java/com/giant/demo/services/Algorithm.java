@@ -191,7 +191,7 @@ public class Algorithm {
     public void breakCluster(Cluster c){
         for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
-            neighbor.addPrecinct(p);
+             neighbor.addPrecinct(p);
         }
     }
 
