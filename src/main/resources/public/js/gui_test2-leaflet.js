@@ -83,32 +83,67 @@ function Map(info) {
 			maplet.layers.removeLayer(maplet.clusterLayer);
 			maplet.layerCtrl.removeLayer(maplet.clusterLayer);
 		}
+		var featureGroup = {
+			type: "FeatureCollection",
+			features: []
+		};
+		maplet.genColorList(simpleClusterGroups.length);
 		angular.forEach(simpleClusterGroups, function(cluster) {
 			var clusterID = cluster.clusterID;
 			maplet.$http.get('getClusters').then(function(clusterResponse) {
-				console.log(clusterResponse);
+				if (clusterResponse.data) {
+					featureGroup.features.push(maplet.makeFeature(clusterResponse.data));
+					if (clusterResponse.data.clusterID == simpleClusterGroups.length - 1) {
+						maplet.clusterLayer = new L.geoJSON(featureGroup, {
+							style: districtStyle,
+							onEachFeature: onEachCluster
+						});
+						maplet.layerCtrl.addOverlay(maplet.clusterLayer, 'Clusters');
+						maplet.layers.addLayer(maplet.clusterLayer);
+						maplet.clusterLayer.eachLayer(function(layer) {
+							if (layer.feature) {
+								maplet.leaf_clusters[layer.feature.properties.clusterID] = layer._leaflet_id;
+							}
+						});
+					}
+				}
 			}, function(errorResponse) {
 				console.log(errorResponse);
 			});
 		});
-
-		/*hidePrecinctPanel();
-		maplet.layerCtrl.addOverlay(maplet.clusterLayer, 'Clusters');
-		maplet.layers.addLayer(maplet.clusterLayer);
-		maplet.clusterLayer.eachLayer(function(layer) {
-			if (layer.feature) {
-				maplet.leaf_clusters[layer.feature.properties.precinctID] = layer._leaflet_id;
-			}
-		});*/
 	};
 
 	/**
 	 * Helper functions
 	 */
+	maplet.makeFeature = function(clusterInfo) {
+		var feature = {
+			type: "Feature",
+			properties: {},
+			geometry: null
+		};
+		console.log(clusterInfo);
+		var labels = Object.keys(clusterInfo);
+		angular.forEach(labels, function(label) {
+			if (label == "demographics") {
+				var demLabels = Object.keys(clusterInfo[label]);
+				angular.forEach(demLabels, function(demLabel) {
+					this.properties[demLabel] = clusterInfo[label][demLabel];
+				}, this);
+			} else if (label == "boundaries") {
+				this.geometry = clusterInfo[label];
+			} else {
+				this.properties[label] = clusterInfo[label];
+			}
+		}, feature);
+
+		return feature;
+	};
+
 	// Style Functions
 	maplet.genColorList = function(numDistricts) {
 		maplet.colorIndex = 0;
-		maplet.colorQueue.clear();
+		maplet.colorQueue = [];
 		var shift = Math.floor(Math.random() * 360);
 		for (var i = shift; i < (360 + shift); i += (360 / numDistricts)) {
 			var color = {};
@@ -474,7 +509,7 @@ function Map(info) {
 		// Update info control based on feature properties
 		maplet.clusInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>Cluster Metrics</h4>' +  (props ?
-				'Cluster ID: <i>' + props.precinctID + '</i><br />' +
+				'Cluster ID: <i>' + props.clusterID + '</i><br />' +
 				'Population: ' + formatNumber(props.population) + '<br />' +
 				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
 				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
