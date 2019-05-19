@@ -519,4 +519,12 @@ public class Algorithm {
     public State getRealState() {
         return realState;
     }
+
+    public static ConcurrentLinkedQueue<Move> getMoveQueue() {
+        return moveQueue;
+    }
+
+    public void initializeObjectiveFunction(){
+        this.objectiveFunction = new ObjectiveFunction(job, realState);
+    }
 }

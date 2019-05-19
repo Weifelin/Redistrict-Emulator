@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.util.AssertionErrors.assertNotEquals;
@@ -62,22 +63,22 @@ public class DemoApplicationTests {
 
 	}
 
-	@Test
-	public void GraphPartisionTest(){
-
-		//Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
-		//algorithm.setJob(job); /*Store job in algorithm until phase II. */
-		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
-		algorithm.setJob(job);
-		algorithm.initializeClusters();
-		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+//	@Test
+//	public void GraphPartisionTest(){
+//
+//		//Job job = new Job(0.5, 0.5, 0.5,0.5,0.5, 12); /*double demo, double comp, double cont, double pop, double party*/
+//		//algorithm.setJob(job); /*Store job in algorithm until phase II. */
+//		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
+//		algorithm.setJob(job);
+//		algorithm.initializeClusters();
+//		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
+//		ObjectMapper mapper = new ObjectMapper();
+//		try {
+//			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	@Test
 	public void combineClusterTest() {
@@ -167,6 +168,30 @@ public class DemoApplicationTests {
 		assertNotEquals("Null Cluster", null, c1);
 		System.out.println("Min Population: " + c1.getPopulation());
 		System.out.println("Precincts: " + c1.getContainedPrecincts());*/
+	}
+
+	@Test
+	public void SimulatedAnnealingTest(){
+		Job job = new Job(null, 12, 0.5, 0.5, 0.5, 100, new AfricanAmerican(10, 60), new LatinAmerican(5, 60), new Asian(5, 60), StateE.NJ);
+		algorithm.setJob(job);
+		algorithm.initializeClusters();
+		SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			mapper.writeValue(new File("SimpleGroups.json"), simpleClusterGroups);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		algorithm.initializeObjectiveFunction();
+		algorithm.generateMoves();
+		ConcurrentLinkedQueue<Move> queue = algorithm.getMoveQueue();
+
+		int counter = 0;
+		while(!queue.isEmpty()){
+			Move move = queue.poll();
+			counter++;
+			System.out.println("Move "+ counter + ": from:" +move.getFrom().getClusterID()+", to: "+move.getTo().getClusterID()+", precinctID: "+move.getPrecinct().getPrecinctID());
+		}
 	}
 
 }

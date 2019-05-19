@@ -7,11 +7,13 @@ import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.preprocessing.PreProcess;
+import com.giant.demo.returnreceivemodels.MoveModel;
 import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
 import com.giant.demo.returnreceivemodels.UserModel;
 import com.giant.demo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,7 @@ import javax.validation.Valid;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
@@ -156,9 +159,9 @@ public class HomeController {
     public SimpleClusterGroups singleRun(@RequestBody Job job){
 //        counter ++;
 //        System.out.println("being called: "+ counter);
-//        if (algorithm.getStatus() == AlgorithmStatus.Running){
-//            return null;
-//        }
+        if (algorithm.getStatus() == AlgorithmStatus.Running){
+            return null;
+        }
 //
 //        if (job == null){
 //            return  null;
@@ -190,6 +193,27 @@ public class HomeController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Doesn't Exist", e);
         }
+    }
+
+    @PostMapping("/start-simulatedAnnealing")
+    public MoveModel trigger(@RequestBody Job job){
+        algorithm.initializeObjectiveFunction();
+        algorithm.generateMoves();
+        return new MoveModel(); /* This will be returned after generateMoves() finishes.*/
+    }
+
+    @GetMapping("/getmoves")
+    public MoveModel getMove(){
+        ConcurrentLinkedQueue<Move> queue =  algorithm.getMoveQueue();
+        Move move = queue.poll();
+        if (move != null) {
+            MoveModel moveModel = new MoveModel(move.getFrom().getClusterID(),
+                                                move.getTo().getClusterID(),
+                                                move.getPrecinct().getPrecinctID());
+            return moveModel;
+        }
+
+        return null;
     }
 
 }
