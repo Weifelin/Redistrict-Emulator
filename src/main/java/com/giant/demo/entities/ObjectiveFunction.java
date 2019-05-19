@@ -60,6 +60,7 @@ public class ObjectiveFunction {
         this.maxScores.put(Measures.Compactness, 0.0);
         this.maxScores.put(Measures.Partisan, 0.0);
         this.maxScores.put(Measures.Population, 0.0);
+        this.maxScores.put(Measures.EfficiencyGap,0.0);
         this.maxScores.put(Measures.EfficiencyGap, 0.0);
         this.state = state;
     }
