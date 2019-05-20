@@ -2,6 +2,7 @@
 
 function AlgIntermissionPanel(AlgorithmService, $scope, $rootScope, $element, $attrs) {
     var ctrl = this;
+    $scope.AlgorithmService = AlgorithmService;
 }
 
 angular.module('DistrictApp').component('algIntermission', {
@@ -25,6 +26,6 @@ angular.module('DistrictApp').component('algSummary', {
     templateUrl: 'templates/summary.tmpl.html',
     controller: AlgSummaryPanel,
     bindings: {
-        summaryInfo: '>'
+        summaryInfo: '<'
     }
 });

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('AlgoUtil')
-    .factory('AlgorithmService', function($rootScope, $mdToast, $http) {
+    .factory('AlgorithmService', function($rootScope, $mdToast, $http, $interval) {
         var service = this;
         service.formatData = function(data) {
             var result = {};
@@ -48,11 +48,39 @@ angular.module('AlgoUtil')
             return $http.post(url, data);
         };
 
+        service.getSummary = function() {
+
+        };
+
+        service.getMove = function() {
+            var url = "getmoves";
+            $http.get(url).then(function(moveInfo) {
+                if (moveInfo.data !== "") {
+                    console.log(moveInfo);
+                    if (moveInfo.data.finished) {
+                        $interval.cancel($rootScope.simAnnealPromise);
+                        // make call to getSummary
+                    } else {
+                        var mainCtrl = angular.element("#appShell").scope();
+                        var precinctID = moveInfo.data.precinctID;
+                        var oldClusterID = moveInfo.data.fromID;
+                        var newClusterID = moveInfo.data.toID;
+                        mainCtrl.usMap.moveCluster(precinctID, oldClusterID, newClusterID);
+                    }
+                }
+            }, function(errResponse) {
+                console.log("No move currently available.")
+            });
+        };
+
         service.startSimAnneal = function() {
             var url = "start-simulatedAnnealing";
             $http.post(url, {}).then(function(success) {
                 // Make interval that requests 'getmoves' until flag is received
+                console.log("Phase II finished.");
             });
+
+            $rootScope.simAnnealPromise = $interval(function() { service.getMove(); }, 3000);
         };
 
         return service;

@@ -89,14 +89,16 @@ function Map(info) {
 			features: []
 		};
 		maplet.genColorList(simpleClusterGroups.length);
+		maplet.$rootScope.loadNum = 0;
+		var incr = 100 / simpleClusterGroups.length;
 		angular.forEach(simpleClusterGroups, function(cluster) {
 			var clusterID = cluster.clusterID;
 			maplet.$http.get('getClusters').then(function(clusterResponse) {
 				//console.log(clusterResponse);
 				if (clusterResponse.data) {
 					var feature = maplet.makeFeature(clusterResponse.data);
-					console.log(feature);
 					featureGroup.features.push(feature);
+                    maplet.$rootScope.loadNum += incr;
 					if (featureGroup.features.length == simpleClusterGroups.length) {
 						maplet.clusterLayer = new L.geoJSON(featureGroup, {
 							style: districtStyle,
@@ -137,7 +139,6 @@ function Map(info) {
 					this.properties[demLabel] = clusterInfo[label][demLabel];
 				}, this);
 			} else if (label == "boundaries") {
-				console.log("here");
 				this.geometry = clusterInfo[label];
 			} else {
 				this.properties[label] = clusterInfo[label];
@@ -596,13 +597,12 @@ function Map(info) {
 	}
 
 	maplet.moveCluster = function(precinctId, oldClusterId, newClusterId) {
-
-		//newClusterId = maplet.cluster_seeds[newClusterId];
-		var precinct = maplet.precinctLayer.getLayer(maplet.leaf_precincts[precinctId]);
+	    var precinct = maplet.precinctLayer.getLayer(maplet.leaf_precincts[precinctId]);
 		var precGeo = precinct.toGeoJSON();
 		var oldCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[oldClusterId]);
 		var oldClusGeo = oldCluster.toGeoJSON();
 		maplet.clusterLayer.removeLayer(oldCluster);
+
 		var oldCoord = martinez.diff(oldClusGeo.geometry.coordinates, precGeo.geometry.coordinates);
 		if (oldCoord.length > 0) {
 			if (dimenCount(oldCoord) == 3) {
@@ -615,7 +615,7 @@ function Map(info) {
 			oldClusGeo.geometry.coordinates = oldCoord[0];
 			// Convert to layer
 			oldCluster = new L.GeoJSON(oldClusGeo, {
-				style: precinctStyle,
+				style: districtStyle,
 				onEachFeature: onEachCluster
 			});
 			oldCluster = oldCluster.getLayers()[0];
@@ -626,7 +626,7 @@ function Map(info) {
 		var newCluster = maplet.clusterLayer.getLayer(maplet.leaf_clusters[newClusterId]);
 		var newClusGeo = newCluster.toGeoJSON();
 		maplet.clusterLayer.removeLayer(newCluster);
-		//newClusGeo.geometry = turf.union(newClusGeo.geometry, precGeo.geometry);
+
 		newClusGeo.geometry.coordinates = martinez.union(newClusGeo.geometry.coordinates,
 			precGeo.geometry.coordinates);
 		var newCoord = newClusGeo.geometry.coordinates;
@@ -638,7 +638,7 @@ function Map(info) {
 		newClusGeo.properties = updateClusterProps(newClusGeo.properties,
 			precGeo.properties, false);
 		newCluster = new L.GeoJSON(newClusGeo, {
-			style: precinctStyle,
+			style: districtStyle,
 			onEachFeature: onEachCluster
 		});
 		newCluster = newCluster.getLayers()[0];
