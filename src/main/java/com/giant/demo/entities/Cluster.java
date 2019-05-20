@@ -73,6 +73,7 @@ public class Cluster {
         this.numDemo += p.getNumDemo();
         this.numRep += p.getNumRep();
         this.votes += p.getVotes();
+        p.setCluster(this);
         /*Set<Geometry> geo = new HashSet<Geometry>();
         geo.add(boundary);
         geo.add(p.getBoundaries());
