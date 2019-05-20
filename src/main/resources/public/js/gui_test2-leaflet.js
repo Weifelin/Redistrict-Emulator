@@ -92,8 +92,11 @@ function Map(info) {
 		angular.forEach(simpleClusterGroups, function(cluster) {
 			var clusterID = cluster.clusterID;
 			maplet.$http.get('getClusters').then(function(clusterResponse) {
+				console.log(clusterResponse);
 				if (clusterResponse.data) {
-					featureGroup.features.push(maplet.makeFeature(clusterResponse.data));
+					var feature = maplet.makeFeature(clusterResponse.data);
+					console.log(feature);
+					featureGroup.features.push(feature);
 					if (clusterResponse.data.clusterID == simpleClusterGroups.length - 1) {
 						maplet.clusterLayer = new L.geoJSON(featureGroup, {
 							style: districtStyle,
@@ -123,7 +126,6 @@ function Map(info) {
 			properties: {},
 			geometry: null
 		};
-		console.log(clusterInfo);
 		var labels = Object.keys(clusterInfo);
 		angular.forEach(labels, function(label) {
 			if (label == "demographics") {
