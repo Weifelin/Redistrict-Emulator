@@ -52,7 +52,7 @@ public class Algorithm {
         System.out.println("Num precicnts: " + tot);
         int level = 1;
         candidatePairs = new ArrayList<>();
-        int end = (int) (Math.log(job.getNumDistricts())) + 1;
+        int end = (int) Math.ceil(Math.log(job.getNumDistricts()));
         System.out.println("end: "+end);
         int totalPop = 0;
         for(Cluster c : clusters) {
