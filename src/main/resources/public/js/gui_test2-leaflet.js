@@ -588,10 +588,19 @@ function Map(info) {
 	function updateClusterProps(prop1, prop2, remove) {
 		var propLabels = ['population', 'votes', 'numDemo', 'numRep', 'white',
 						  'africanAmerican', 'asian', 'latinAmerican', 'other'];
+		var demList = ['white', 'africanAmerican', 'asian', 'latinAmerican', 'other'];
+		var pop1 = prop1["population"];
+		var pop2 = prop2["population"];
 		var coeff = (remove) ? -1 : 1;
 		for (var i = 0; i < propLabels.length; i++) {
 			var label = propLabels[i];
-			prop1[label] += coeff * prop2[label];
+			if (demList.includes(label)) {
+				var count = (prop1[label] * pop1) + (prop2[label] * pop2);
+
+				prop1[label] += coeff * (count / pop1);
+			} else {
+				prop1[label] += coeff * prop2[label];
+			}
 		}
 		return prop1;
 	}
