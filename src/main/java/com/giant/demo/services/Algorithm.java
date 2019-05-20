@@ -213,6 +213,11 @@ public class Algorithm {
                 break;
             }
             index = index % c.getContainedPrecincts().size();
+
+
+        }
+        /*for(Precinct p : c.getContainedPrecincts()){
+
         }*/
         for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
