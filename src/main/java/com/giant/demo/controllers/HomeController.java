@@ -202,6 +202,7 @@ public class HomeController {
         move.setFinished(true);
         move.setFrom(new Cluster(-1));
         move.setTo(new Cluster(-1));
+        move.setPrecinct(new Precinct());
         algorithm.getMoveQueue().add(move);
         return null; /* This will be returned after generateMoves() finishes.*/
     }
