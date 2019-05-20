@@ -92,7 +92,7 @@ function Map(info) {
 		angular.forEach(simpleClusterGroups, function(cluster) {
 			var clusterID = cluster.clusterID;
 			maplet.$http.get('getClusters').then(function(clusterResponse) {
-				console.log(clusterResponse);
+				//console.log(clusterResponse);
 				if (clusterResponse.data) {
 					var feature = maplet.makeFeature(clusterResponse.data);
 					console.log(feature);
@@ -125,15 +125,19 @@ function Map(info) {
 			type: "Feature",
 			properties: {},
 			geometry: null
-		};
+		}
 		var labels = Object.keys(clusterInfo);
 		angular.forEach(labels, function(label) {
 			if (label == "demographics") {
 				var demLabels = Object.keys(clusterInfo[label]);
+				demLabels = demLabels.filter(function(elem) {
+					return elem !== "population";
+				});
 				angular.forEach(demLabels, function(demLabel) {
 					this.properties[demLabel] = clusterInfo[label][demLabel];
 				}, this);
 			} else if (label == "boundaries") {
+				console.log("here");
 				this.geometry = clusterInfo[label];
 			} else {
 				this.properties[label] = clusterInfo[label];
