@@ -209,7 +209,11 @@ public class Algorithm {
                 neighbor.addPrecinct(p);
                 c.removePrecinct(p);
             }
+            if(c.getContainedPrecincts().isEmpty()){
+                break;
+            }
             index = index % c.getContainedPrecincts().size();
+
         }
         /*for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
