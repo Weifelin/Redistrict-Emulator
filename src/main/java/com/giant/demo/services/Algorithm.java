@@ -209,6 +209,7 @@ public class Algorithm {
                 neighbor.addPrecinct(p);
                 c.removePrecinct(p);
             }
+            index = index % c.getContainedPrecincts().size();
         }
         /*for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
