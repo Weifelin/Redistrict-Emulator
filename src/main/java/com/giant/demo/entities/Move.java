@@ -5,6 +5,7 @@ public class Move {
     private Cluster from;
     private Cluster to;
     private ObjectiveFunction newOF;
+    private boolean finished;
 
     public Move() {
     }
@@ -13,6 +14,7 @@ public class Move {
         this.precinct = precinct;
         this.from = from;
         this.to = to;
+        this.finished = false;
     }
 
     public Precinct getPrecinct() {
@@ -46,4 +48,14 @@ public class Move {
     public void setNewOF(ObjectiveFunction newOF) {
         this.newOF = newOF;
     }
+
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 }
+
