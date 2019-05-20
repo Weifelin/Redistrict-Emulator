@@ -101,7 +101,7 @@ public class ClusterEdge {
         goal /= job.getNumDistricts();
         double popScore = (1 / Math.abs(goal - pop));// * 1000000000);
         //popScore *= 100;
-        this.setJoinability(score + 1/popScore);
+        this.setJoinability(score + 1/popScore/100);
         return joinability;
     }
 
