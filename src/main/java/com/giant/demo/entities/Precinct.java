@@ -84,6 +84,16 @@ public class Precinct {
         this.boundaries = boundaries;
     }
 
+    public boolean isAdjacent(Cluster neighbor){
+        for(Precinct p : this.getNeighbours()){
+            if(p.getCluster() == neighbor){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public int getPrecinctID() {
         return precinctID;
     }
