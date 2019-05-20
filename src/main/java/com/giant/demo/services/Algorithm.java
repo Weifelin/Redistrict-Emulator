@@ -196,30 +196,46 @@ public class Algorithm {
         return clusters;
     }
 
+
+    private Cluster prev = null;
     //send each precinct to neighbor with lowest population
     public void breakCluster(Cluster c){
         List<Precinct> extra = new ArrayList<>();
+
         for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(p);
             if(neighbor == null){
                 extra.add(p);
             }
             else {
-
+                prev = neighbor;
                 neighbor.addPrecinct(p);
             }
         }
         int index = 0;
+        int threshold = 10000;
+        int count = 0;
+
         while(!extra.isEmpty()){
             Precinct p = extra.get(index++);
             Cluster neighbor = eligibleCluster(p);
             if(neighbor != null){
                 neighbor.addPrecinct(p);
                 extra.remove(p);
+                prev = neighbor;
+                count = 0;
+            }
+            else if(count > threshold){
+                if(prev != null) {
+                    prev.addPrecinct(p);
+                }
+                extra.remove(p);
+                break;
             }
             if(!extra.isEmpty()) {
                 index = index % extra.size();
             }
+            count++;
         }
     }
 
