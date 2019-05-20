@@ -29,6 +29,7 @@ public class Algorithm {
     private Map<String, ClusterEdge> clusterEdgeMap;
     private AlgorithmStatus status;
     private ObjectiveFunction objectiveFunction;
+    private Map<Integer, Double> objectiveMap;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
     private static ConcurrentLinkedQueue<Cluster> clustersQueue;
@@ -38,6 +39,7 @@ public class Algorithm {
 
     public Algorithm(){
         this.clusterEdgeMap = new HashMap<>();
+        this.objectiveMap = new HashMap<>();
         this.candidatePairs = null;
         moveQueue = new ConcurrentLinkedQueue<>();
         status = AlgorithmStatus.Free;
@@ -474,7 +476,10 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
+            if (!this.objectiveMap.containsKey(cluster.getClusterID())) {
+                this.objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
+            }
+            double score = this.objectiveMap.get(cluster.getClusterID()); /*getScore needs to be fixed.*/
             //System.out.println("Objective function score: " + score);
             if (worstDistrict == null || score < minScore){
                 worstDistrict = cluster;
@@ -544,7 +549,16 @@ public class Algorithm {
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
 
-        double originalScore = objectiveFunction.getScore(from)+objectiveFunction.getScore(to);
+        double originalScoreFrom;
+        double originalScoreTo;
+        if (!this.objectiveMap.containsKey(from.getClusterID())) {
+            this.objectiveMap.put(from.getClusterID(),  objectiveFunction.getScore(from));
+        }
+        if (!this.objectiveMap.containsKey(to.getClusterID())) {
+            this.objectiveMap.put(to.getClusterID(), objectiveFunction.getScore(to));
+        }
+        originalScoreFrom = this.objectiveMap.get(from.getClusterID());
+        originalScoreTo = this.objectiveMap.get(to.getClusterID());
 
         excuteMove(move1);
         /*Update objective function*/
@@ -554,14 +568,19 @@ public class Algorithm {
         double fromScore = objectiveFunction.getScore(from);
         double toScore = objectiveFunction.getScore(to);
 
-        double finalScore = fromScore + toScore;
-        double change = finalScore - originalScore;
+        double change = (fromScore - originalScoreFrom) + (toScore - originalScoreTo);
+        //boolean isToSplit = to.getBoundary().getNumGeometries() > 1;
+        //boolean isFromSplit = from.getBoundary().getNumGeometries() > 1;
         if (change <= 0){
             /*undo*/
             Move undo = new Move(precinct, to, from);
             excuteMove(undo);
             return false;
         }
+
+        // Store new objective scores in map
+        this.objectiveMap.put(from.getClusterID(), fromScore);
+        this.objectiveMap.put(to.getClusterID(), toScore);
 
         return true;
     }
