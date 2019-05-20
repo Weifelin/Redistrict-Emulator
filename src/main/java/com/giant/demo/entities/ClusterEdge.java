@@ -37,6 +37,13 @@ public class ClusterEdge {
         return -1;
     }
 
+    public double compacted(){
+
+
+
+        return 0.0;
+    }
+
     //calculate joinability based of percentages from demographics
     public double calculateJoinability(Job j){
         //calculated the percentage of representation for each race.
@@ -101,7 +108,7 @@ public class ClusterEdge {
         goal /= job.getNumDistricts();
         double popScore = (1 / Math.abs(goal - pop));// * 1000000000);
         //popScore *= 100;
-        this.setJoinability(score + 1/popScore/100);
+        this.setJoinability(score + 1/popScore/50);
         return joinability;
     }
 
