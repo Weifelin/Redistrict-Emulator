@@ -30,6 +30,7 @@ public class Algorithm {
     private AlgorithmStatus status;
     private ObjectiveFunction objectiveFunction;
     private Map<Integer, Double> objectiveMap;
+    private Map<Integer, Double> precinctObjectiveFunctionMap;
 
     private static ConcurrentLinkedQueue<Move> moveQueue;
     private static ConcurrentLinkedQueue<Cluster> clustersQueue;
@@ -288,6 +289,7 @@ public class Algorithm {
             List<Precinct> borderPrecincts = getBorderingPrecincts(worst_district);
             Iterator<Precinct> iterator = borderPrecincts.listIterator();
             move_count++;
+            System.out.println("looing: "+move_count);
             while (iterator.hasNext()){
                 Precinct precinct = iterator.next();
                 Set<Precinct> neighbours = precinct.getNeighbours();
@@ -321,6 +323,8 @@ public class Algorithm {
                 }
             }
         }
+
+        System.out.println("looing done: " + move_count);
 
 
     }
@@ -460,9 +464,9 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-            if (!this.objectiveMap.containsKey(cluster.getClusterID())) {
-                this.objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
-            }
+//            if (!this.objectiveMap.containsKey(cluster.getClusterID())) {
+//                this.objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
+//            }
             double score = this.objectiveMap.get(cluster.getClusterID()); /*getScore needs to be fixed.*/
             //System.out.println("Objective function score: " + score);
             if (worstDistrict == null || score < minScore){
@@ -517,6 +521,8 @@ public class Algorithm {
 
         to.addPrecinct(precinct);
 
+        precinct.setCluster(to);
+
         /*
          * geometry operation
          * population operation
@@ -535,12 +541,12 @@ public class Algorithm {
 
         double originalScoreFrom;
         double originalScoreTo;
-        if (!this.objectiveMap.containsKey(from.getClusterID())) {
-            this.objectiveMap.put(from.getClusterID(),  objectiveFunction.getScore(from));
-        }
-        if (!this.objectiveMap.containsKey(to.getClusterID())) {
-            this.objectiveMap.put(to.getClusterID(), objectiveFunction.getScore(to));
-        }
+//        if (!this.objectiveMap.containsKey(from.getClusterID())) {
+//            this.objectiveMap.put(from.getClusterID(),  objectiveFunction.getScore(from));
+//        }
+//        if (!this.objectiveMap.containsKey(to.getClusterID())) {
+//            this.objectiveMap.put(to.getClusterID(), objectiveFunction.getScore(to));
+//        }
         originalScoreFrom = this.objectiveMap.get(from.getClusterID());
         originalScoreTo = this.objectiveMap.get(to.getClusterID());
 
@@ -608,5 +614,13 @@ public class Algorithm {
         clustersQueue.addAll(clusterSet);
     }
 
+    public void initializeObjectiveFunctionMap(){
+        Set<Cluster> clusterSet = realState.getDistricts();
+        Iterator<Cluster> iterator = clusterSet.iterator();
+        while (iterator.hasNext()){
+            Cluster cluster = iterator.next();
+            objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
+        }
+    }
 
 }

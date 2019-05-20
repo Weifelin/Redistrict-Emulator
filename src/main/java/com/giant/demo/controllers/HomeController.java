@@ -197,6 +197,7 @@ public class HomeController {
     @PostMapping("/start-simulatedAnnealing")
     public MoveModel trigger(@RequestBody Job job){
         algorithm.initializeObjectiveFunction();
+        algorithm.initializeObjectiveFunctionMap();
         algorithm.generateMoves();
         Move move = new Move();
         move.setFinished(true);
@@ -247,6 +248,8 @@ public class HomeController {
     public SummaryModel getSummary(){
         /*Construct Summary Object from realState*/
         State realState = algorithm.getRealState();
+
+
 
         return null;
     }

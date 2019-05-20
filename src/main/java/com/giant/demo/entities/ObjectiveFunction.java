@@ -285,6 +285,7 @@ public class ObjectiveFunction {
     }
 
     public double getScore(Cluster c) {
+
         double score = 0.0;
         score += normalize(calculateCompactnessScore(c), minScores.get(Measures.Compactness), maxScores.get(Measures.Compactness));
         //System.out.println("Compactness: " + score);
