@@ -49,7 +49,12 @@ angular.module('AlgoUtil')
         };
 
         service.getSummary = function() {
-
+            var url = "getSummary";
+            $http.get(url).then(function(summaryInfo) {
+                console.log(summaryInfo);
+            }, function(errResponse) {
+                $mdToast.showSimple("Error loading summary page.");
+            });
         };
 
         service.getMove = function() {
@@ -59,7 +64,8 @@ angular.module('AlgoUtil')
                     console.log(moveInfo);
                     if (moveInfo.data.finished) {
                         $interval.cancel($rootScope.simAnnealPromise);
-                        // make call to getSummary
+                        $rootScope.globalData.programState = $rootScope.programStates.PENDING;
+                        service.getSummary();
                     } else {
                         var mainCtrl = angular.element("#appShell").scope();
                         var precinctID = moveInfo.data.precinctID;
@@ -74,6 +80,7 @@ angular.module('AlgoUtil')
         };
 
         service.startSimAnneal = function() {
+            $rootScope.globalData.programState = $rootScope.programStates.RUNNING;
             var url = "start-simulatedAnnealing";
             $http.post(url, {}).then(function(success) {
                 // Make interval that requests 'getmoves' until flag is received
