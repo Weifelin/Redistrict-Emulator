@@ -149,8 +149,8 @@ public class ObjectiveFunction {
         double minP = 20, minR = 20, minC = 20, minS = 20;
         //Polsby-Popper
         //Area divided by Perimeter
-        double A = Math.PI * Math.pow(c.getBoundary().getLength() / (2 * Math.PI), 2);
-        polsbyPopper += 4 * Math.PI * (A / Math.pow(c.getBoundary().getLength(), 2));
+        //double A = Math.PI * Math.pow(c.getBoundary().getLength() / (2 * Math.PI), 2);
+        //polsbyPopper += 4 * Math.PI * (A / Math.pow(c.getBoundary().getLength(), 2));
         //Reock
         //Area of the Distrist divided by the area of the minimum bounding circle
         Geometry circle = new MinimumBoundingCircle(c.getBoundary()).getCircle();
@@ -205,7 +205,7 @@ public class ObjectiveFunction {
         }
         schwartzberg *= compactnessWeights.getSchwartzSlider();
         //System.out.println("Schwartsberg: " + schwartzberg);
-        double score = polsbyPopper + reock + convexHull + schwartzberg;
+        double score = reock + convexHull + schwartzberg;//+polysbypopper
         if (score > maxScores.get(Measures.Compactness)) {
             maxScores.put(Measures.Compactness, score);
         }
