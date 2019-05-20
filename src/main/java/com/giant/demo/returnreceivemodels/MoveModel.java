@@ -11,11 +11,11 @@ public class MoveModel {
         this.finished = true;
     }
 
-    public MoveModel(int fromID, int toId, int precinctID) {
+    public MoveModel(int fromID, int toId, int precinctID, boolean finished) {
         this.fromID = fromID;
         this.toId = toId;
         this.precinctID = precinctID;
-        this.finished = false;
+        this.finished = finished;
     }
 
     public int getFromID() {

@@ -1,3 +1,7 @@
+:root {
+	--alg-gui-width: 25%;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -82,8 +86,8 @@ md-progress-circular {
 
 /* State Selector */
 .stateSelect {
-	max-width: 24%;
-	width: 24%;
+	max-width: var(--alg-gui-width);
+	width: var(--alg-gui-width);
 	max-height: 44px;
 	position: absolute;
 	bottom: 20px;
@@ -120,7 +124,7 @@ md-progress-circular {
 }
 
 .algCtrl {
-	width: 24%;
+	width: var(--alg-gui-width);
 	position: absolute;
 	top: 12%;
 	bottom: 12%;
@@ -194,4 +198,27 @@ md-progress-circular {
 
 .md-input {
 	width: auto;
+}
+
+/* Algorithm Helper UI */
+.intermission {
+	width: var(--alg-gui-width);
+	position: absolute;
+	top: 12%;
+	right: 10px;
+	z-index: 1;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+
+.summary {
+	width: var(--alg-gui-width);
+	position: absolute;
+	top: 12%;
+	right: 10px;
+	z-index: 1;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
 }

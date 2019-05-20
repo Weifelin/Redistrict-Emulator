@@ -53,6 +53,7 @@
         <script type="text/javascript" src="js/gui_util.js"></script>
         <script type="text/javascript" src="js/account_actions.js"></script>
         <script type="text/javascript" src="js/algorithm_util.js"></script>
+        <script type="text/javascript" src="js/algorithm_ctrl.js"></script>
         <script type="text/javascript" src="js/gui_ctrl.js"></script>
         <script type="text/javascript" src="js/main_menu.js"></script>
         <script type="text/javascript" src="js/single_run.js"></script>
@@ -70,10 +71,16 @@
 
             <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
 
+            <alg-intermission layout-padding class="intermission" ng-if="$rootScope.globalData.mode == 'intermission'
+                                                          && $rootScope.globalData.programState == $rootScope.programStates.PENDING"></alg-intermission>
+            <alg-summary layout-padding class="summary" ng-if="$rootScope.globalData.mode == 'summary'
+                                  && $rootScope.globalData.programState == $rootScope.programStates.PENDING"></alg-summary>
+
             <!-- Loading wheel -->
             <div ng-if="$rootScope.loading" class="loading" layout="row"
                  layout-sm="column" layout-align="space-around">
-                <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="100%"></md-progress-circular>
+                <md-progress-circular ng-if="$rootScope.loadNum > -1" value="{{$rootScope.loadNum}}" class="md-accent" md-mode="determinate" md-diameter="100%"></md-progress-circular>
+                <md-progress-circular ng-if="$rootScope.loadNum < 0" class="md-accent" md-mode="indeterminate" md-diameter="100%"></md-progress-circular>
             </div>
         </div>
 	</body>

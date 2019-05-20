@@ -269,7 +269,7 @@ public class Algorithm {
             Cluster worst_district = getWorstDistrict(realState);
             List<Precinct> borderPrecincts = getBorderingPrecincts(worst_district);
             Iterator<Precinct> iterator = borderPrecincts.listIterator();
-
+            move_count++;
             while (iterator.hasNext()){
                 Precinct precinct = iterator.next();
                 Set<Precinct> neighbours = precinct.getNeighbours();
@@ -281,7 +281,6 @@ public class Algorithm {
                         if (testMove(move1)){ /* */
                             //excuteMove(move1); /* executed in testMove*/
                             foundMove = true;
-                            move_count++;
                             counter++;
                             System.out.println("Adding Moves "+counter);
                             moveQueue.add(move1);
@@ -291,7 +290,6 @@ public class Algorithm {
                             if (testMove(move2)){
                                 //excuteMove(move2);
                                 foundMove = true;
-                                move_count++;
                                 counter++;
                                 System.out.println("Adding Moves "+counter);
                                 moveQueue.add(move2);
@@ -305,6 +303,8 @@ public class Algorithm {
                 }
             }
         }
+
+
     }
 
 

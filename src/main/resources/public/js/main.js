@@ -31,10 +31,11 @@ app.config(['$locationProvider', '$routeProvider',
 app.run(['$rootScope', '$cookies', '$http',
     function($rootScope, $cookies, $http) {
         $rootScope.userTypes = { REGULAR: 0, ADMIN: 1, GUEST: 2 };
-        $rootScope.programStates = { FREE: 0, RUNNING: 1 };
+        $rootScope.programStates = { FREE: 0, RUNNING: 1, PENDING: 2 };
         $rootScope.demographics = { AFRICAN_AMERICAN: 0, ASIAN: 1, HISPANIC: 2, WHITE: 3 };
         $rootScope.stateCode = { 0: "NJ", 1: "VA", 2: "WI" };
         $rootScope.loading = false;
+        $rootScope.loadNum = -1;
         $rootScope.globalData = $cookies.get('globalData');
         if (!$rootScope.globalData || $rootScope.globalData == "[object Object]") {
             $rootScope.globalData = {
@@ -77,6 +78,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
                 };
                 $scope.usMap = new Map($scope.uiInfo);
                 $scope.usMap.GeoDataService = GeoDataService;
+                $scope.usMap.$rootScope = $rootScope;
                 $scope.usMap.$mdToast = $mdToast;
                 $scope.usMap.$http = $http;
                 $scope.usMap.stateCallback = function(stateId, map) {
@@ -107,14 +109,20 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
         $rootScope.$watch('globalData.programState', function(newVal, oldVal) {
             if (newVal == $rootScope.programStates.RUNNING &&
                 oldVal == $rootScope.programStates.FREE) {
+                $rootScope.loading = true;
                 AlgorithmService.makeSingleRunRequest().then(function(successResponse) {
                     console.log(successResponse);
                     if(successResponse.data !== "") {
                         $scope.usMap.initClusters(successResponse.data.simpleClusterGroups);
+                        $rootScope.loading = false;
+                        $rootScope.loadNum = -1;
+                        $rootScope.globalData.mode = "intermission";
+                        $rootScope.globalData.programState = $rootScope.programStates.PENDING;
                     }
                 }, function(errorResponse) {
                     console.log(errorResponse);
                     $mdToast.showSimple("Request to start algorithm failed.");
+                    $rootScope.loading = false;
                 });
             }
         });
