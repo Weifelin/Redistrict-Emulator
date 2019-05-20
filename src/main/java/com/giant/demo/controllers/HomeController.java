@@ -198,7 +198,12 @@ public class HomeController {
     public MoveModel trigger(@RequestBody Job job){
         algorithm.initializeObjectiveFunction();
         algorithm.generateMoves();
-        return new MoveModel(); /* This will be returned after generateMoves() finishes.*/
+        Move move = new Move();
+        move.setFinished(true);
+        move.setFrom(new Cluster(-1));
+        move.setTo(new Cluster(-1));
+        algorithm.getMoveQueue().add(move);
+        return null; /* This will be returned after generateMoves() finishes.*/
     }
 
     @GetMapping("/getmoves")
@@ -208,7 +213,7 @@ public class HomeController {
         if (move != null) {
             MoveModel moveModel = new MoveModel(move.getFrom().getClusterID(),
                                                 move.getTo().getClusterID(),
-                                                move.getPrecinct().getPrecinctID());
+                                                move.getPrecinct().getPrecinctID(), move.isFinished());
             return moveModel;
         }
 
