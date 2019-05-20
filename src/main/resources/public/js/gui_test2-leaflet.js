@@ -97,7 +97,7 @@ function Map(info) {
 					var feature = maplet.makeFeature(clusterResponse.data);
 					console.log(feature);
 					featureGroup.features.push(feature);
-					if (clusterResponse.data.clusterID == simpleClusterGroups.length - 1) {
+					if (featureGroup.features.length == simpleClusterGroups.length) {
 						maplet.clusterLayer = new L.geoJSON(featureGroup, {
 							style: districtStyle,
 							onEachFeature: onEachCluster
