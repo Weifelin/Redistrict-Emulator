@@ -73,10 +73,10 @@ public class Cluster {
         this.numDemo += p.getNumDemo();
         this.numRep += p.getNumRep();
         this.votes += p.getVotes();
-        Set<Geometry> geo = new HashSet<Geometry>();
+        /*Set<Geometry> geo = new HashSet<Geometry>();
         geo.add(boundary);
         geo.add(p.getBoundaries());
-        this.boundary = new CascadedPolygonUnion(geo).union();
+        this.boundary = new CascadedPolygonUnion(geo).union();*/
     }
 
     public void removePrecinct(Precinct precinct){
@@ -94,7 +94,7 @@ public class Cluster {
             numRep -= precinct.getNumRep();
             votes -= precinct.getVotes();
             /*boundary operation*/
-            this.boundary = boundary.symDifference(precinct.getBoundaries());
+            //this.boundary = boundary.symDifference(precinct.getBoundaries());
 
         }
     }
