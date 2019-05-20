@@ -59,11 +59,34 @@ public class PreProcess {
             Integer votes = (int) (long) p.get("votes");
             Double demo = (double)p.get("demo");
             Double rep = (double) p.get("rep");
+            if (pop==0){
+                pop = (int)Math.ceil(demo + rep);
+            }
+            if (votes == 0){
+                votes = (int)Math.ceil(demo + rep);
+            }
+
+            if (pop == 0){
+                pop = 100;
+            }
+
+            if (votes == 0){
+                votes = 100;
+            }
+
             double africanAmerican = (long)p.get("africanAmerican") / (double)pop;
             double asian = (long) p.get("asian") / (double)pop;
             double latinAmerican = (long) p.get("latinAmerican") / (double)pop;
             double white = (long) p.get("white") / (double)pop;
             double other = (long) p.get("other") / (double)pop;
+
+            africanAmerican = Double.valueOf(africanAmerican);
+            asian = Double.valueOf(asian);
+            latinAmerican = Double.valueOf(latinAmerican);
+            white = Double.valueOf(white);
+            other = Double.valueOf(other);
+            pop = Integer.valueOf(pop);
+
             Demographics demographics = new Demographics(africanAmerican, asian, latinAmerican, white, other, pop);
 
             JSONArray array = (JSONArray) p.get("neighbor");
