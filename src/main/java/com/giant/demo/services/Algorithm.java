@@ -528,7 +528,8 @@ public class Algorithm {
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
 
-        double originalScore = objectiveFunction.getScore(from)+objectiveFunction.getScore(to);
+        double originalScoreFrom = objectiveFunction.getScore(from);
+        double originalScoreTo = objectiveFunction.getScore(to);
 
         excuteMove(move1);
         /*Update objective function*/
@@ -538,8 +539,7 @@ public class Algorithm {
         double fromScore = objectiveFunction.getScore(from);
         double toScore = objectiveFunction.getScore(to);
 
-        double finalScore = fromScore + toScore;
-        double change = finalScore - originalScore;
+        double change = (fromScore - originalScoreFrom) + (toScore - originalScoreTo);
         if (change <= 0){
             /*undo*/
             Move undo = new Move(precinct, to, from);
