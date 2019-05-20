@@ -221,7 +221,16 @@ public class Algorithm {
         }*/
         for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
-            neighbor.addPrecinct(p);
+            if(neighbor == null){
+                for(Precinct neig : p.getNeighbours()){
+                    if(neig.getCluster() != c){
+                        neig.getCluster().addPrecinct(p);
+                    }
+                }
+            }
+            else {
+                neighbor.addPrecinct(p);
+            }
         }
     }
 
