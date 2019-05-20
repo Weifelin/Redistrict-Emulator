@@ -205,6 +205,7 @@ public class Algorithm {
                 extra.add(p);
             }
             else {
+
                 neighbor.addPrecinct(p);
             }
         }
