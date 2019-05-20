@@ -91,7 +91,13 @@ public class Algorithm {
             total += c.getContainedPrecincts().size();
         }
         System.out.println("Number of Precincts - before: " + total);
-
+        for(Cluster c : clusters){
+            Set<Geometry> geo = new HashSet<>();
+            for(Precinct p : c.getContainedPrecincts()){
+                geo.add(p.getBoundaries());
+            }
+            c.setBoundary(new CascadedPolygonUnion(geo).union());
+        }
         clusters = toDistrict(clusters, job.getNumDistricts());
         total = 0;
         for(Cluster c : clusters){
@@ -110,13 +116,7 @@ public class Algorithm {
             numOfPrecinct += cluster.getContainedPrecincts().size();
         }
         System.out.println("Total Precincts after toDistrict: " + numOfPrecinct);
-        for(Cluster c : clusters){
-            Set<Geometry> geo = new HashSet<>();
-            for(Precinct p : c.getContainedPrecincts()){
-                geo.add(p.getBoundaries());
-            }
-            c.setBoundary(new CascadedPolygonUnion(geo).union());
-        }
+
         return stateToSimpleClusterGroups(realState);
     }
 
@@ -199,9 +199,29 @@ public class Algorithm {
 
     //send each precinct to neighbor with lowest population
     public void breakCluster(Cluster c){
-        for(Precinct p : c.getContainedPrecincts()){
+        /*for(Precinct p : c.getContainedPrecincts()){
             Cluster neighbor = eligibleCluster(c);
-             neighbor.addPrecinct(p);
+            neighbor.addPrecinct(p);
+
+            Set<Geometry> geo = new HashSet<>();
+            for(Precinct p : c.getContainedPrecincts()){
+                geo.add(p.getBoundaries());
+            }
+            c.setBoundary(new CascadedPolygonUnion(geo).union());
+        }*/
+        int index = 0;
+        while(!c.getContainedPrecincts().isEmpty()){
+            Cluster neighbor = eligibleCluster(c);
+            Precinct p = c.getContainedPrecincts().get(index);
+            if(p.getBoundaries().touches(neighbor.getBoundary())){
+                neighbor.addPrecinct(p);
+                Set<Geometry> geo = new HashSet<>();
+                geo.add(p.getBoundaries());
+                geo.add(neighbor.getBoundary());
+                neighbor.setBoundary(new CascadedPolygonUnion(geo).union());
+                c.removePrecinct(p);
+            }
+            index = ++index % c.getContainedPrecincts().size();
         }
     }
 
