@@ -64,7 +64,7 @@ angular.module('AlgoUtil')
                         var mainCtrl = angular.element("#appShell").scope();
                         var precinctID = moveInfo.data.precinctID;
                         var oldClusterID = moveInfo.data.fromID;
-                        var newClusterID = moveInfo.data.toID;
+                        var newClusterID = moveInfo.data.toId;
                         mainCtrl.usMap.moveCluster(precinctID, oldClusterID, newClusterID);
                     }
                 }
@@ -80,7 +80,7 @@ angular.module('AlgoUtil')
                 console.log("Phase II finished.");
             });
 
-            $rootScope.simAnnealPromise = $interval(function() { service.getMove(); }, 3000);
+            $rootScope.simAnnealPromise = $interval(function() { service.getMove(); }, 300);
         };
 
         return service;

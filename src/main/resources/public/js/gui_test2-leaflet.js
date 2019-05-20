@@ -612,7 +612,7 @@ function Map(info) {
 			}
 			oldClusGeo.properties = updateClusterProps(oldClusGeo.properties,
 				precGeo.properties, true);
-			oldClusGeo.geometry.coordinates = oldCoord[0];
+			oldClusGeo.geometry.coordinates = oldCoord;
 			// Convert to layer
 			oldCluster = new L.GeoJSON(oldClusGeo, {
 				style: districtStyle,
