@@ -7,10 +7,7 @@ import com.giant.demo.enums.AlgorithmStatus;
 import com.giant.demo.enums.StateE;
 import com.giant.demo.jobObjects.*;
 import com.giant.demo.preprocessing.PreProcess;
-import com.giant.demo.returnreceivemodels.ClusterModel;
-import com.giant.demo.returnreceivemodels.MoveModel;
-import com.giant.demo.returnreceivemodels.SimpleClusterGroups;
-import com.giant.demo.returnreceivemodels.UserModel;
+import com.giant.demo.returnreceivemodels.*;
 import com.giant.demo.services.*;
 import org.locationtech.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,9 +222,25 @@ public class HomeController {
         if (cluster!= null){
 //            System.out.println("Printing Boundaries");
 //            System.out.println(geoJsonService.coordinatesArrayToString(cluster.getBoundary().getCoordinates()));
-            ClusterModel clusterModel = new ClusterModel(cluster.getClusterID(), cluster.getBoundary(),cluster.getPopulation(), cluster.getDemographics(), cluster.getPartyPreference(), cluster.isMajorityMinority(), cluster.getNumDemo(), cluster.getNumRep(), cluster.getVotes());
+            ClusterModel clusterModel = new ClusterModel(cluster.getClusterID(),
+                    cluster.getBoundary(),
+                    cluster.getPopulation(),
+                    cluster.getDemographics(),
+                    cluster.getPartyPreference(),
+                    cluster.isMajorityMinority(),
+                    cluster.getNumDemo(),
+                    cluster.getNumRep(),
+                    cluster.getVotes());
             return clusterModel;
         }
+
+        return null;
+    }
+
+    @GetMapping("/getSummary")
+    public SummaryModel getSummary(){
+        /*Construct Summary Object from realState*/
+        State realState = algorithm.getRealState();
 
         return null;
     }
