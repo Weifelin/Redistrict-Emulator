@@ -122,13 +122,13 @@ public class Algorithm {
     public ClusterEdge findClusterPair(Cluster c, int numClusters, int totalPop, Job j){
         double max = 0.0;
         ClusterEdge bestEdge = null;
-        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.2;
+        double popUpperBound = totalPop / ((double)numClusters / 2.0) * 1.10;
         for(String key : c.getEdgeIDs()){
 
             ClusterEdge e = clusterEdgeMap.get(key);
             int combinePop = e.getCluster1().getPopulation() + e.getCluster2().getPopulation();
-            double join = e.getJoinability(j, totalPop, combinePop);
-            if(bestEdge == null || combinePop <= popUpperBound && join > max){
+            double join = e.getJoinability(j, totalPop / job.getNumDistricts(), combinePop, numClusters);
+            if(combinePop <= popUpperBound && (bestEdge == null ||  join > max)){
                 max = join;
                 bestEdge = e;
             }
@@ -445,9 +445,12 @@ public class Algorithm {
 
     public List<Precinct> getBorderingPrecincts(Cluster c){
         List<Precinct> precincts = new LinkedList<>();
-        for(Precinct p : c.getContainedPrecincts()){
-            if(p.getBoundaries().touches(c.getBoundary().getBoundary()))
+        List<Precinct> borders = new ArrayList<>();
+        borders = c.getContainedPrecincts();
+        for(Precinct p : borders){
+            if(p.getBoundaries().touches(c.getBoundary().getBoundary())) {
                 precincts.add(p);
+            }
         }
         return precincts;
     }
@@ -458,7 +461,7 @@ public class Algorithm {
         for (Cluster cluster : realState.getDistricts()){
             double score = objectiveFunction.getScore(cluster); /*getScore needs to be fixed.*/
             //System.out.println("Objective function score: " + score);
-            if (score < minScore){
+            if (worstDistrict == null || score < minScore){
                 worstDistrict = cluster;
                 minScore = score;
             }
