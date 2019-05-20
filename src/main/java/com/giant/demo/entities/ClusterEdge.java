@@ -122,7 +122,7 @@ public class ClusterEdge {
     public double getJoinability(Job job, double goal, int pop, int numClusters) {
         double score = calculateJoinability(job);
         double popScore = (1 / (Math.abs(goal - (double)pop) / goal));// * 1000000000);
-        double compact = compacted() / 100 * Math.log(numClusters);
+        double compact = Math.sqrt(compacted());
         this.setJoinability(score + popScore + compact);
         return joinability;
     }

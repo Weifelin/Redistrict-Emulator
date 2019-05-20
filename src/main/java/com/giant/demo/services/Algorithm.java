@@ -198,24 +198,39 @@ public class Algorithm {
 
     //send each precinct to neighbor with lowest population
     public void breakCluster(Cluster c){
+        List<Precinct> extra = new ArrayList<>();
         for(Precinct p : c.getContainedPrecincts()){
-            Cluster neighbor = eligibleCluster(c);
+            Cluster neighbor = eligibleCluster(p);
             if(neighbor == null){
-                for(Precinct neig : p.getNeighbours()){
-                    if(neig.getCluster() != c){
-                        neig.getCluster().addPrecinct(p);
-                    }
-                }
+                extra.add(p);
             }
             else {
                 neighbor.addPrecinct(p);
             }
         }
+        int index = 0;
+        while(!extra.isEmpty()){
+            Precinct p = extra.get(index++);
+            Cluster neighbor = eligibleCluster(p);
+            if(neighbor != null){
+                neighbor.addPrecinct(p);
+                extra.remove(p);
+            }
+            if(!extra.isEmpty()) {
+                index = index % extra.size();
+            }
+        }
     }
 
     //finds adjacent cluster with smallest population
-    public Cluster eligibleCluster(Cluster c){
-        Cluster min = null;//terEdgeMap.get(c.getEdgeIDs());
+    public Cluster eligibleCluster(Precinct p){
+        for(Precinct neighbor : p.getNeighbours()){
+            if(p.getCluster() != neighbor.getCluster()){
+                return neighbor.getCluster();
+            }
+        }
+        return null;
+        /*Cluster min = null;//terEdgeMap.get(c.getEdgeIDs());
         int pop = 0;
         for(String key : c.getEdgeIDs()){
             ClusterEdge e = clusterEdgeMap.get(key);
@@ -227,7 +242,7 @@ public class Algorithm {
                 min = c2;
             }
         }
-        return min;
+        return min;*/
     }
 
     //returns cluster with min population
