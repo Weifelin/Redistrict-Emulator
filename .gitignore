@@ -31,7 +31,6 @@ HELP.md
 lib/Archive.zip
 src/main/resources/application.properties
 src/main/resources/application.properties
-src/main/resources/public/vaprecincts.json
 testJson.json
 src/test/java/com/giant/demo/DemoApplicationTests.java
 src/main/resources/application.properties
