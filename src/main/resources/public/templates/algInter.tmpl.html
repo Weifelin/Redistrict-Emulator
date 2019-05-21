@@ -1,11 +1,11 @@
 <h4><i>Phase I completed.</i></h4>
-<md-button ng-click="AlgorithmService.saveMap()" ng-disabled="username === ''">
+<md-button ng-click="$eval('AlgorithmService.saveMap()')" ng-disabled="username === ''">
     <md-label>Save map</md-label>
     <md-tooltip ng-if="username === ''" md-direction="bottom">Log in to use this feature</md-tooltip>
 </md-button>
-<md-button ng-click="AlgorithmService.startSimAnneal()">
+<md-button ng-click="$eval('AlgorithmService.startSimAnneal()')">
     <md-label>Continue</md-label>
 </md-button>
-<md-button ng-click="AlgorithmService.getSummary()">
+<md-button ng-click="$eval('AlgorithmService.getSummary()')">
     <md-label>Stop</md-label>
 </md-button>

@@ -14,6 +14,7 @@ angular.module('DistrictApp').component('algIntermission', {
 
 function AlgSummaryPanel(AlgorithmService, $scope, $rootScope, $element, $attrs) {
     var ctrl = this;
+    $scope.AlgorithmService = AlgorithmService;
     $scope.username = $rootScope.globalData.user.username;
     var mainScope = angular.element("#appShell").scope();
     $scope.formatNumber = mainScope.usMap.formatNumber;

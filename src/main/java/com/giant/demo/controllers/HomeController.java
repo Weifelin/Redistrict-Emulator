@@ -200,6 +200,7 @@ public class HomeController {
         algorithm.initializeObjectiveFunction();
         algorithm.initializeObjectiveFunctionMap();
         algorithm.generateMoves();
+        System.out.println("yeppers");
         Move move = new Move();
         move.setFinished(true);
         move.setFrom(new Cluster(-1));

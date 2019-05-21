@@ -88,6 +88,8 @@ angular.module('AlgoUtil')
             $http.post(url, {}).then(function(success) {
                 // Make interval that requests 'getmoves' until flag is received
                 console.log("Phase II finished.");
+            }, function(error) {
+                $mdToast.showSimple("Phase II could not be initiated.");
             });
 
             $rootScope.simAnnealPromise = $interval(function() { service.getMove(); }, 300);

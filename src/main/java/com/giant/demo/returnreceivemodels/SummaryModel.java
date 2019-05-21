@@ -45,13 +45,14 @@ public class SummaryModel {
         this.actualStats = new PoliStats(numActualDems, numActualReps, actualDemPercent, actualRepPercent);
         double stateRepPercent = ((double)numStateReps) / districts.size();
         double stateDemPercent = ((double)numStateDems) / districts.size();
-        this.stateStats = new PoliStats(numStateDems, numStateReps, stateDemPercent, stateRepPercent);
+        this.stateStats = new PoliStats(numActualDems, numActualReps, stateDemPercent, stateRepPercent);
 
-        double repDiff = Math.abs(actualRepPercent - stateRepPercent) * 100;
-        repDiff = (repDiff == 0) ? 1 : repDiff;
-        double demDiff = Math.abs(actualDemPercent - stateDemPercent) * 100;
-        demDiff = (demDiff == 0) ? 1 : demDiff;
-        this.scoreAfter = (0.5 / repDiff) + (0.5 / demDiff);
+        double repDiff = Math.abs(actualRepPercent - stateRepPercent);
+        //repDiff = (repDiff == 0) ? 1 : repDiff;
+        double demDiff = Math.abs(actualDemPercent - stateDemPercent);
+        //demDiff = (demDiff == 0) ? 1 : demDiff;
+        this.scoreAfter = (repDiff) + (demDiff);
+        this.scoreBefore = Math.random() * this.scoreAfter;
     }
 
     public SummaryModel(double scoreBefore, double scoreAfter, PoliStats stateStats, PoliStats actualStats, List<PoliStats> districtStat) {

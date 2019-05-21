@@ -118,6 +118,7 @@ public class Algorithm {
                 geo.add(p.getBoundaries());
             }
             c.setBoundary(new CascadedPolygonUnion(geo).union());
+            //c.setMajorityMinority(c.isMajorityMinority(c));
         }
         return stateToSimpleClusterGroups(realState);
     }
