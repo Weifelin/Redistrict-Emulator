@@ -274,7 +274,7 @@ public class ObjectiveFunction {
     //measure how close the population of each cluster is so being #people / # districts
     public double calculatePopulationScore(Cluster c) {
         double score, avgPop = this.state.getPopulation() / this.state.getDistricts().size();
-        score = (avgPop == c.getPopulation()) ? 1 : 1 / Math.abs(avgPop - c.getPopulation());
+        score = (avgPop == c.getPopulation()) ? 1 : (populationEqualityWeight) / Math.abs(avgPop - c.getPopulation());
         if (score > maxScores.get(Measures.Population)) {
             maxScores.put(Measures.Population, score);
         }

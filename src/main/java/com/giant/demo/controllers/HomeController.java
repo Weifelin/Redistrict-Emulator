@@ -166,6 +166,7 @@ public class HomeController {
 //        }
 
         algorithm.lockAlgorithm();
+//        job.setPopulationEquality(Math.abs(1.0-job.getPopulationEquality()));
         algorithm.setJob(job); /*Store job in algorithm until phase II. */
         algorithm.initializeClusters();
         SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
@@ -254,6 +255,12 @@ public class HomeController {
         return null;
     }
 
+    @PostMapping("/saveMap")
+    public HttpStatus saveMap(@RequestBody UserModel userModel){
+        User user = userService.getUser(userModel.getUsername());
+        user.addState(algorithm.getRealState());
+        return HttpStatus.ACCEPTED;
+    }
 
 
 }
