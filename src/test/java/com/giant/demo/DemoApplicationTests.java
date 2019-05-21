@@ -187,6 +187,7 @@ public class DemoApplicationTests {
 			e.printStackTrace();
 		}
 		algorithm.initializeObjectiveFunction();
+		algorithm.initializeObjectiveFunctionMap();
 		algorithm.generateMoves();
 		ConcurrentLinkedQueue<Move> queue = algorithm.getMoveQueue();
 

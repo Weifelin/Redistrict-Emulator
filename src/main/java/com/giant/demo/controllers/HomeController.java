@@ -166,6 +166,7 @@ public class HomeController {
 //        }
 
         algorithm.lockAlgorithm();
+//        job.setPopulationEquality(Math.abs(1.0-job.getPopulationEquality()));
         algorithm.setJob(job); /*Store job in algorithm until phase II. */
         algorithm.initializeClusters();
         SimpleClusterGroups simpleClusterGroups = algorithm.graphPartition(algorithm.getClusters());
@@ -197,6 +198,7 @@ public class HomeController {
     @PostMapping("/start-simulatedAnnealing")
     public MoveModel trigger(@RequestBody Job job){
         algorithm.initializeObjectiveFunction();
+        algorithm.initializeObjectiveFunctionMap();
         algorithm.generateMoves();
         Move move = new Move();
         move.setFinished(true);
@@ -248,9 +250,17 @@ public class HomeController {
         /*Construct Summary Object from realState*/
         State realState = algorithm.getRealState();
 
+
+
         return null;
     }
 
+    @PostMapping("/saveMap")
+    public HttpStatus saveMap(@RequestBody UserModel userModel){
+        User user = userService.getUser(userModel.getUsername());
+        user.addState(algorithm.getRealState());
+        return HttpStatus.ACCEPTED;
+    }
 
 
 }
