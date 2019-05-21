@@ -576,8 +576,10 @@ public class Algorithm {
         originalScoreTo = this.objectiveMap.get(to.getClusterID());
 
         excuteMove(move1);
-        boolean isSplit = from.getBoundary().within(to.getBoundary());
-        if (isSplit) {
+        String fromType = from.getBoundary().getGeometryType();
+        String toType = to.getBoundary().getGeometryType();
+        
+        if (fromType.equals("MultiPolygon") || toType.equals("MultiPolygon")) {
             Move undo = new Move(precinct, to, from);
             excuteMove(undo);
             return false;
