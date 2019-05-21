@@ -310,7 +310,8 @@ public class Algorithm {
             Iterator<Precinct> iterator = borderPrecincts.listIterator();
             //move_count++;
             //System.out.println("looing: "+move_count);
-            while (iterator.hasNext()){
+            int threshold = 0;
+            while (iterator.hasNext() && threshold++ < 500){
                 Precinct precinct = iterator.next();
                 Set<Precinct> neighbours = precinct.getNeighbours();
                 Iterator<Precinct> setIterator = neighbours.iterator();
@@ -543,7 +544,11 @@ public class Algorithm {
         to.addPrecinct(precinct);
 
         precinct.setCluster(to);
-
+        Set<Geometry> geo = new HashSet<Geometry>();
+        geo.add(to.getBoundary());
+        geo.add(precinct.getBoundaries());
+        to.setBoundary(new CascadedPolygonUnion(geo).union());
+        from.setBoundary(from.getBoundary().symDifference(precinct.getBoundaries()));
         /*
          * geometry operation
          * population operation
@@ -574,12 +579,12 @@ public class Algorithm {
         }
         originalScoreFrom = this.objectiveMap.get(from.getClusterID());
         originalScoreTo = this.objectiveMap.get(to.getClusterID());
-
+        //boolean noncontiguitious = notContiguitious(move1);
         excuteMove(move1);
         String fromType = from.getBoundary().getGeometryType();
         String toType = to.getBoundary().getGeometryType();
-        
-        if (fromType.equals("MultiPolygon") || toType.equals("MultiPolygon")) {
+
+        if (toType.equals("MultiPolygon") || fromType.equals("MultiPolygon")) {
             Move undo = new Move(precinct, to, from);
             excuteMove(undo);
             return false;
