@@ -545,6 +545,12 @@ public class Algorithm {
         originalScoreTo = this.objectiveMap.get(to.getClusterID());
 
         excuteMove(move1);
+        boolean isSplit = from.getBoundary().within(to.getBoundary());
+        if (isSplit) {
+            Move undo = new Move(precinct, to, from);
+            excuteMove(undo);
+            return false;
+        }
         /*Update objective function*/
 
         /*double fromScore = from.rateDistrict(); *//*need to be implemented*//*
@@ -553,8 +559,7 @@ public class Algorithm {
         double toScore = objectiveFunction.getScore(to);
 
         double change = (fromScore - originalScoreFrom) + (toScore - originalScoreTo);
-        //boolean isToSplit = to.getBoundary().getNumGeometries() > 1;
-        //boolean isFromSplit = from.getBoundary().getNumGeometries() > 1;
+
         if (change <= 0){
             /*undo*/
             Move undo = new Move(precinct, to, from);
