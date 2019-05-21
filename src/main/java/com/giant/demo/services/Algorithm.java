@@ -294,18 +294,22 @@ public class Algorithm {
 
 
     public void generateMoves(){
-        boolean foundMove = true;
+        /*boolean foundMove = true;
         int move_count = 0;
-        int max_attempts = 10000;
+        int max_attempts = 10000;*/
+        double temperature = 1.0;
+        double alpha = 0.9;
+        double tempMin = 0.0000001;
         int counter = 0;
 
-        while (foundMove && move_count < max_attempts){
-            foundMove = false;
+        //while (foundMove && move_count < max_attempts){
+        while (temperature > tempMin) {
+            //foundMove = false;
             Cluster worst_district = getWorstDistrict(realState);
             List<Precinct> borderPrecincts = getBorderingPrecincts(worst_district);
             Iterator<Precinct> iterator = borderPrecincts.listIterator();
-            move_count++;
-            System.out.println("looing: "+move_count);
+            //move_count++;
+            //System.out.println("looing: "+move_count);
             while (iterator.hasNext()){
                 Precinct precinct = iterator.next();
                 Set<Precinct> neighbours = precinct.getNeighbours();
@@ -314,18 +318,18 @@ public class Algorithm {
                     Precinct neighour = setIterator.next();
                     if (precinct.getCluster().getClusterID() != neighour.getCluster().getClusterID()){
                         Move move1 = new Move(precinct, precinct.getCluster(), neighour.getCluster());
-                        if (testMove(move1)){ /* */
+                        if (testMove(move1, temperature)){ /* */
                             //excuteMove(move1); /* executed in testMove*/
-                            foundMove = true;
+                            //foundMove = true;
                             counter++;
                             System.out.println("Adding Moves "+counter);
                             moveQueue.add(move1);
                             break;
                         }else {
                             Move move2 = new Move(neighour, neighour.getCluster(), precinct.getCluster());
-                            if (testMove(move2)){
+                            if (testMove(move2, temperature)){
                                 //excuteMove(move2);
-                                foundMove = true;
+                                //foundMove = true;
                                 counter++;
                                 System.out.println("Adding Moves "+counter);
                                 moveQueue.add(move2);
@@ -333,14 +337,15 @@ public class Algorithm {
                         }
                     }
 
-                    if (foundMove == true){
-                        break; /*break inner while loop*/
-                    }
+                    /*if (foundMove == true){
+                        break; //break inner while loop
+                    }*/
                 }
             }
+            temperature *= alpha;
         }
 
-        System.out.println("looing done: " + move_count);
+        System.out.println("looing done: " + temperature);
 
 
     }
@@ -480,9 +485,9 @@ public class Algorithm {
         Cluster worstDistrict = null;
         double minScore = Double.POSITIVE_INFINITY;
         for (Cluster cluster : realState.getDistricts()){
-//            if (!this.objectiveMap.containsKey(cluster.getClusterID())) {
-//                this.objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
-//            }
+            if (!this.objectiveMap.containsKey(cluster.getClusterID())) {
+                this.objectiveMap.put(cluster.getClusterID(), objectiveFunction.getScore(cluster));
+            }
             double score = this.objectiveMap.get(cluster.getClusterID()); /*getScore needs to be fixed.*/
             //System.out.println("Objective function score: " + score);
             if (worstDistrict == null || score < minScore){
@@ -550,19 +555,23 @@ public class Algorithm {
         /*change reflected inside the realState. So the state */
     }
 
-    private boolean testMove(Move move1) {
+    private double acceptanceProb(double change, double temperature) {
+        return Math.exp(change/temperature);
+    }
+
+    private boolean testMove(Move move1, double temperature) {
         Cluster from = move1.getFrom();
         Cluster to = move1.getTo();
         Precinct precinct = move1.getPrecinct();
 
         double originalScoreFrom;
         double originalScoreTo;
-//        if (!this.objectiveMap.containsKey(from.getClusterID())) {
-//            this.objectiveMap.put(from.getClusterID(),  objectiveFunction.getScore(from));
-//        }
-//        if (!this.objectiveMap.containsKey(to.getClusterID())) {
-//            this.objectiveMap.put(to.getClusterID(), objectiveFunction.getScore(to));
-//        }
+        if (!this.objectiveMap.containsKey(from.getClusterID())) {
+            this.objectiveMap.put(from.getClusterID(),  objectiveFunction.getScore(from));
+        }
+        if (!this.objectiveMap.containsKey(to.getClusterID())) {
+            this.objectiveMap.put(to.getClusterID(), objectiveFunction.getScore(to));
+        }
         originalScoreFrom = this.objectiveMap.get(from.getClusterID());
         originalScoreTo = this.objectiveMap.get(to.getClusterID());
 
@@ -582,7 +591,7 @@ public class Algorithm {
 
         double change = (fromScore - originalScoreFrom) + (toScore - originalScoreTo);
 
-        if (change <= 0){
+        if (acceptanceProb(change, temperature) < Math.random()){
             /*undo*/
             Move undo = new Move(precinct, to, from);
             excuteMove(undo);
