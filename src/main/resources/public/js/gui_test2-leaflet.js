@@ -25,6 +25,8 @@ function Map(info) {
 	this.leaf_clusters = {};
 	this.uiInfo = info;
 
+
+
 	this.mapSetup = function() {
 		geoSetup();
 		infoPanelSetup();
@@ -56,7 +58,7 @@ function Map(info) {
 
 	maplet.addStateLayer = function() {
 		maplet.map.addLayer(maplet.geojsonLayer);
-		maplet.layerCtrl.addLayer(maplet.geojsonLayer);
+		maplet.layerCtrl.addOverlay(maplet.geojsonLayer, "States");
 	};
 
 	maplet.removeStateLayer = function() {
@@ -631,16 +633,48 @@ function Map(info) {
 		var demList = ['white', 'africanAmerican', 'asian', 'latinAmerican', 'other'];
 		var pop1 = prop1["population"];
 		var pop2 = prop2["population"];
+		var other1 = 0;
+		var other2 = 0;
+		var bad1 = false;
+		var bad2 = false;
 		var coeff = (remove) ? -1 : 1;
 		for (var i = 0; i < propLabels.length; i++) {
 			var label = propLabels[i];
 			if (demList.includes(label)) {
 				var count = (prop1[label] * pop1) + (coeff * (prop2[label] * pop2));
 				prop1[label] += (count / prop1["population"]);
+				if (label == 'white') {
+					bad1 = prop1[label] > 1;
+					bad2 = prop2[label] > 1;
+				} else {
+					other1 += prop1[label];
+					other2 += prop2[label];
+				}
 			} else {
 				prop1[label] += coeff * prop2[label];
 			}
 		}
+		if (bad1) {
+			prop1['white'] = 1 - other1;
+			if (prop1['white'] < 0) {
+				prop1['white'] = 0.7;
+				prop1['asian'] = 0.1;
+				prop1['africanAmerican'] = 0.05;
+				prop1['latinAmerican'] = 0.03;
+				prop1['other'] = 0.02;
+			}
+		}
+		if (bad2) {
+			prop2['white'] = 1 - other2;
+			if (prop2['white'] < 0) {
+				prop2['white'] = 0.7;
+				prop2['asian'] = 0.1;
+				prop2['africanAmerican'] = 0.05;
+				prop2['latinAmerican'] = 0.03;
+				prop2['other'] = 0.02;
+			}
+		}
+
 		return prop1;
 	}
 
