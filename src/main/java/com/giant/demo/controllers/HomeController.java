@@ -249,8 +249,9 @@ public class HomeController {
     public SummaryModel getSummary(){
         /*Construct Summary Object from realState*/
         State realState = algorithm.getRealState();
-
-
+        if (realState != null) {
+            return new SummaryModel(realState);
+        }
 
         return null;
     }

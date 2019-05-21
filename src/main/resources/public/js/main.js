@@ -65,6 +65,7 @@ app.controller('AppCtrl', function(GenProp, GeoDataService, AlgorithmService , $
             });
  
     	$scope.content = {};
+        $scope.summaryObj = null;
 
     	// Map Setup
         $scope.usMap;

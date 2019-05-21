@@ -125,6 +125,12 @@
 		"flex": "",
 		"layout": []
 	},
+	"stateSelectBox": {
+		"classes": [],
+		"ifClause": "true",
+		"flex": "flex-100",
+		"layout": []
+	},
 	"stateSelect": {
 		"classes": ["stateSelect", "md-raised", "layout-padding", "layout-row", "layout-align-center-center"],
 		"ifClause": "true",

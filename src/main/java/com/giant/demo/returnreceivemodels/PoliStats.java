@@ -3,13 +3,13 @@ package com.giant.demo.returnreceivemodels;
 public class PoliStats {
     private int totalDemoVotes;
     private int totalRepVotes;
-    private int likelyRepSeats;
-    private int likelyDemoSeats;
+    private double likelyRepSeats;
+    private double likelyDemoSeats;
 
     public PoliStats() {
     }
 
-    public PoliStats(int totalDemoVotes, int totalRepVotes, int likelyRepSeats, int likelyDemoSeats) {
+    public PoliStats(int totalDemoVotes, int totalRepVotes, double likelyRepSeats, double likelyDemoSeats) {
         this.totalDemoVotes = totalDemoVotes;
         this.totalRepVotes = totalRepVotes;
         this.likelyRepSeats = likelyRepSeats;
@@ -32,19 +32,19 @@ public class PoliStats {
         this.totalRepVotes = totalRepVotes;
     }
 
-    public int getLikelyRepSeats() {
+    public double getLikelyRepSeats() {
         return likelyRepSeats;
     }
 
-    public void setLikelyRepSeats(int likelyRepSeats) {
+    public void setLikelyRepSeats(double likelyRepSeats) {
         this.likelyRepSeats = likelyRepSeats;
     }
 
-    public int getLikelyDemoSeats() {
+    public double getLikelyDemoSeats() {
         return likelyDemoSeats;
     }
 
-    public void setLikelyDemoSeats(int likelyDemoSeats) {
+    public void setLikelyDemoSeats(double likelyDemoSeats) {
         this.likelyDemoSeats = likelyDemoSeats;
     }
 }

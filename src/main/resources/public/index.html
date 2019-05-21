@@ -65,16 +65,13 @@
             <!-- US Map -->
             <div leaflet (leafletMapReady)="onMapReady($event)" layout="column" flex="100%" id="map"></div>
 
-            <span class="usernameSlot" ng-if="$rootScope.globalData.user.username != ''">
-                {{$rootScope.globalData.user.username}}
-            </span>
-
             <single-run ng-if="$rootScope.globalData.mode == 'singleRun'" content="content" component-prop="componentProp"></single-run>
 
             <alg-intermission layout-padding class="intermission" ng-if="$rootScope.globalData.mode == 'intermission'
-                                                          && $rootScope.globalData.programState == $rootScope.programStates.PENDING"></alg-intermission>
-            <alg-summary layout-padding class="summary" ng-if="$rootScope.globalData.mode == 'summary'
-                                  && $rootScope.globalData.programState == $rootScope.programStates.PENDING"></alg-summary>
+                                                                      && $rootScope.globalData.programState == $rootScope.programStates.PENDING" username="$rootScope.globalData.user.username"></alg-intermission>
+            <alg-summary ng-cloak layout-padding class="summary" ng-if="$rootScope.globalData.mode == 'summary'
+                                  && $rootScope.globalData.programState == $rootScope.programStates.PENDING
+                                  && summaryObj != null" summary-info="summaryObj"></alg-summary>
 
             <!-- Loading wheel -->
             <div ng-if="$rootScope.loading" class="loading" layout="row"

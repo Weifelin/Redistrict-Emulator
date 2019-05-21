@@ -49,11 +49,15 @@ angular.module('AlgoUtil')
         };
 
         service.getSummary = function() {
+            $rootScope.globalData.programState = $rootScope.programStates.PENDING;
+            $rootScope.globalData.mode = "summary";
             var url = "getSummary";
             $http.get(url).then(function(summaryInfo) {
                 console.log(summaryInfo);
+                angular.element("#appShell").scope().summaryObj = summaryInfo.data;
             }, function(errResponse) {
                 $mdToast.showSimple("Error loading summary page.");
+                service.finishSingleRun();
             });
         };
 
@@ -64,7 +68,6 @@ angular.module('AlgoUtil')
                     console.log(moveInfo);
                     if (moveInfo.data.finished) {
                         $interval.cancel($rootScope.simAnnealPromise);
-                        $rootScope.globalData.programState = $rootScope.programStates.PENDING;
                         service.getSummary();
                     } else {
                         var mainCtrl = angular.element("#appShell").scope();
@@ -88,6 +91,23 @@ angular.module('AlgoUtil')
             });
 
             $rootScope.simAnnealPromise = $interval(function() { service.getMove(); }, 300);
+        };
+
+        service.saveMap = function() {
+            var url = "saveMap";
+            var user = $rootScope.globalData.user;
+            $http.post(url, user).then(function(saveResponse) {
+                $mdToast.showSimple("Map saved successfully.")
+            }, function(errResponse) {
+                $mdToast.showSimple("Problem saving map.");
+            });
+        };
+
+        service.finishSingleRun = function() {
+            $rootScope.globalData.selectedState = "";
+            $rootScope.globalData.programState = $rootScope.programStates.FREE;
+            $rootScope.globalData.mode = "singleRun";
+            angular.element("#appShell").scope().usMap.reset();
         };
 
         return service;

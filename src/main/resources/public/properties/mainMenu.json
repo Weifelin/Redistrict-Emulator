@@ -66,18 +66,8 @@
 				"id": "stateSelect",
 				"properties": "stateSelect",
 				"sections": {
-					"prevButton": {
-						"type": "iconBtn",
-						"properties": "iconBtn", 
-						"id": "prevStateBtn", 
-						"label": "prevStateBtn", 
-						"icon": "img/icons/baseline-navigate_before-24px.svg", 
-						"clickEvent": "advanceState",
-						"tooltip": "",
-						"tooltipDir": ""
-					},
 					"stateSelectBox": {
-						"properties": "select",
+						"properties": "stateSelectBox",
 						"id": "stateChoice",
 						"label": "Select State",
 						"options": ["New Jersey", "Wisconsin", "Virginia"],
@@ -85,16 +75,6 @@
 						"multiSelect": false,
 						"onChange": "GeneralUtilService.selectState($ctrl.select.selected)",
 						"type": "select"
-					},
-					"nextButton": {
-						"type": "iconBtn",
-						"properties": "iconBtn", 
-						"id": "nextStateBtn", 
-						"label": "nextStateBtn", 
-						"icon": "img/icons/baseline-navigate_next-24px.svg", 
-						"clickEvent": "advanceState",
-						"tooltip": "",
-						"tooltipDir": ""
 					}
 				}
 			}

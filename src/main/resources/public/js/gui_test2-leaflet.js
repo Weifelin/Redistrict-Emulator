@@ -5,7 +5,11 @@ function Map(info) {
 	this.geojsonLayer;
 	this.districtLayer;
 	this.precinctLayer;
+	this.clusterLayer;
 	this.stateInfoCtrl;
+	this.disInfoCtrl;
+	this.precInfoCtrl;
+	this.clusInfoCtrl;
 	this.layers;
 	this.layerCtrl;
 	maplet.GeoDataService;
@@ -19,7 +23,6 @@ function Map(info) {
 	this.leaf_states = {};
 	this.leaf_precincts = {};
 	this.leaf_clusters = {};
-	this.cluster_seeds = {};
 	this.uiInfo = info;
 
 	this.mapSetup = function() {
@@ -27,13 +30,50 @@ function Map(info) {
 		infoPanelSetup();
 	};
 
+	maplet.reset = function() {
+		console.log("here");
+		maplet.removeDistrictLayer();
+		maplet.removePrecinctLayer();
+		maplet.removeClusterLayer();
+
+		maplet.districtLayer = null;
+		maplet.precinctLayer = null;
+		maplet.clusterLayer = null;
+		maplet.disStyleMap = {};
+		maplet.clusStyleMap = {};
+		maplet.leaf_precincts = {};
+		maplet.leaf_clusters = {};
+
+		maplet.addStateLayer();
+		showStatePanel();
+
+		maplet.map.setView([37.8, -96], 4);
+	};
+
 	maplet.addPrecinctSeed = function(clusterID, seedPrecinct) {
 		maplet.cluster_seeds[clusterID] = seedPrecinct;
+	};
+
+	maplet.addStateLayer = function() {
+		maplet.map.addLayer(maplet.geojsonLayer);
+		maplet.layerCtrl.addLayer(maplet.geojsonLayer);
 	};
 
 	maplet.removeStateLayer = function() {
 		maplet.map.removeLayer(maplet.geojsonLayer);
 		maplet.layerCtrl.removeLayer(maplet.geojsonLayer);
+	};
+	maplet.removeDistrictLayer = function() {
+		maplet.map.removeLayer(maplet.districtLayer);
+		maplet.layerCtrl.removeLayer(maplet.districtLayer);
+	};
+	maplet.removePrecinctLayer = function() {
+		maplet.map.removeLayer(maplet.precinctLayer);
+		maplet.layerCtrl.removeLayer(maplet.precinctLayer);
+	};
+	maplet.removeClusterLayer = function() {
+		maplet.map.removeLayer(maplet.clusterLayer);
+		maplet.layerCtrl.removeLayer(maplet.clusterLayer);
 	};
 
 	maplet.getState = function(stateId) {
@@ -433,9 +473,9 @@ function Map(info) {
 		maplet.stateInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>State Metrics</h4>' +  (props ?
 				'<i>' + props.NAME + '</i><br />' +
-				'Population: ' + formatNumber(props.population) + '<br />' +
-				'Number of Districts: ' + formatNumber(props.numDistricts) + '<br />' +
-				'Number of Precincts: ' + formatNumber(props.numPrecincts)
+				'Population: ' + maplet.formatNumber(props.population) + '<br />' +
+				'Number of Districts: ' + maplet.formatNumber(props.numDistricts) + '<br />' +
+				'Number of Precincts: ' + maplet.formatNumber(props.numPrecincts)
 				: 'Hover over a state');
 		};
 
@@ -463,16 +503,16 @@ function Map(info) {
 		maplet.disInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>District Metrics</h4>' +  (props ?
 				'<i>District ' + props.DISTRICT + "</i><br />" +
-				'Population: ' + formatNumber(props.population) + '<br />' +
-				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
-				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
-				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'Population: ' + maplet.formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + maplet.formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + maplet.formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + maplet.formatNumber(props.numRep) + '<br /><br />' +
 				'<h6>Demographic Distribution</h6>' +
-				'White: ' + formatPercent(props.white) + '<br />' +
-				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
-				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
-				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
-				'Other: ' + formatPercent(props.other) + '<br />'
+				'White: ' + maplet.formatPercent(props.white) + '<br />' +
+				'African American: ' + maplet.formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + maplet.formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + maplet.formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + maplet.formatPercent(props.other) + '<br />'
 				: 'Hover over a district');
 		};
 
@@ -499,16 +539,16 @@ function Map(info) {
 		maplet.precInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>Precinct Metrics</h4>' +  (props ?
 				'<i>' + props.name + '</i><br />' +
-				'Population: ' + formatNumber(props.population) + '<br />' +
-				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
-				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
-				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'Population: ' + maplet.formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + maplet.formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + maplet.formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + maplet.formatNumber(props.numRep) + '<br /><br />' +
 				'<h6>Demographic Distribution</h6>' +
-				'White: ' + formatPercent(props.white) + '<br />' +
-				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
-				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
-				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
-				'Other: ' + formatPercent(props.other) + '<br />'
+				'White: ' + maplet.formatPercent(props.white) + '<br />' +
+				'African American: ' + maplet.formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + maplet.formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + maplet.formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + maplet.formatPercent(props.other) + '<br />'
 				: 'Hover over a precinct');
 		};
 
@@ -535,16 +575,16 @@ function Map(info) {
 		maplet.clusInfoCtrl.update = function (props) {
 			this._div.innerHTML = '<h4>Cluster Metrics</h4>' +  (props ?
 				'Cluster ID: <i>' + props.clusterID + '</i><br />' +
-				'Population: ' + formatNumber(props.population) + '<br />' +
-				'Total Primary Votes: ' + formatNumber(props.votes) + '<br />' +
-				'Democrat votes: ' + formatNumber(props.numDemo) + '<br />' +
-				'Republican votes: ' + formatNumber(props.numRep) + '<br /><br />' +
+				'Population: ' + maplet.formatNumber(props.population) + '<br />' +
+				'Total Primary Votes: ' + maplet.formatNumber(props.votes) + '<br />' +
+				'Democrat votes: ' + maplet.formatNumber(props.numDemo) + '<br />' +
+				'Republican votes: ' + maplet.formatNumber(props.numRep) + '<br /><br />' +
 				'<h6>Demographic Distribution</h6>' +
-				'White: ' + formatPercent(props.white) + '<br />' +
-				'African American: ' + formatPercent(props.africanAmerican) + '<br />' +
-				'Asian/Pacific Islander: ' + formatPercent(props.asian) + '<br />' +
-				'Hispanic/Latino: ' + formatPercent(props.latinAmerican) + '<br />' +
-				'Other: ' + formatPercent(props.other) + '<br />'
+				'White: ' + maplet.formatPercent(props.white) + '<br />' +
+				'African American: ' + maplet.formatPercent(props.africanAmerican) + '<br />' +
+				'Asian/Pacific Islander: ' + maplet.formatPercent(props.asian) + '<br />' +
+				'Hispanic/Latino: ' + maplet.formatPercent(props.latinAmerican) + '<br />' +
+				'Other: ' + maplet.formatPercent(props.other) + '<br />'
 				: 'Hover over a cluster');
 		};
 
@@ -558,7 +598,7 @@ function Map(info) {
 	}
 
 	// Info Panel Helper functions
-	function formatNumber(num) {
+	maplet.formatNumber = function(num) {
 		var numRepr = (num).toString();
 		var commaGap = 3;
 		var result = "";
@@ -575,7 +615,7 @@ function Map(info) {
 		return result;
 	}
 
-	function formatPercent(num) {
+	maplet.formatPercent = function(num) {
 		var numStr = (num * 100).toString();
 		var endIndex = (numStr.length > 4) ? 4 : numStr.length;
 		var result = numStr.substring(0, endIndex) + '%';
@@ -595,9 +635,8 @@ function Map(info) {
 		for (var i = 0; i < propLabels.length; i++) {
 			var label = propLabels[i];
 			if (demList.includes(label)) {
-				var count = (prop1[label] * pop1) + (prop2[label] * pop2);
-
-				prop1[label] += coeff * (count / pop1);
+				var count = (prop1[label] * pop1) + (coeff * (prop2[label] * pop2));
+				prop1[label] += (count / prop1["population"]);
 			} else {
 				prop1[label] += coeff * prop2[label];
 			}
